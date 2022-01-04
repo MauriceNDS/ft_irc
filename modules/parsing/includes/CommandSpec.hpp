@@ -1,9 +1,12 @@
 #ifndef FT_IRC_PARSING_COMMAND_SPEC
 #define FT_IRC_PARSING_COMMAND_SPEC
 
+#include <sstream>
+
 #include "ft_irc.hpp"
 #include "parsing/includes/CommandElement.hpp"
 #include "parsing/includes/CommandExecutor.hpp"
+#include "parsing/includes/exception/TooFewArgumentsException.hpp"
 
 class CommandSpec {
 private:
@@ -44,12 +47,24 @@ public:
 		}
 	};
 
-	void call() const {
+	void call(string input) const {
 		map<string, void*> args;
+
+		vector<string> tokens;
+		std::stringstream ss(input);
+		string temp;
+		while (ss >> temp)
+			tokens.push_back(temp);
+		vector<string>::iterator tokens_it = tokens.begin();
 
 		vector<pair<const string, CommandElement*> >::const_iterator it;
 		for (it = _parameters.begin(); it != _parameters.end(); it++) {
-			args[it->first] = it->second->parseValue("Hello you" /* Command part */);
+			string token = "";
+			if (tokens_it != tokens.end())
+				token = *tokens_it++;
+			if (!it->second->is_valid(token))
+				throw TooFewArgumentsException();
+			args[it->first] = it->second->parseValue(token);
 		}
 
 		_executor->execute(Command(_name, args), CommandSender());

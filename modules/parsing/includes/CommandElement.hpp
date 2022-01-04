@@ -5,6 +5,10 @@
 
 class CommandElement {
 public:
+	virtual bool is_valid(const string& arg) {
+		return !arg.empty();
+	}
+
 	virtual void *parseValue(const string& arg) = 0;
 };
 

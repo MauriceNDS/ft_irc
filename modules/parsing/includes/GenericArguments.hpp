@@ -29,6 +29,29 @@ public:
 	}
 };
 
+class OptionalCommandElement : public CommandElement {
+private:
+	CommandElement *subtype;
+	void *empty;
+	void *val;
+
+	OptionalCommandElement();
+public:
+	OptionalCommandElement(CommandElement *subtype) : subtype(subtype), empty(nullptr) {}
+
+	bool is_valid(const string& arg) {
+		(void)arg;
+		return true;
+	}
+
+	void *parseValue(const string& arg) {
+		if (arg.empty())
+			return &empty;
+		this->val = subtype->parseValue(arg);
+		return &this->val;
+	}
+};
+
 class GenericArguments {
 private:
 	GenericArguments();
@@ -40,6 +63,10 @@ public:
 
 	static IntegerCommandElement *integer() {
 		return new IntegerCommandElement();
+	}
+
+	static OptionalCommandElement *optional(CommandElement *subtype) {
+		return new OptionalCommandElement(subtype);
 	}
 };
 

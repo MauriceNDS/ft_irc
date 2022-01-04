@@ -6,6 +6,7 @@
 #include "core/includes/interface/User.hpp"
 
 #include "parsing/includes/CommandElement.hpp"
+#include "parsing/includes/exception/ArgumentParseException.hpp"
 
 // TODO test
 User global_user("meuh");
@@ -13,7 +14,8 @@ User global_user("meuh");
 class UserCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg) {
-		(void)arg;
+		if (arg == "NotAUser" || arg == "NAU")
+			throw ArgumentParseException(string(arg) + " is not a user");
 		return &global_user;
 	}
 };
