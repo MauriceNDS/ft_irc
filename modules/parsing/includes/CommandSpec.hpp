@@ -7,12 +7,12 @@
 
 class CommandSpec {
 private:
-	string name;
+	string _name;
 	vector<pair<const string, CommandElement*> > _parameters;
-	CommandExecutor *executor;
+	CommandExecutor *_executor;
 
 protected:
-	CommandSpec(const string& name, vector<pair<const string, CommandElement*> >& parameters, CommandExecutor *executor) : name(name), executor(executor) {
+	CommandSpec(const string& name, vector<pair<const string, CommandElement*> >& parameters, CommandExecutor *executor) : _name(name), _executor(executor) {
 		this->_parameters.swap(parameters);
 	}
 
@@ -45,7 +45,14 @@ public:
 	};
 
 	void call() const {
-		executor->execute(Command(), CommandSender());
+		map<string, void*> args;
+
+		vector<pair<const string, CommandElement*> >::const_iterator it;
+		for (it = _parameters.begin(); it != _parameters.end(); it++) {
+			args[it->first] = it->second->parseValue("Hello you" /* Command part */);
+		}
+
+		_executor->execute(Command(_name, args), CommandSender());
 	}
 };
 

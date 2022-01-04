@@ -12,13 +12,9 @@ private:
 	string val;
 
 public:
-	operator string() {
-		return val;
-	}
-
 	void *parseValue(const string& arg) {
 		this->val = arg;
-		return this;
+		return &this->val;
 	}
 };
 
@@ -27,14 +23,9 @@ private:
 	int val;
 
 public:
-	// TODO virtual ?
-	operator int() {
-		return val;
-	}
-
 	void *parseValue(const string& arg) {
 		this->val = atoi(arg.c_str());
-		return this;
+		return &this->val;
 	}
 };
 

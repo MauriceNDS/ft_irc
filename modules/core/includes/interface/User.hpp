@@ -10,6 +10,10 @@ private:
 public:
 	// TODO test
 	User(string name) : name(name) {}
+
+	const string& getName() {
+		return name;
+	}
 };
 
 #endif /* FT_IRC_CORE_USER */

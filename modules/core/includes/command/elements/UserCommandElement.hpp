@@ -13,6 +13,7 @@ User global_user("meuh");
 class UserCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg) {
+		(void)arg;
 		return &global_user;
 	}
 };
