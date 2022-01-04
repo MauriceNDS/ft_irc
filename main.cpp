@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "parsing/includes/CommandSpec.hpp"
 #include "parsing/includes/CommandExecutor.hpp"
 #include "parsing/includes/GenericArguments.hpp"
@@ -13,9 +11,9 @@
 int main(int argc, const char *argv[]) {
 	const CommandSpec oper = CommandSpec::Builder()
 		.name("oper")
+		.argument("list", GenericArguments::list<string>(GenericArguments::string()))
 		.argument("user", new UserCommandElement())
 		.argument("action", GenericArguments::string())
-		// .argument("list", GenericArguments::list<string>(GenericArguments::string()))
 		.argument("optional", GenericArguments::optional(new UserCommandElement()))
 		.executor(new OperCommand())
 		.build();

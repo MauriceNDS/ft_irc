@@ -10,20 +10,18 @@ private:
 	friend class CommandSpec;
 
 	string _name;
-	map<string, void*>& _args;
+	map<string, void *const>& _args;
 
-	Command(const string& name, map<string, void*>& args) : _name(name), _args(args) {}
+	Command(const string& name, map<string, void *const>& args) : _name(name), _args(args) {}
 
 public:
 	template <class T>
-	T &getArg(const string& name) {
-		T *arg;
+	T &getArg(const string& name) const {
 		try {
-			arg = static_cast<T*>(_args.at(name));
+			return *static_cast<T*>(_args.at(name));
 		} catch(const std::out_of_range& e) {
 			throw ArgumentNotFoundException();
 		}
-		return static_cast<T&>(*arg);
 	}
 };
 

@@ -11,6 +11,7 @@
 class CommandExecutor {
 public:
 	virtual Response execute(Command cmd, CommandSender sender) = 0;
+	virtual ~CommandExecutor() {};
 };
 
 #endif /* FT_IRC_PARSING_COMMAND_EXECUTOR */

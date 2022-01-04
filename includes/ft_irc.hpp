@@ -11,4 +11,7 @@ using std::vector;
 using std::pair;
 using std::make_pair;
 
+// TODO test
+#include <iostream>
+
 #endif /* FT_IRC */

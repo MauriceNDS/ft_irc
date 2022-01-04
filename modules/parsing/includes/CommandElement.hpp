@@ -9,7 +9,10 @@ public:
 		return !arg.empty();
 	}
 
-	virtual void *parseValue(const string& arg) = 0;
+	virtual void *parseValue(const string& arg) const = 0;
+
+	virtual void destroy(void *) const {}
+	virtual ~CommandElement() {}
 };
 
 #endif /* FT_IRC_PARSING_COMMAND_ELEMENT */

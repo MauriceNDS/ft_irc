@@ -9,9 +9,6 @@
 #include "parsing/includes/CommandSender.hpp"
 #include "parsing/includes/CommandExecutor.hpp"
 
-// TODO test
-#include <iostream>
-
 class PartCommand : public CommandExecutor {
 
 	Response execute(Command cmd, CommandSender sender) {

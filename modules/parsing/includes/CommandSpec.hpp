@@ -48,7 +48,7 @@ public:
 	};
 
 	void call(string input) const {
-		map<string, void*> args;
+		map<string, void *const> args;
 
 		vector<string> tokens;
 		std::stringstream ss(input);
@@ -64,10 +64,22 @@ public:
 				token = *tokens_it++;
 			if (!it->second->is_valid(token))
 				throw TooFewArgumentsException();
-			args[it->first] = it->second->parseValue(token);
+			args.insert(make_pair(it->first, it->second->parseValue(token)));
 		}
 
 		_executor->execute(Command(_name, args), CommandSender());
+
+		for (it = _parameters.begin(); it != _parameters.end(); it++) {
+			it->second->destroy(args.at(it->first));
+		}
+	}
+
+	~CommandSpec() {
+		vector<pair<const string, CommandElement*> >::iterator it;
+		for (it = _parameters.begin(); it != _parameters.end(); it++) {
+			delete it->second;
+		}
+		delete _executor;
 	}
 };
 

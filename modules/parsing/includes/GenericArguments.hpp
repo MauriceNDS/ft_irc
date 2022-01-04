@@ -2,82 +2,103 @@
 #define FT_IRC_PARSING_GENERIC_ARGUMENTS
 
 #include <cstdlib>
+#include <sstream>
 
 #include "ft_irc.hpp"
 
 #include "parsing/includes/CommandElement.hpp"
 
 class StringCommandElement : public CommandElement {
-private:
-	string val;
-
 public:
-	void *parseValue(const string& arg) {
-		this->val = arg;
-		return &this->val;
+	void *parseValue(const string& arg) const {
+		return new string(arg);
+	}
+
+	void destroy(void *arg) const {
+		delete static_cast<string*>(arg);
 	}
 };
 
 class IntegerCommandElement : public CommandElement {
-private:
-	int val;
-
 public:
-	void *parseValue(const string& arg) {
-		this->val = atoi(arg.c_str());
-		return &this->val;
+	void *parseValue(const string& arg) const {
+		return new int(atoi(arg.c_str()));
+	}
+
+	void destroy(void *arg) const {
+		delete static_cast<int*>(arg);
 	}
 };
 
 class OptionalCommandElement : public CommandElement {
 private:
 	CommandElement *subtype;
-	void *empty;
-	void *val;
 
 	OptionalCommandElement();
 public:
-	OptionalCommandElement(CommandElement *subtype) : subtype(subtype), empty(nullptr) {}
+	OptionalCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
 	bool is_valid(const string& arg) {
 		(void)arg;
 		return true;
 	}
 
-	void *parseValue(const string& arg) {
+	void *parseValue(const string& arg) const {
 		if (arg.empty())
-			return &empty;
-		this->val = subtype->parseValue(arg);
-		return &this->val;
+			return new const void*(nullptr);
+		return new const void*(subtype->parseValue(arg));
+	}
+
+	void destroy(void *arg) const {
+		delete static_cast<void **>(arg);
+	}
+
+	~OptionalCommandElement() {
+		delete this->subtype;
 	}
 };
 
-// template <class T>
-// class ListCommandElement : public CommandElement {
-// private:
-// 	CommandElement *subtype;
-// 	vector<T&> val;
+template <class T>
+class ListCommandElement : public CommandElement {
+private:
+	CommandElement *subtype;
 
-// 	ListCommandElement();
-// public:
-// 	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
+	ListCommandElement();
+public:
+	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
-// 	void *parseValue(const string& arg) {
-// 		string cpy = arg;
-// 		cpy.replace(arg.begin(), arg.end(), ',', ' ');
+	void *parseValue(const string& arg) const {
+		vector<T*> *val = new vector<T*>();
 
-// 		vector<string> tokens;
-// 		std::stringstream ss(cpy);
-// 		string temp;
-// 		while (ss >> temp)
-// 			tokens.push_back(temp);
-// 		vector<string>::iterator tokens_it;
+		string cpy = arg;
+		std::replace(cpy.begin(), cpy.end(), ',', ' ');
 
-// 		for (tokens_it = tokens.begin(); i != tokens.end(); tokens_it++)
-// 			val.push_back(*subtype->parseValue())
-// 		return &this->val;
-// 	}
-// };
+		vector<string> tokens;
+		std::stringstream ss(cpy);
+		string temp;
+		while (ss >> temp)
+			tokens.push_back(temp);
+		vector<string>::iterator tokens_it;
+
+		for (tokens_it = tokens.begin(); tokens_it != tokens.end(); tokens_it++) {
+			val->push_back(static_cast<T*>(subtype->parseValue(*tokens_it)));
+		}
+		return val;
+	}
+
+	void destroy(void *arg) const {
+		vector<T*>* base = static_cast<vector<T*>* >(arg);
+
+		typename vector<T*>::const_iterator it = base->begin();
+		while (it != base->end())
+			subtype->destroy(*it++);
+		delete base;
+	}
+
+	~ListCommandElement() {
+		delete this->subtype;
+	}
+};
 
 class GenericArguments {
 private:
@@ -96,10 +117,10 @@ public:
 		return new OptionalCommandElement(subtype);
 	}
 
-	// template <class T>
-	// static ListCommandElement<T> *list(CommandElement *subtype) {
-	// 	return new ListCommandElement<T>(subtype);
-	// }
+	template <class T>
+	static ListCommandElement<T> *list(CommandElement *subtype) {
+		return new ListCommandElement<T>(subtype);
+	}
 };
 
 #endif /* FT_IRC_PARSING_GENERIC_ARGUMENTS */
