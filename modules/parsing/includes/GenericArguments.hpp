@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 
-#include "core.hpp"
+#include "ft_irc.hpp"
 #include "CommandElement.hpp"
 
 class StringCommandElement : public CommandElement {

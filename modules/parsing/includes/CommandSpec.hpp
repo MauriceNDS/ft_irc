@@ -1,7 +1,7 @@
 #ifndef FT_IRC_COMMAND_SPEC
 #define FT_IRC_COMMAND_SPEC
 
-#include "core.hpp"
+#include "ft_irc.hpp"
 #include "command/CommandElement.hpp"
 #include "command/CommandExecutor.hpp"
 

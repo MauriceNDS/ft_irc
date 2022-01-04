@@ -1,17 +1,8 @@
-#ifndef FT_IRC_USER
-#define FT_IRC_USER
+#ifndef FT_IRC_CORE_USER_COMMAND_ELEMENT
+#define FT_IRC_CORE_USER_COMMAND_ELEMENT
 
-#include "core.hpp"
+#include "ft_irc.hpp"
 #include "command/CommandElement.hpp"
-
-class User {
-private:
-	string name;
-
-public:
-	// TODO test
-	User(string name) : name(name) {}
-};
 
 // TODO test
 User global_user("meuh");
@@ -23,4 +14,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_USER */
+#endif /* FT_IRC_CORE_USER_COMMAND_ELEMENT */
