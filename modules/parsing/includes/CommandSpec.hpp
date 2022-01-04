@@ -1,9 +1,9 @@
-#ifndef FT_IRC_COMMAND_SPEC
-#define FT_IRC_COMMAND_SPEC
+#ifndef FT_IRC_PARSING_COMMAND_SPEC
+#define FT_IRC_PARSING_COMMAND_SPEC
 
 #include "ft_irc.hpp"
-#include "command/CommandElement.hpp"
-#include "command/CommandExecutor.hpp"
+#include "parsing/includes/CommandElement.hpp"
+#include "parsing/includes/CommandExecutor.hpp"
 
 class CommandSpec {
 private:
@@ -49,4 +49,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_COMMAND_SPEC */
+#endif /* FT_IRC_PARSING_COMMAND_SPEC */

@@ -1,14 +1,16 @@
-#ifndef FT_IRC_COMMAND_EXECUTOR
-#define FT_IRC_COMMAND_EXECUTOR
+#ifndef FT_IRC_PARSING_COMMAND_EXECUTOR
+#define FT_IRC_PARSING_COMMAND_EXECUTOR
 
 #include "ft_irc.hpp"
-#include "Response.hpp"
-#include "command/Command.hpp"
-#include "command/CommandSender.hpp"
+
+#include "core/includes/server/Response.hpp"
+
+#include "parsing/includes/Command.hpp"
+#include "parsing/includes/CommandSender.hpp"
 
 class CommandExecutor {
 public:
 	virtual Response execute(Command cmd, CommandSender sender) = 0;
 };
 
-#endif /* FT_IRC_COMMAND_EXECUTOR */
+#endif /* FT_IRC_PARSING_COMMAND_EXECUTOR */

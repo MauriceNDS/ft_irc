@@ -1,10 +1,11 @@
-#ifndef FT_IRC_GENERIC_ARGUMENTS
-#define FT_IRC_GENERIC_ARGUMENTS
+#ifndef FT_IRC_PARSING_GENERIC_ARGUMENTS
+#define FT_IRC_PARSING_GENERIC_ARGUMENTS
 
 #include <cstdlib>
 
 #include "ft_irc.hpp"
-#include "CommandElement.hpp"
+
+#include "parsing/includes/CommandElement.hpp"
 
 class StringCommandElement : public CommandElement {
 private:
@@ -51,4 +52,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_GENERIC_ARGUMENTS */
+#endif /* FT_IRC_PARSING_GENERIC_ARGUMENTS */

@@ -1,9 +1,11 @@
 #include <iostream>
 
-#include "command/CommandSpec.hpp"
-#include "command/CommandExecutor.hpp"
-#include "command/GenericArguments.hpp"
-#include "User.hpp"
+#include "core/includes/interface/User.hpp"
+#include "core/includes/command/elements/UserCommandElement.hpp"
+
+#include "parsing/includes/CommandSpec.hpp"
+#include "parsing/includes/CommandExecutor.hpp"
+#include "parsing/includes/GenericArguments.hpp"
 
 class OperExecutor : public CommandExecutor {
 

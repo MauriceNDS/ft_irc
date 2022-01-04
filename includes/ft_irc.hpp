@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE
-#define FT_IRC_CORE
+#ifndef FT_IRC
+#define FT_IRC
 
 #include <string>
 #include <map>
@@ -11,4 +11,4 @@ using std::vector;
 using std::pair;
 using std::make_pair;
 
-#endif /* FT_IRC_CORE */
+#endif /* FT_IRC */

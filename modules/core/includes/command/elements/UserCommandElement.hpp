@@ -2,7 +2,10 @@
 #define FT_IRC_CORE_USER_COMMAND_ELEMENT
 
 #include "ft_irc.hpp"
-#include "command/CommandElement.hpp"
+
+#include "core/includes/interface/User.hpp"
+
+#include "parsing/includes/CommandElement.hpp"
 
 // TODO test
 User global_user("meuh");

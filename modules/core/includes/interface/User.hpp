@@ -1,8 +1,7 @@
-#ifndef FT_IRC_USER
-#define FT_IRC_USER
+#ifndef FT_IRC_CORE_USER
+#define FT_IRC_CORE_USER
 
 #include "ft_irc.hpp"
-#include "command/CommandElement.hpp"
 
 class User {
 private:
@@ -13,4 +12,4 @@ public:
 	User(string name) : name(name) {}
 };
 
-#endif /* FT_IRC_USER */
+#endif /* FT_IRC_CORE_USER */
