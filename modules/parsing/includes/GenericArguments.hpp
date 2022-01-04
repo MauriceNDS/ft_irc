@@ -52,6 +52,33 @@ public:
 	}
 };
 
+// template <class T>
+// class ListCommandElement : public CommandElement {
+// private:
+// 	CommandElement *subtype;
+// 	vector<T&> val;
+
+// 	ListCommandElement();
+// public:
+// 	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
+
+// 	void *parseValue(const string& arg) {
+// 		string cpy = arg;
+// 		cpy.replace(arg.begin(), arg.end(), ',', ' ');
+
+// 		vector<string> tokens;
+// 		std::stringstream ss(cpy);
+// 		string temp;
+// 		while (ss >> temp)
+// 			tokens.push_back(temp);
+// 		vector<string>::iterator tokens_it;
+
+// 		for (tokens_it = tokens.begin(); i != tokens.end(); tokens_it++)
+// 			val.push_back(*subtype->parseValue())
+// 		return &this->val;
+// 	}
+// };
+
 class GenericArguments {
 private:
 	GenericArguments();
@@ -68,6 +95,11 @@ public:
 	static OptionalCommandElement *optional(CommandElement *subtype) {
 		return new OptionalCommandElement(subtype);
 	}
+
+	// template <class T>
+	// static ListCommandElement<T> *list(CommandElement *subtype) {
+	// 	return new ListCommandElement<T>(subtype);
+	// }
 };
 
 #endif /* FT_IRC_PARSING_GENERIC_ARGUMENTS */
