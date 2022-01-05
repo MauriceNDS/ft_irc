@@ -5,8 +5,8 @@
 
 #include "core/includes/interface/User.hpp"
 
-#include "parsing/includes/CommandElement.hpp"
-#include "parsing/includes/exception/ArgumentParseException.hpp"
+#include "commands/includes/CommandElement.hpp"
+#include "commands/includes/exception/ArgumentParseException.hpp"
 
 // TODO test
 User global_user("meuh");

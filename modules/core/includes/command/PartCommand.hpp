@@ -5,9 +5,9 @@
 
 #include "core/includes/interface/User.hpp"
 
-#include "core/includes/server/Response.hpp"
-#include "parsing/includes/CommandSender.hpp"
-#include "parsing/includes/CommandExecutor.hpp"
+#include "server/includes/Response.hpp"
+#include "commands/includes/CommandSender.hpp"
+#include "commands/includes/CommandExecutor.hpp"
 
 class PartCommand : public CommandExecutor {
 

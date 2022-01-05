@@ -1,6 +1,6 @@
-#include "parsing/includes/CommandSpec.hpp"
-#include "parsing/includes/CommandExecutor.hpp"
-#include "parsing/includes/GenericArguments.hpp"
+#include "commands/includes/CommandSpec.hpp"
+#include "commands/includes/CommandExecutor.hpp"
+#include "commands/includes/GenericArguments.hpp"
 
 #include "core/includes/interface/User.hpp"
 #include "core/includes/command/elements/UserCommandElement.hpp"
