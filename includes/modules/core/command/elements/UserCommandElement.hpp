@@ -3,10 +3,10 @@
 
 #include "ft_irc.hpp"
 
-#include "core/includes/interface/User.hpp"
+#include "core/interface/User.hpp"
 
-#include "commands/includes/CommandElement.hpp"
-#include "commands/includes/exception/ArgumentParseException.hpp"
+#include "commands/CommandElement.hpp"
+#include "commands/exception/ArgumentParseException.hpp"
 
 // TODO test
 User global_user("meuh");

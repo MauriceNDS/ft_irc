@@ -4,9 +4,9 @@
 #include <sstream>
 
 #include "ft_irc.hpp"
-#include "commands/includes/CommandElement.hpp"
-#include "commands/includes/CommandExecutor.hpp"
-#include "commands/includes/exception/TooFewArgumentsException.hpp"
+#include "commands/CommandElement.hpp"
+#include "commands/CommandExecutor.hpp"
+#include "commands/exception/TooFewArgumentsException.hpp"
 
 class CommandSpec {
 private:

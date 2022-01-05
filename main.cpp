@@ -1,12 +1,12 @@
-#include "commands/includes/CommandSpec.hpp"
-#include "commands/includes/CommandExecutor.hpp"
-#include "commands/includes/GenericArguments.hpp"
+#include "commands/CommandSpec.hpp"
+#include "commands/CommandExecutor.hpp"
+#include "commands/GenericArguments.hpp"
 
-#include "core/includes/interface/User.hpp"
-#include "core/includes/command/elements/UserCommandElement.hpp"
+#include "core/interface/User.hpp"
+#include "core/command/elements/UserCommandElement.hpp"
 
-#include "core/includes/command/OperCommand.hpp"
-#include "core/includes/command/PartCommand.hpp"
+#include "core/command/OperCommand.hpp"
+#include "core/command/PartCommand.hpp"
 
 int main(int argc, const char *argv[]) {
 	const CommandSpec oper = CommandSpec::Builder()
@@ -19,7 +19,7 @@ int main(int argc, const char *argv[]) {
 		.build();
 
 	const CommandSpec part = CommandSpec::Builder()
-		.name("oper")
+		.name("part")
 		.argument("user", new UserCommandElement())
 		.argument("action", GenericArguments::string())
 		.executor(new PartCommand())

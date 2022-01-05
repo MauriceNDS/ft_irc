@@ -3,10 +3,10 @@
 
 #include "ft_irc.hpp"
 
-#include "server/includes/Response.hpp"
+#include "server/Response.hpp"
 
-#include "commands/includes/Command.hpp"
-#include "commands/includes/CommandSender.hpp"
+#include "commands/Command.hpp"
+#include "commands/CommandSender.hpp"
 
 class CommandExecutor {
 public:

@@ -6,7 +6,7 @@
 
 #include "ft_irc.hpp"
 
-#include "commands/includes/CommandElement.hpp"
+#include "commands/CommandElement.hpp"
 
 class StringCommandElement : public CommandElement {
 public:

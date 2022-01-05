@@ -1,9 +1,9 @@
 #ifndef FT_IRC_PARSING_COMMAND
 #define FT_IRC_PARSING_COMMAND
 
-#include "commands/includes/CommandSpec.hpp"
-#include "commands/includes/CommandElement.hpp"
-#include "commands/includes/exception/ArgumentNotFoundException.hpp"
+#include "commands/CommandSpec.hpp"
+#include "commands/CommandElement.hpp"
+#include "commands/exception/ArgumentNotFoundException.hpp"
 
 class Command {
 private:

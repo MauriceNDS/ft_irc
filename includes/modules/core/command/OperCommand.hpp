@@ -3,11 +3,11 @@
 
 #include "ft_irc.hpp"
 
-#include "core/includes/interface/User.hpp"
+#include "core/interface/User.hpp"
 
-#include "server/includes/Response.hpp"
-#include "commands/includes/CommandSender.hpp"
-#include "commands/includes/CommandExecutor.hpp"
+#include "server/Response.hpp"
+#include "commands/CommandSender.hpp"
+#include "commands/CommandExecutor.hpp"
 
 class OperCommand : public CommandExecutor {
 
