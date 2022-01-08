@@ -11,7 +11,7 @@
 
 class PartCommand : public CommandExecutor {
 
-	Response execute(Command cmd, CommandSender sender) {
+	Response execute(const Command& cmd, CommandSender& sender) {
 		(void)sender;
 		std::cout << "==== PART ====" << std::endl;
 

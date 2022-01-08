@@ -1,5 +1,5 @@
-#ifndef FT_IRC_PARSING_COMMAND
-#define FT_IRC_PARSING_COMMAND
+#ifndef FT_IRC_COMMANDS_COMMAND
+#define FT_IRC_COMMANDS_COMMAND
 
 #include "commands/CommandSpec.hpp"
 #include "commands/CommandElement.hpp"
@@ -10,7 +10,7 @@ private:
 	friend class CommandSpec;
 
 	string _name;
-	map<string, void *const>& _args;
+	map<string, void *const> _args;
 
 	Command(const string& name, map<string, void *const>& args) : _name(name), _args(args) {}
 
@@ -25,4 +25,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_PARSING_COMMAND */
+#endif /* FT_IRC_COMMANDS_COMMAND */

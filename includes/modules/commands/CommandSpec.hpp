@@ -1,5 +1,5 @@
-#ifndef FT_IRC_PARSING_COMMAND_SPEC
-#define FT_IRC_PARSING_COMMAND_SPEC
+#ifndef FT_IRC_COMMANDS_COMMAND_SPEC
+#define FT_IRC_COMMANDS_COMMAND_SPEC
 
 #include <sstream>
 
@@ -7,6 +7,9 @@
 #include "commands/CommandElement.hpp"
 #include "commands/CommandExecutor.hpp"
 #include "commands/exception/TooFewArgumentsException.hpp"
+
+// TODO remove
+CommandSender sender;
 
 class CommandSpec {
 private:
@@ -67,7 +70,7 @@ public:
 			args.insert(make_pair(it->first, it->second->parseValue(token)));
 		}
 
-		_executor->execute(Command(_name, args), CommandSender());
+		_executor->execute(Command(_name, args), sender);
 
 		for (it = _parameters.begin(); it != _parameters.end(); it++) {
 			it->second->destroy(args.at(it->first));
@@ -83,4 +86,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_PARSING_COMMAND_SPEC */
+#endif /* FT_IRC_COMMANDS_COMMAND_SPEC */

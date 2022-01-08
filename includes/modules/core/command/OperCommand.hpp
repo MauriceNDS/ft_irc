@@ -11,7 +11,7 @@
 
 class OperCommand : public CommandExecutor {
 
-	Response execute(Command cmd, CommandSender sender) {
+	Response execute(const Command& cmd, CommandSender& sender) {
 		(void)sender;
 		std::cout << "==== OPER ====" << std::endl;
 
