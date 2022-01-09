@@ -1,9 +1,8 @@
-#ifndef FT_IRC_COMMANDS_COMMAND
-#define FT_IRC_COMMANDS_COMMAND
+#ifndef FT_IRC_API_COMMAND
+#define FT_IRC_API_COMMAND
 
-#include "commands/CommandSpec.hpp"
-#include "commands/CommandElement.hpp"
-#include "commands/exception/ArgumentNotFoundException.hpp"
+#include "api/command/CommandSpec.hpp"
+#include "api/exception/ArgumentNotFoundException.hpp"
 
 class Command {
 private:
@@ -25,4 +24,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_COMMANDS_COMMAND */
+#endif /* FT_IRC_API_COMMAND */

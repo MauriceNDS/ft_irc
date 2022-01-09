@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE_USER
-#define FT_IRC_CORE_USER
+#ifndef FT_IRC_API_USER
+#define FT_IRC_API_USER
 
 #include "ft_irc.hpp"
 
@@ -16,4 +16,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_CORE_USER */
+#endif /* FT_IRC_API_USER */

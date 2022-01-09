@@ -1,12 +1,12 @@
-#ifndef FT_IRC_COMMANDS_GENERIC_ARGUMENTS
-#define FT_IRC_COMMANDS_GENERIC_ARGUMENTS
+#ifndef FT_IRC_API_GENERIC_ARGUMENTS
+#define FT_IRC_API_GENERIC_ARGUMENTS
 
 #include <cstdlib>
 #include <sstream>
 
 #include "ft_irc.hpp"
 
-#include "commands/CommandElement.hpp"
+#include "api/command/CommandElement.hpp"
 
 class StringCommandElement : public CommandElement {
 public:
@@ -100,11 +100,7 @@ public:
 	}
 };
 
-class GenericArguments {
-private:
-	GenericArguments();
-
-public:
+namespace GenericArguments {
 	static StringCommandElement *string() {
 		return new StringCommandElement();
 	}
@@ -123,4 +119,4 @@ public:
 	}
 };
 
-#endif /* FT_IRC_COMMANDS_GENERIC_ARGUMENTS */
+#endif /* FT_IRC_API_GENERIC_ARGUMENTS */

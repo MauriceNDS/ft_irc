@@ -1,5 +1,5 @@
-#ifndef FT_IRC_COMMANDS_COMMAND_ELEMENT
-#define FT_IRC_COMMANDS_COMMAND_ELEMENT
+#ifndef FT_IRC_API_COMMAND_ELEMENT
+#define FT_IRC_API_COMMAND_ELEMENT
 
 #include <exception>
 
@@ -15,4 +15,4 @@ public:
 	virtual ~CommandElement() {}
 };
 
-#endif /* FT_IRC_COMMANDS_COMMAND_ELEMENT */
+#endif /* FT_IRC_API_COMMAND_ELEMENT */

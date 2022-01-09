@@ -1,40 +1,45 @@
-#include "commands/CommandSpec.hpp"
-#include "commands/CommandExecutor.hpp"
-#include "commands/GenericArguments.hpp"
+#include "ft_irc.hpp"
 
-#include "core/interface/User.hpp"
+#include "api/command/CommandManager.hpp"
+#include "api/command/CommandSpec.hpp"
+#include "api/command/GenericArguments.hpp"
+
+#include "api/User.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 
 #include "core/command/OperCommand.hpp"
 #include "core/command/PartCommand.hpp"
 
 int main(int argc, const char *argv[]) {
-	const CommandSpec oper = CommandSpec::Builder()
+	CommandManager manager;
+
+	manager.registerCommand(CommandSpec::Builder()
 		.name("oper")
 		.argument("list", GenericArguments::list<string>(GenericArguments::string()))
 		.argument("user", new UserCommandElement())
 		.argument("action", GenericArguments::string())
 		.argument("optional", GenericArguments::optional(new UserCommandElement()))
 		.executor(new OperCommand())
-		.build();
-
-	const CommandSpec part = CommandSpec::Builder()
+		.build()
+	);
+	manager.registerCommand(CommandSpec::Builder()
 		.name("part")
-		.argument("user", new UserCommandElement())
+		.argument("channels", GenericArguments::string())
 		.argument("action", GenericArguments::string())
 		.executor(new PartCommand())
-		.build();
+		.build()
+	);
 
 	string input;
-	int i;
-
-	i = 0;
+	int i = 0;
 	while (++i < argc) {
 		if (i > 1)
 			input += " ";
 		input += argv[i];
 	}
 
-	oper.call(input);
+	User *u = new User("Simon");
+	manager.post(input, *u);
+	delete u;
 	return 0;
 }

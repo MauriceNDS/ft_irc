@@ -3,15 +3,13 @@
 
 #include "ft_irc.hpp"
 
-#include "core/interface/User.hpp"
-
+#include "api/User.hpp"
 #include "server/Response.hpp"
-#include "commands/CommandSender.hpp"
-#include "commands/CommandExecutor.hpp"
+#include "api/command/CommandExecutor.hpp"
 
 class PartCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	Response execute(const Command& cmd, User& sender) {
 		(void)sender;
 		std::cout << "==== PART ====" << std::endl;
 
