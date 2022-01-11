@@ -16,21 +16,20 @@ public:
 	// TODO test
 	User(string name) : nickName(name), oper(false) {}
 
-	void setOperator() {oper = true;}
-	bool isOperator() {return oper;}
+	void setOperator()	{ oper = true; }
+	bool isOperator()	{ return oper; }
 
-	void setUserName(string & username) {userName = username;}
-	void setHostName(string & hostname) {hostName = hostname;}
-	void setServerName(string & servername) {serverName = servername;}
-	void setRealName(string & realname) {realName = realname;}
-	string & getUserName(string & username) {return userName;}
-	string & getHostName(string & hostname) {return hostName;}
-	string & getServerName(string & servername) {return serverName;}
-	string & getRealName(string & realname) {return realName;}
+	void setNickName(const string& nickName)		{ this->nickName = nickName; }
+	void setUserName(const string& userName)		{ this->userName = userName; }
+	void setHostName(const string& hostName)		{ this->hostName = hostName; }
+	void setServerName(const string& serverName)	{ this->serverName = serverName; }
+	void setRealName(const string& realName)		{ this->realName = realName; }
 
-	const string& getNickName() {
-		return nickName;
-	}
+	const string& getNickName()		{ return this->nickName; }
+	const string& getUserName()		{ return this->userName; }
+	const string& getHostName()		{ return this->hostName; }
+	const string& getServerName()	{ return this->serverName; }
+	const string& getRealName()		{ return this->realName; }
 };
 
 #endif /* FT_IRC_API_USER */

@@ -4,15 +4,14 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
-#include "server/Response.hpp"
 #include "api/command/CommandExecutor.hpp"
+
+#include "server/Response.hpp"
 
 class QuitCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, User& sender) {
-
-		irc.server.killUser(sender);
-        
+	Response execute(const Command& cmd, User *sender) {
+    
 		return NONE;
 	}
 };

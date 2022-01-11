@@ -4,8 +4,9 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
-#include "server/Response.hpp"
 #include "api/command/CommandExecutor.hpp"
+
+#include "server/Response.hpp"
 
 class PartCommand : public CommandExecutor {
 public:

@@ -33,8 +33,8 @@ private:
 	static Irc *instance;
 
 public:
-	static Irc *getInstance() {
-		return Irc::instance;
+	static Irc& getInstance() {
+		return *Irc::instance;
 	}
 
 	Irc() : server(this) {

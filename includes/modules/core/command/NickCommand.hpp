@@ -3,17 +3,17 @@
 
 #include "ft_irc.hpp"
 
+#include "core/Irc.hpp"
+
 #include "api/User.hpp"
-#include "server/Response.hpp"
 #include "api/command/CommandExecutor.hpp"
+
+#include "server/Response.hpp"
 
 class NickCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, User& sender) {
-
-        if (irc)
-		irc.server.getUsers().pushback(new User(cmd.getArg<string>("nickname")));
-
+	Response execute(const Command& cmd, User *sender) {
+		sender->setNickName(cmd.getArg<string>("nick"));
 		return NONE;
 	}
 };
