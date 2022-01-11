@@ -50,6 +50,7 @@ public:
 	}
 
 	void destroy(void *arg) const {
+		subtype->destroy(*static_cast<void **>(arg));
 		delete static_cast<void **>(arg);
 	}
 

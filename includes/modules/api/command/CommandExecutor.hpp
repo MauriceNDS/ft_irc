@@ -10,7 +10,7 @@
 
 class CommandExecutor {
 public:
-	virtual Response execute(const Command& cmd, User& sender) = 0;
+	virtual Response execute(const Command& cmd, User *sender) = 0;
 
 	virtual ~CommandExecutor() {}
 };

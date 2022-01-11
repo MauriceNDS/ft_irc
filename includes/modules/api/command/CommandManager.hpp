@@ -23,8 +23,7 @@ public:
 			throw DuplicatedCommandException();
 	}
 
-	void post(const string& line, User& sender) {
-		int i;
+	void post(const string& line, User *sender) {
 		vector<string> tokens;
 		map<string, const CommandSpec *>::iterator it = specs.end();
 

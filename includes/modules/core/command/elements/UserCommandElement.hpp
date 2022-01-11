@@ -9,15 +9,16 @@
 
 #include "api/exception/ArgumentParseException.hpp"
 
-// TODO test
-User global_user("meuh");
-
 class UserCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg) const {
 		if (arg == "NotAUser" || arg == "NAU")
 			throw ArgumentParseException(string(arg) + " is not a user");
-		return &global_user;
+		return new User(arg);
+	}
+
+	void destroy(void *user) const {
+		delete static_cast<User*>(user);
 	}
 };
 

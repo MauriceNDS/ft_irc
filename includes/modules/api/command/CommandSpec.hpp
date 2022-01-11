@@ -19,7 +19,7 @@ private:
 	vector<pair<string, CommandElement *> > _parameters;
 	CommandExecutor *_executor;
 
-	void call(vector<string>& tokens, User& sender) const {
+	void call(vector<string>& tokens, User *sender) const {
 		map<string, void *const> args;
 		vector<string>::iterator tokens_it = tokens.begin();
 		vector<pair<string, CommandElement *> >::const_iterator it;

@@ -8,32 +8,20 @@
 #include "api/command/CommandExecutor.hpp"
 
 class OperCommand : public CommandExecutor {
+public:
+	Response execute(const Command& cmd, User *sender) {
+		std::cout << "=== OPER ===" << std::endl;
 
-	Response execute(const Command& cmd, User& sender) {
-		(void)sender;
-		std::cout << "==== OPER ====" << std::endl;
-
-		vector<string*>& messages = cmd.getArg<vector<string*> >("list");
+		vector<User*>& messages = cmd.getArg<vector<User*> >("list");
 		User& user = cmd.getArg<User>("user");
 		string& action = cmd.getArg<string>("action");
 		User*& optional = cmd.getArg<User*>("optional");
 
-		for (vector<string*>::iterator it = messages.begin(); it != messages.end(); it++) {
-			if (it != messages.begin())
-				std::cout << " - ";
-			std::cout << **it;
-		}
-		std::cout << std::endl;
-
-		std::cout << user.getName() << std::endl;
-		std::cout << "---" << std::endl;
-		std::cout << action << std::endl;
-		std::cout << "---" << std::endl;
-		if (optional)
-			std::cout << "Optional user found" << std::endl;
-		else
-			std::cout << "Optional user not found" << std::endl;
-
+		(void)sender;
+		(void)messages;
+		(void)user;
+		(void)action;
+		(void)optional;
 		return NONE;
 	}
 };

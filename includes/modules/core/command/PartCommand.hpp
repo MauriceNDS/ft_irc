@@ -8,18 +8,16 @@
 #include "api/command/CommandExecutor.hpp"
 
 class PartCommand : public CommandExecutor {
-
-	Response execute(const Command& cmd, User& sender) {
-		(void)sender;
-		std::cout << "==== PART ====" << std::endl;
+public:
+	Response execute(const Command& cmd, User *sender) {
+		std::cout << "=== PART ===" << std::endl;
 
 		string& user = cmd.getArg<string>("channels");
 		string& action = cmd.getArg<string>("action");
 
-		std::cout << user << std::endl;
-		std::cout << "---" << std::endl;
-		std::cout << action << std::endl;
-
+		(void)sender;
+		(void)user;
+		(void)action;
 		return NONE;
 	}
 };
