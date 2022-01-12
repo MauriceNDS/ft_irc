@@ -1,39 +1,23 @@
-#ifndef FT_IRC_API_SERVER
-#define FT_IRC_API_SERVER
+#ifndef FT_IRC_SERVER_SERVER
+#define FT_IRC_SERVER_SERVER
 
 #include "ft_irc.hpp"
 
-#include "core/Irc.hpp"
-
-#include "api/User.hpp"
-
-#include <fstream>
-std::ifstream infile("example.txt");
+#include "server/Connection.hpp"
 
 class Server {
 private:
 	string name;
-    
+	map<int, Connection *> connections;
+
 public:
-	// TODO test
 	Server(const string& name) : name(name) {}
 
 	const string& getName() {
 		return name;
 	}
 
-	void Server::listen() {
-		User *u = new User("Simon");
-
-		std::string line;
-
-		while (std::getline(infile, line)) {
-			if (!line.empty())
-				Irc::getInstance().getCommandManager().post(line, nullptr);
-		}
-
-		delete u;
-	}
+	void listen();
 };
 
-#endif /* FT_IRC_API_SERVER */
+#endif /* FT_IRC_SERVER_SERVER */

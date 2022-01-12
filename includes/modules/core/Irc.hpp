@@ -19,9 +19,10 @@ class Channel {}; // #include "api/Channel.hpp"
 
 class Irc {
 private:
+	static Irc *instance;
+
 	Server server;
 	CommandManager commandManager;
-	static Irc *instance;
 
     vector<Channel *> channels;
     vector<User *> users;
@@ -92,7 +93,5 @@ public:
 	// 	return channels;
 	// }
 };
-
-Irc *Irc::instance = nullptr;
 
 #endif /* FT_IRC_CORE */

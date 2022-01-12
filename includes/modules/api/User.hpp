@@ -3,7 +3,9 @@
 
 #include "ft_irc.hpp"
 
-class User {
+#include "api/Client.hpp"
+
+class User : public Client {
 private:
 	string nickName;
 	string userName;
@@ -14,7 +16,7 @@ private:
 
 public:
 	// TODO test
-	User(string name) : nickName(name), oper(false) {}
+	User(Connection *connection) : Client(connection), oper(false) {}
 
 	void setOperator()	{ oper = true; }
 	bool isOperator()	{ return oper; }

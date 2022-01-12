@@ -1,7 +1,7 @@
 #ifndef FT_IRC_API_GENERIC_ARGUMENTS
 #define FT_IRC_API_GENERIC_ARGUMENTS
 
-#include <cstdlib>
+// #include <cstdlib>
 #include <sstream>
 
 #include "ft_irc.hpp"
@@ -19,16 +19,16 @@ public:
 	}
 };
 
-class IntegerCommandElement : public CommandElement {
-public:
-	void *parseValue(const string& arg) const {
-		return new int(atoi(arg.c_str()));
-	}
+// class IntegerCommandElement : public CommandElement {
+// public:
+// 	void *parseValue(const string& arg) const {
+// 		return new int(atoi(arg.c_str()));
+// 	}
 
-	void destroy(void *arg) const {
-		delete static_cast<int*>(arg);
-	}
-};
+// 	void destroy(void *arg) const {
+// 		delete static_cast<int*>(arg);
+// 	}
+// };
 
 class OptionalCommandElement : public CommandElement {
 private:
@@ -106,9 +106,9 @@ namespace GenericArguments {
 		return new StringCommandElement();
 	}
 
-	static IntegerCommandElement *integer() {
-		return new IntegerCommandElement();
-	}
+	// static IntegerCommandElement *integer() {
+	// 	return new IntegerCommandElement();
+	// }
 
 	static OptionalCommandElement *optional(CommandElement *subtype) {
 		return new OptionalCommandElement(subtype);
