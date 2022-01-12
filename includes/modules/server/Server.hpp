@@ -2,34 +2,37 @@
 #define FT_IRC_API_SERVER
 
 #include "ft_irc.hpp"
+
+#include "core/Irc.hpp"
+
 #include "api/User.hpp"
-#include "api/Channel.hpp"
+
+#include <fstream>
+std::ifstream infile("example.txt");
 
 class Server {
 private:
 	string name;
-    vector<Channel *> channels;
-    vector<User *> users;
     
 public:
 	// TODO test
-	Server(string name) : name(name) {}
+	Server(const string& name) : name(name) {}
 
-	User *findUser(string & nickname) {
-		for (iterator it = users.begin(); it != users.end(); it++)
-			if ((*it).getNickName() == nickname)
-				return *it;
-		return NULL;
-	}
-
-	vector<Channel *> getChannels() {
-		return channels;
-	}
-	vector<User *> getUsers() {
-		return users;
-	}
 	const string& getName() {
 		return name;
+	}
+
+	void Server::listen() {
+		User *u = new User("Simon");
+
+		std::string line;
+
+		while (std::getline(infile, line)) {
+			if (!line.empty())
+				Irc::getInstance().getCommandManager().post(line, nullptr);
+		}
+
+		delete u;
 	}
 };
 

@@ -13,18 +13,9 @@
 #include "core/command/PartCommand.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 
-class Irc;
-#include <fstream>
-std::ifstream infile("example.txt");
-class Server {
-private:
-	Irc *const main;
+#include "server/Server.hpp"
 
-public:
-	Server(Irc *main) : main(main) {}
-
-	void listen();
-};
+class Channel {}; // #include "api/Channel.hpp"
 
 class Irc {
 private:
@@ -32,12 +23,15 @@ private:
 	CommandManager commandManager;
 	static Irc *instance;
 
+    vector<Channel *> channels;
+    vector<User *> users;
+
 public:
 	static Irc& getInstance() {
 		return *Irc::instance;
 	}
 
-	Irc() : server(this) {
+	Irc(const string& name) : server(name) {
 		Irc::instance = this;
 	}
 
@@ -69,21 +63,36 @@ public:
 	const CommandManager& getCommandManager() const {
 		return this->commandManager;
 	}
+
+	User *findUser(string& nickname) {
+		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
+			if ((*it)->getNickName() == nickname)
+				return *it;
+		return NULL;
+	}
+
+	const vector<User *>& getUsers() const {
+		return users;
+	}
+
+	void addUser(User *user) {
+		users.push_back(user);
+	}
+
+	void removeUser(User *user) {
+		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
+			if (*it == user) {
+				users.erase(it);
+				break ;
+			}
+		}
+	}
+
+	// const vector<Channel *>& getChannels() const {
+	// 	return channels;
+	// }
 };
 
 Irc *Irc::instance = nullptr;
-
-void Server::listen() {
-	User *u = new User("Simon");
-
-	std::string line;
-
-	while (std::getline(infile, line)) {
-		if (!line.empty())
-			main->getCommandManager().post(line, nullptr);
-	}
-
-	delete u;
-}
 
 #endif /* FT_IRC_CORE */

@@ -3,7 +3,7 @@
 #include "core/Irc.hpp"
 
 int main() {
-	Irc irc;
+	Irc irc("meuh-rc");
 	irc.start();
 	return 0;
 }
