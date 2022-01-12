@@ -10,6 +10,14 @@ private:
 	string name;
 	map<int, Connection *> connections;
 
+	Connection *simulate_connect(int socket) {
+		Connection *connection = new Connection(socket, sockaddr());
+		connections[socket] = connection;
+		return connection;
+	}
+
+	void simulate_join(Connection *connection, string name);
+
 public:
 	Server(const string& name) : name(name) {}
 

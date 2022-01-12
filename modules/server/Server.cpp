@@ -5,8 +5,16 @@
 #include <fstream>
 std::ifstream infile("example.txt");
 
+void Server::simulate_join(Connection *connection, string name) {
+	User *u = new User(connection);
+	u->setNickName(name);
+	Irc::getInstance().addUser(u);
+}
+
 void Server::listen() {
-	User *u = new User("Simon");
+	simulate_join(simulate_connect(1), "ArseneLeBG");
+	simulate_join(simulate_connect(2), "SimonLePlusBG");
+	simulate_join(simulate_connect(3), "Lucasquette");
 
 	std::string line;
 
@@ -14,6 +22,4 @@ void Server::listen() {
 		if (!line.empty())
 			Irc::getInstance().getCommandManager().post(line, nullptr);
 	}
-
-	delete u;
 }

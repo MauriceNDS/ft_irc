@@ -13,14 +13,12 @@ public:
 	Response execute(const Command& cmd, User *sender) {
 		std::cout << "=== OPER ===" << std::endl;
 
-		vector<User*>& messages = cmd.getArg<vector<User*> >("list");
-		User& user = cmd.getArg<User>("user");
+		vector<User*>& users = cmd.getArg<vector<User*> >("list");
 		string& action = cmd.getArg<string>("action");
 		User*& optional = cmd.getArg<User*>("optional");
 
 		(void)sender;
-		(void)messages;
-		(void)user;
+		(void)users;
 		(void)action;
 		(void)optional;
 		return NONE;

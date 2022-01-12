@@ -7,6 +7,8 @@
 
 #include <sys/socket.h>
 
+class Client;
+
 struct Connection {
 	Client *client;
 	int socket;

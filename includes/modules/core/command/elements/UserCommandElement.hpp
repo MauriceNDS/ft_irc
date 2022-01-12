@@ -4,17 +4,18 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
-
 #include "api/command/CommandElement.hpp"
-
 #include "api/exception/ArgumentParseException.hpp"
+
+#include "core/Irc.hpp"
 
 class UserCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg) const {
-		if (arg == "NotAUser" || arg == "NAU")
+		User *user = Irc::getInstance().findUser(arg);
+		if (!user)
 			throw ArgumentParseException(string(arg) + " is not a user");
-		return new User(arg);
+		return user;
 	}
 
 	void destroy(void *user) const {

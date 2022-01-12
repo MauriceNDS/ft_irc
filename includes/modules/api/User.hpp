@@ -27,11 +27,11 @@ public:
 	void setServerName(const string& serverName)	{ this->serverName = serverName; }
 	void setRealName(const string& realName)		{ this->realName = realName; }
 
-	const string& getNickName()		{ return this->nickName; }
-	const string& getUserName()		{ return this->userName; }
-	const string& getHostName()		{ return this->hostName; }
-	const string& getServerName()	{ return this->serverName; }
-	const string& getRealName()		{ return this->realName; }
+	const string& getNickName() const				{ return this->nickName; }
+	const string& getUserName() const				{ return this->userName; }
+	const string& getHostName() const				{ return this->hostName; }
+	const string& getServerName() const				{ return this->serverName; }
+	const string& getRealName() const				{ return this->realName; }
 };
 
 #endif /* FT_IRC_API_USER */

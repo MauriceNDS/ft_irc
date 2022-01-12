@@ -5,14 +5,14 @@
 
 #include "server/Connection.hpp"
 
+struct Connection;
+
 class Client {
 private:
 	Connection *connection;
     
 public:
-	Client(Connection *connection) : connection(connection) {
-		connection->client = this;
-	}
+	Client(Connection *connection);
 
 	const Connection *getConnection() {
 		return connection;
