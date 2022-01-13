@@ -12,9 +12,14 @@
 
 class NickCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, User *sender) {
-		sender->setNickName(cmd.getArg<string>("nick"));
-		return NONE;
+	Response execute(const Command& cmd, Client& sender) {
+		string nickname = cmd.getArg<string>("nickname");
+		if (nickname.empty())
+			return ERR_NONICKNAMEGIVEN;
+
+		(void)sender;
+		std::cout << "'" << nickname << "'" << std::endl;
+		return RPL_NONE;
 	}
 };
 

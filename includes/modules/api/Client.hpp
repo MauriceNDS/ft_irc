@@ -3,6 +3,7 @@
 
 #include "ft_irc.hpp"
 
+#include "server/Response.hpp"
 #include "server/Connection.hpp"
 
 struct Connection;
@@ -16,6 +17,10 @@ public:
 
 	const Connection *getConnection() {
 		return connection;
+	}
+
+	void send(Response response) const {
+		std::cout << "> " << response << std::endl;
 	}
 
 	virtual ~Client() = 0;

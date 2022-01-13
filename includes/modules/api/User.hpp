@@ -7,11 +7,9 @@
 
 class User : public Client {
 private:
-	string nickName;
-	string userName;
-	string hostName;
-	string serverName;
-	string realName;
+	string nickname;
+	string username;
+	string realname;
 	bool oper;
 
 public:
@@ -21,17 +19,13 @@ public:
 	void setOperator()	{ oper = true; }
 	bool isOperator()	{ return oper; }
 
-	void setNickName(const string& nickName)		{ this->nickName = nickName; }
-	void setUserName(const string& userName)		{ this->userName = userName; }
-	void setHostName(const string& hostName)		{ this->hostName = hostName; }
-	void setServerName(const string& serverName)	{ this->serverName = serverName; }
-	void setRealName(const string& realName)		{ this->realName = realName; }
+	void setNickName(const string& nickname)		{ this->nickname = nickname; }
+	void setUserName(const string& username)		{ this->username = username; }
+	void setRealName(const string& realname)		{ this->realname = realname; }
 
-	const string& getNickName() const				{ return this->nickName; }
-	const string& getUserName() const				{ return this->userName; }
-	const string& getHostName() const				{ return this->hostName; }
-	const string& getServerName() const				{ return this->serverName; }
-	const string& getRealName() const				{ return this->realName; }
+	const string& getNickName() const				{ return this->nickname; }
+	const string& getUserName() const				{ return this->username; }
+	const string& getRealName() const				{ return this->realname; }
 };
 
 #endif /* FT_IRC_API_USER */

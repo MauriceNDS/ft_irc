@@ -19,24 +19,30 @@ private:
 	vector<pair<string, CommandElement *> > _parameters;
 	CommandExecutor *_executor;
 
-	void call(vector<string>& tokens, User *sender) const {
+	void call(vector<string>& tokens, MessageEvent& event) const {
 		map<string, void *const> args;
 		vector<string>::iterator tokens_it = tokens.begin();
 		vector<pair<string, CommandElement *> >::const_iterator it;
 
-		for (it = _parameters.begin(); it != _parameters.end(); it++) {
+		for (it = _parameters.begin(); it != _parameters.end() && !event.isCancelled(); it++) {
 			string token = "";
 			if (tokens_it != tokens.end())
 				token = *tokens_it++;
-			if (!it->second->is_valid(token))
-				throw TooFewArgumentsException();
-			args.insert(make_pair(it->first, it->second->parseValue(token)));
+			else if (it->second->isRequired()) {
+				event.getSender().send(ERR_NEEDMOREPARAMS);
+				event.setCancelled(true);
+				break ;
+			}
+			args.insert(make_pair(it->first, it->second->parseValue(token, event)));
+		}
+		if (!event.isCancelled()) {
+			event.getSender().send(_executor->execute(Command(_name, args), event.getSender()));
 		}
 
-		_executor->execute(Command(_name, args), sender);
-
 		for (it = _parameters.begin(); it != _parameters.end(); it++) {
-			it->second->destroy(args.at(it->first));
+			try {
+				it->second->destroy(args.at(it->first));
+			} catch (const std::out_of_range& e) {}
 		}
 	}
 

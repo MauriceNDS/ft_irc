@@ -3,13 +3,17 @@
 
 #include <exception>
 
+#include "ft_irc.hpp"
+
+#include "api/event/MessageEvent.hpp"
+
 class CommandElement {
 public:
-	virtual bool is_valid(const string& arg) {
-		return !arg.empty();
+	virtual bool isRequired() {
+		return true;
 	}
 
-	virtual void *parseValue(const string& arg) const = 0;
+	virtual void *parseValue(const string& arg, MessageEvent& event) const = 0;
 
 	virtual void destroy(void *) const {}
 	virtual ~CommandElement() {}

@@ -1,6 +1,6 @@
 #include "core/Irc.hpp"
-#include "core/command/OperCommand.hpp"
-#include "core/command/PartCommand.hpp"
+#include "core/command/UserCommand.hpp"
+#include "core/command/NickCommand.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 
 #include "api/command/CommandSpec.hpp"
@@ -8,19 +8,18 @@
 
 void Irc::start() {
 	commandManager.registerCommand(CommandSpec::Builder()
-		.name("OPER")
-		.argument("list", GenericArguments::list<User>(new UserCommandElement()))
-		.argument("action", GenericArguments::string())
-		.argument("optional", GenericArguments::optional(new UserCommandElement()))
-		.executor(new OperCommand())
+		.name("USER")
+		.argument("username", GenericArguments::string())
+		.argument("mode", GenericArguments::string())
+		.argument("unused", GenericArguments::string())
+		.argument("realname", GenericArguments::string())
+		.executor(new UserCommand())
 		.build()
 	);
-
 	commandManager.registerCommand(CommandSpec::Builder()
-		.name("PART")
-		.argument("channels", GenericArguments::string())
-		.argument("action", GenericArguments::string())
-		.executor(new PartCommand())
+		.name("NICK")
+		.argument("nickname", GenericArguments::string())
+		.executor(new NickCommand())
 		.build()
 	);
 	server.listen();

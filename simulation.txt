@@ -1,0 +1,5 @@
+NICK aaa
+NICK :
+NICK
+
+USER scros 0 * :Simon Cros

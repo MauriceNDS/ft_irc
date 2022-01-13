@@ -10,7 +10,8 @@
 
 class StringCommandElement : public CommandElement {
 public:
-	void *parseValue(const string& arg) const {
+	void *parseValue(const string& arg, MessageEvent& event) const {
+		(void)event;
 		return new string(arg);
 	}
 
@@ -19,16 +20,17 @@ public:
 	}
 };
 
-// class IntegerCommandElement : public CommandElement {
-// public:
-// 	void *parseValue(const string& arg) const {
-// 		return new int(atoi(arg.c_str()));
-// 	}
+class IntegerCommandElement : public CommandElement {
+public:
+	void *parseValue(const string& arg, MessageEvent& event) const {
+		(void)event;
+		return new int(atoi(arg.c_str()));
+	}
 
-// 	void destroy(void *arg) const {
-// 		delete static_cast<int*>(arg);
-// 	}
-// };
+	void destroy(void *arg) const {
+		delete static_cast<int*>(arg);
+	}
+};
 
 class OptionalCommandElement : public CommandElement {
 private:
@@ -38,15 +40,14 @@ private:
 public:
 	OptionalCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
-	bool is_valid(const string& arg) {
-		(void)arg;
-		return true;
+	bool isRequired() {
+		return false;
 	}
 
-	void *parseValue(const string& arg) const {
+	void *parseValue(const string& arg, MessageEvent& event) const {
 		if (arg.empty())
 			return new const void*(nullptr);
-		return new const void*(subtype->parseValue(arg));
+		return new const void*(subtype->parseValue(arg, event));
 	}
 
 	void destroy(void *arg) const {
@@ -68,21 +69,18 @@ private:
 public:
 	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
-	void *parseValue(const string& arg) const {
+	void *parseValue(const string& arg, MessageEvent& event) const {
 		vector<T*> *val = new vector<T*>();
-
-		string cpy = arg;
-		std::replace(cpy.begin(), cpy.end(), ',', ' ');
-
 		vector<string> tokens;
-		std::stringstream ss(cpy);
-		string temp;
-		while (ss >> temp)
-			tokens.push_back(temp);
 		vector<string>::iterator tokens_it;
 
+		std::istringstream ss(arg);
+		string temp;
+		while (std::getline(ss, temp, ','))
+			tokens.push_back(temp);
+
 		for (tokens_it = tokens.begin(); tokens_it != tokens.end(); tokens_it++) {
-			val->push_back(static_cast<T*>(subtype->parseValue(*tokens_it)));
+			val->push_back(static_cast<T*>(subtype->parseValue(*tokens_it, event)));
 		}
 		return val;
 	}
@@ -110,9 +108,9 @@ namespace GenericArguments {
 	// 	return new IntegerCommandElement();
 	// }
 
-	static OptionalCommandElement *optional(CommandElement *subtype) {
-		return new OptionalCommandElement(subtype);
-	}
+	// static OptionalCommandElement *optional(CommandElement *subtype) {
+	// 	return new OptionalCommandElement(subtype);
+	// }
 
 	template <class T>
 	static ListCommandElement<T> *list(CommandElement *subtype) {

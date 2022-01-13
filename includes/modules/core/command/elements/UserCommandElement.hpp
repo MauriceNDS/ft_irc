@@ -10,11 +10,19 @@
 #include "core/Irc.hpp"
 
 class UserCommandElement : public CommandElement {
+private:
+	Response failResponse;
+
 public:
-	void *parseValue(const string& arg) const {
+	UserCommandElement(Response fail) : failResponse(fail) {}
+
+	void *parseValue(const string& arg, MessageEvent& event) const {
 		User *user = Irc::getInstance().findUser(arg);
-		if (!user)
-			throw ArgumentParseException(string(arg) + " is not a user");
+		if (!user) {
+			event.getSender().send(failResponse);
+			event.setCancelled(true);
+			return nullptr;
+		}
 		return user;
 	}
 

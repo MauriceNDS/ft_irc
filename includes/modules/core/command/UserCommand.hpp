@@ -10,14 +10,11 @@
 
 class UserCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, User& sender) {
-
-		sender.setUserName(cmd.getArg<string>("user"));
-		sender.setHostName(cmd.getArg<string>("host"));
-		sender.setServerName(cmd.getArg<string>("server"));
-		sender.setRealName(cmd.getArg<string>("real"));
-
-		return NONE;
+	Response execute(const Command& cmd, Client& sender) {
+		(void)sender;
+		std::cout << "'" << cmd.getArg<string>("username") << "'" << std::endl;
+		std::cout << "'" << cmd.getArg<string>("realname") << "'" << std::endl;
+		return RPL_NONE;
 	}
 };
 
