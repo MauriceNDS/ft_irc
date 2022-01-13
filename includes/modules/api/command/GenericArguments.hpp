@@ -1,7 +1,7 @@
 #ifndef FT_IRC_API_GENERIC_ARGUMENTS
 #define FT_IRC_API_GENERIC_ARGUMENTS
 
-// #include <cstdlib>
+#include <cstdlib>
 #include <sstream>
 
 #include "ft_irc.hpp"
