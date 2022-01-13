@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Mac",
+            "name": "macOS 10.14 x64",
             "includePath": [
                 "${workspaceFolder}/includes",
                 "${workspaceFolder}/includes/modules"
@@ -16,7 +16,7 @@
             "intelliSenseMode": "macos-clang-x64"
         },
         {
-            "name": "Spple Silicon",
+            "name": "macOS 12.1 arm64",
             "includePath": [
                 "${workspaceFolder}/includes",
                 "${workspaceFolder}/includes/modules"
