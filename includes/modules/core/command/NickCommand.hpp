@@ -16,6 +16,8 @@ class NickCommand : public CommandExecutor {
 		string nickname = cmd.getArg<string>("nickname");
 		if (nickname.empty())
 			return ERR_NONICKNAMEGIVEN;
+		if (nickname.find(' ') != string::npos)
+			return ERR_ERRONEUSNICKNAME;
 
 		(void)sender;
 		std::cout << "'" << nickname << "'" << std::endl;

@@ -22,7 +22,11 @@ void Irc::start() {
 		.executor(new NickCommand())
 		.build()
 	);
+
 	server.listen();
+	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i) {
+		delete *i;
+	}
 }
 
 Irc *Irc::instance = nullptr;

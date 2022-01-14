@@ -3,6 +3,8 @@
 
 #include "ft_irc.hpp"
 
+#include "api/User.hpp"
+
 #include "server/Connection.hpp"
 
 class Server {
@@ -16,7 +18,7 @@ private:
 		return connection;
 	}
 
-	void simulate_join(Connection *connection, string name);
+	User *simulate_join(Connection *connection, string name);
 
 public:
 	Server(const string& name) : name(name) {}

@@ -5,10 +5,11 @@
 #include <fstream>
 std::ifstream infile("simulation.txt");
 
-void Server::simulate_join(Connection *connection, string name) {
+User *Server::simulate_join(Connection *connection, string name) {
 	User *u = new User(connection);
 	u->setNickName(name);
 	Irc::getInstance().addUser(u);
+	return u;
 }
 
 void Server::listen() {
@@ -21,14 +22,17 @@ void Server::listen() {
 
 	std::string line;
 
-	while (std::getline(infile, line)) {
+	while (std::getline(std::cin, line)) {
+	// while (std::getline(infile, line)) {
 		if (!line.empty()) {
-			std::cout << "< " << line << std::endl;
 			MessageEvent event = MessageEvent(line, *base);
 			Irc::getInstance().getCommandManager().post(event);
 		}
 	}
 
+	for (map<int, Connection *>::iterator i = connections.begin(); i != connections.end(); ++i) {
+		delete i->second;
+	}
 	delete base_connection;
 	delete base;
 }

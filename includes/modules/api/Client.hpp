@@ -10,8 +10,8 @@ struct Connection;
 
 class Client {
 private:
-	Connection *connection;
-    
+	Connection *const connection;
+
 public:
 	Client(Connection *connection);
 
