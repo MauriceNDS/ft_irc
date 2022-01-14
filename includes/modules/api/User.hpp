@@ -26,6 +26,12 @@ public:
 	const string& getNickName() const				{ return this->nickname; }
 	const string& getUserName() const				{ return this->username; }
 	const string& getRealName() const				{ return this->realname; }
+
+	bool isRegistered() const {
+		return !getNickName().empty()
+			&& !getUserName().empty()
+			&& !getRealName().empty();
+	}
 };
 
 #endif /* FT_IRC_API_USER */

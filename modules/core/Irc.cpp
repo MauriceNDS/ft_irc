@@ -1,7 +1,10 @@
 #include "core/Irc.hpp"
+#include "core/command/TestCommand.hpp"
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
+
+#include "api/middleware/RegisteredUserMiddleware.hpp"
 
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
@@ -20,6 +23,12 @@ void Irc::start() {
 		.name("NICK")
 		.argument("nickname", GenericArguments::string())
 		.executor(new NickCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("TEST")
+		.executor(new TestCommand())
+		.middleware(new RegisteredUserMiddleware())
 		.build()
 	);
 

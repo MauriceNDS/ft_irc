@@ -8,6 +8,7 @@
 #include "api/command/CommandManager.hpp"
 #include "api/command/CommandExecutor.hpp"
 #include "api/exception/TooFewArgumentsException.hpp"
+#include "api/middleware/Middleware.hpp"
 
 class CommandManager;
 
@@ -18,12 +19,18 @@ private:
 	string _name;
 	vector<pair<string, CommandElement *> > _parameters;
 	CommandExecutor *_executor;
+	Middleware *_middleware;
 
 	void call(vector<string>& tokens, MessageEvent& event) const {
 		map<string, void *const> args;
 		vector<string>::iterator tokens_it = tokens.begin();
 		vector<pair<string, CommandElement *> >::const_iterator it;
 
+		// Middleware protection
+		if (_middleware && !_middleware->handle(event.getSender()))
+			return ;
+
+		// Converting string to elements
 		for (it = _parameters.begin(); it != _parameters.end() && !event.isCancelled(); it++) {
 			string token = "";
 			if (tokens_it != tokens.end())
@@ -35,10 +42,13 @@ private:
 			}
 			args.insert(make_pair(it->first, it->second->parseValue(token, event)));
 		}
+
+		// Launch command
 		if (!event.isCancelled()) {
 			event.getSender().send(_executor->execute(Command(_name, args), event.getSender()));
 		}
 
+		// Destroy all the created elements
 		for (it = _parameters.begin(); it != _parameters.end(); it++) {
 			try {
 				it->second->destroy(args.at(it->first));
@@ -50,7 +60,7 @@ private:
 	CommandSpec& operator=(const CommandSpec&);
 
 protected:
-	CommandSpec(const string& name, const vector<pair<string, CommandElement *> >& parameters, CommandExecutor *executor) : _name(name), _parameters(parameters), _executor(executor) {}
+	CommandSpec(const string& name, const vector<pair<string, CommandElement *> >& parameters, CommandExecutor *executor, Middleware *middleware) : _name(name), _parameters(parameters), _executor(executor), _middleware(middleware) {}
 
 public:
 	class Builder {
@@ -58,8 +68,11 @@ public:
 		string _name;
 		vector<pair<string, CommandElement *> > _parameters;
 		CommandExecutor *_executor;
+		Middleware *_middleware;
 
 	public:
+		Builder() : _executor(nullptr), _middleware(nullptr) {}
+
 		Builder& name(string name) {
 			this->_name = name;
 			return *this;
@@ -75,8 +88,13 @@ public:
 			return *this;
 		}
 
+		Builder &middleware(Middleware *middleware) {
+			this->_middleware = middleware;
+			return *this;
+		}
+
 		const CommandSpec *build() const {
-			return new CommandSpec(_name, _parameters, _executor);
+			return new CommandSpec(_name, _parameters, _executor, _middleware);
 		}
 	};
 
@@ -90,6 +108,7 @@ public:
 			delete it->second;
 		}
 		delete _executor;
+		delete _middleware;
 	}
 };
 
