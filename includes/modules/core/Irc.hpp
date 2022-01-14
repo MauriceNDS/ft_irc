@@ -66,6 +66,8 @@ public:
 	// const vector<Channel *>& getChannels() const {
 	// 	return channels;
 	// }
+
+	~Irc();
 };
 
 #endif /* FT_IRC_CORE */

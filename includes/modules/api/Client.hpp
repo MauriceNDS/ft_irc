@@ -3,8 +3,9 @@
 
 #include "ft_irc.hpp"
 
+#include "api/Connection.hpp"
+
 #include "server/Response.hpp"
-#include "server/Connection.hpp"
 
 struct Connection;
 

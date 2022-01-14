@@ -5,6 +5,12 @@
 #include <fstream>
 std::ifstream infile("simulation.txt");
 
+Connection *Server::simulate_connect(int socket) {
+	Connection *connection = new Connection(socket, sockaddr());
+	connections[socket] = connection;
+	return connection;
+}
+
 User *Server::simulate_join(Connection *connection, string name) {
 	User *u = new User(connection);
 	u->setNickName(name);

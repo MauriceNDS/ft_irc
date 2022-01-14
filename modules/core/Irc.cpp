@@ -4,6 +4,7 @@
 #include "core/command/NickCommand.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 
+#include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
 
 #include "api/command/CommandSpec.hpp"
@@ -16,23 +17,28 @@ void Irc::start() {
 		.argument("mode", GenericArguments::string())
 		.argument("unused", GenericArguments::string())
 		.argument("realname", GenericArguments::string())
+		.middleware(new UserMiddleware())
 		.executor(new UserCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("NICK")
 		.argument("nickname", GenericArguments::string())
+		.middleware(new UserMiddleware())
 		.executor(new NickCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("TEST")
-		.executor(new TestCommand())
 		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
 		.build()
 	);
 
 	server.listen();
+}
+
+Irc::~Irc() {
 	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i) {
 		delete *i;
 	}

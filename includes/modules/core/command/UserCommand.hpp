@@ -11,9 +11,13 @@
 class UserCommand : public CommandExecutor {
 
 	Response execute(const Command& cmd, Client& sender) {
-		(void)sender;
-		std::cout << "'" << cmd.getArg<string>("username") << "'" << std::endl;
-		std::cout << "'" << cmd.getArg<string>("realname") << "'" << std::endl;
+		User& user = dynamic_cast<User&>(sender);
+
+		if (!(user.getUserName().empty()))
+			return ERR_ALREADYREGISTRED;
+
+		user.setUserName(cmd.getArg<string>("username"));
+		user.setRealName(cmd.getArg<string>("realname"));
 		return RPL_NONE;
 	}
 };

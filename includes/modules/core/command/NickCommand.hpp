@@ -13,14 +13,15 @@
 class NickCommand : public CommandExecutor {
 
 	Response execute(const Command& cmd, Client& sender) {
+		User& user = dynamic_cast<User&>(sender);
+
 		string nickname = cmd.getArg<string>("nickname");
 		if (nickname.empty())
 			return ERR_NONICKNAMEGIVEN;
 		if (nickname.find(' ') != string::npos)
 			return ERR_ERRONEUSNICKNAME;
 
-		(void)sender;
-		std::cout << "'" << nickname << "'" << std::endl;
+		user.setNickName(nickname);
 		return RPL_NONE;
 	}
 };

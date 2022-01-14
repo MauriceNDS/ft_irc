@@ -12,7 +12,6 @@ class TestCommand : public CommandExecutor {
 	Response execute(const Command& cmd, Client& sender) {
 		(void)cmd;
 		(void)sender;
-		std::cout << "(test)" << std::endl;
 		return RPL_NONE;
 	}
 };

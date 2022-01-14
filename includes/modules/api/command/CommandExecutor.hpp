@@ -12,7 +12,7 @@ class CommandExecutor {
 public:
 	virtual Response execute(const Command& cmd, Client& sender) = 0;
 
-	virtual ~CommandExecutor() {}
+	virtual ~CommandExecutor() = 0;
 };
 
 #endif /* FT_IRC_API_COMMAND_EXECUTOR */

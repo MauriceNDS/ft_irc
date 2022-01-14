@@ -4,20 +4,14 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
-
-#include "server/Connection.hpp"
+#include "api/Connection.hpp"
 
 class Server {
 private:
 	string name;
 	map<int, Connection *> connections;
 
-	Connection *simulate_connect(int socket) {
-		Connection *connection = new Connection(socket, sockaddr());
-		connections[socket] = connection;
-		return connection;
-	}
-
+	Connection *simulate_connect(int socket);
 	User *simulate_join(Connection *connection, string name);
 
 public:

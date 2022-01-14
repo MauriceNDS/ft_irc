@@ -13,4 +13,3 @@ public:
 };
 
 #endif /* FT_IRC_API_MIDDLEWARE */
-
