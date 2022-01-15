@@ -12,7 +12,7 @@
 
 class NickCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, Client& sender) {
+	Response execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
 		string nickname = cmd.getArg<string>("nickname");

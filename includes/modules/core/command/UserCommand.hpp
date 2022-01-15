@@ -10,13 +10,13 @@
 
 class UserCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, Client& sender) {
+	Response execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
 		if (!(user.getUserName().empty()))
 			return ERR_ALREADYREGISTRED;
 
-		user.setUserName(cmd.getArg<string>("username"));
+		user.setUserName(cmd.getArg<string>("user"));
 		user.setRealName(cmd.getArg<string>("realname"));
 		return RPL_NONE;
 	}

@@ -6,23 +6,16 @@
 #include "api/User.hpp"
 #include "api/command/CommandElement.hpp"
 #include "api/exception/ArgumentParseException.hpp"
+#include "api/event/MessageEvent.hpp"
 
 #include "core/Irc.hpp"
 
 class UserCommandElement : public CommandElement {
-private:
-	Response failResponse;
-
 public:
-	UserCommandElement(Response fail) : failResponse(fail) {}
-
 	void *parseValue(const string& arg, MessageEvent& event) const {
 		User *user = Irc::getInstance().findUser(arg);
-		if (!user) {
-			event.getSender().send(failResponse);
-			event.setCancelled(true);
+		if (!user)
 			return nullptr;
-		}
 		return user;
 	}
 

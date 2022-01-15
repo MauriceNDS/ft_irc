@@ -3,13 +3,14 @@
 
 #include "ft_irc.hpp"
 
+#include "api/CommandSender.hpp"
 #include "api/Connection.hpp"
 
 #include "server/Response.hpp"
 
 struct Connection;
 
-class Client {
+class Client : public CommandSender {
 private:
 	Connection *const connection;
 
@@ -20,8 +21,8 @@ public:
 		return connection;
 	}
 
-	void send(Response response) const {
-		std::cout << "> " << response << std::endl;
+	void send(Response message) const {
+		std::cout << "> " << message << std::endl;
 	}
 
 	virtual ~Client() = 0;

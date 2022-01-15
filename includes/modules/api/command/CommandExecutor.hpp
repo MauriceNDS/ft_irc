@@ -5,12 +5,12 @@
 
 #include "server/Response.hpp"
 
-#include "api/Client.hpp"
+#include "api/CommandSender.hpp"
 #include "api/command/Command.hpp"
 
 class CommandExecutor {
 public:
-	virtual Response execute(const Command& cmd, Client& sender) = 0;
+	virtual Response execute(const Command& cmd, CommandSender& sender) = 0;
 
 	virtual ~CommandExecutor() = 0;
 };

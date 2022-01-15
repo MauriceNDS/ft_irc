@@ -4,11 +4,12 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
+#include "api/Channel.hpp"
 #include "api/command/CommandManager.hpp"
 
 #include "server/Server.hpp"
 
-class Channel {}; // #include "api/Channel.hpp"
+#include "api/Channel.hpp"
 
 class Irc {
 private:

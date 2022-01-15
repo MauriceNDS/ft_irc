@@ -2,7 +2,9 @@
 #include "core/command/TestCommand.hpp"
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
+
 #include "core/command/elements/UserCommandElement.hpp"
+#include "core/command/elements/ChannelCommandElement.hpp"
 
 #include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
@@ -13,7 +15,7 @@
 void Irc::start() {
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("USER")
-		.argument("username", GenericArguments::string())
+		.argument("user", GenericArguments::string())
 		.argument("mode", GenericArguments::string())
 		.argument("unused", GenericArguments::string())
 		.argument("realname", GenericArguments::string())
@@ -26,6 +28,22 @@ void Irc::start() {
 		.argument("nickname", GenericArguments::string())
 		.middleware(new UserMiddleware())
 		.executor(new NickCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PRIVMSG")
+		.argument("msgtarget", CommandElement::Builder()
+			.element(new ChannelCommandElement())
+			.onlyIf(Channel::isValidIdentifier)
+			.element(new UserCommandElement())
+			.ifNotProvided(ERR_NORECIPIENT)
+			.build())
+		.argument("message", CommandElement::Builder()
+			.element(GenericArguments::string())
+			.ifNotProvided(ERR_NOTEXTTOSEND)
+			.build())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
