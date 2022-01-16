@@ -1,5 +1,9 @@
-NICK aaa
-NICK :
-NICK
-
+PRIVMSG
+PRIVMSG Someone ?
 USER scros 0 * :Simon Cros
+USER adel-sol 0 * :Arsène Del Sol
+NICK Saumon
+PRIVMSG Someone ?
+PRIVMSG Lucasquette
+PRIVMSG
+PRIVMSG Lucasquette :Hello World !!!
