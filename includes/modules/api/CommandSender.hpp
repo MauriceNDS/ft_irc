@@ -10,6 +10,8 @@ struct Connection;
 class CommandSender {
 public:
 	virtual void send(Response message) const = 0;
+
+	virtual ~CommandSender() {}
 };
 
 #endif /* FT_IRC_API_COMMAND_SENDER */

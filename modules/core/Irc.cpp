@@ -3,6 +3,7 @@
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
 
+#include "core/command/elements/MsgTargetCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 #include "core/command/elements/ChannelCommandElement.hpp"
 
@@ -32,22 +33,11 @@ void Irc::start() {
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("PRIVMSG")
-		.argument("msgtarget", CommandElement::Builder()
-			.element(new ChannelCommandElement())
-			.onlyIf(Channel::isValidIdentifier)
-			.element(new UserCommandElement())
-			.ifNotProvided(ERR_NORECIPIENT)
-			.build())
+		.argument("msgtarget", new MsgTargetCommandElement())
 		.argument("message", CommandElement::Builder()
 			.element(GenericArguments::string())
 			.ifNotProvided(ERR_NOTEXTTOSEND)
 			.build())
-		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
-		.build()
-	);
-	commandManager.registerCommand(CommandSpec::Builder()
-		.name("TEST")
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new TestCommand())
 		.build()

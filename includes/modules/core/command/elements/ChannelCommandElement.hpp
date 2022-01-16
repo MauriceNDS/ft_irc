@@ -10,11 +10,10 @@
 class ChannelCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg, MessageEvent& event) const {
+		if (Channel::isValidIdentifier(arg)) {
+		}
+		event.getSender().send(ERR_NOSUCHCHANNEL);
 		return nullptr;
-	}
-
-	void destroy(void *channel) const {
-		delete static_cast<Channel*>(channel);
 	}
 };
 

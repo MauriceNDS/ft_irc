@@ -27,7 +27,7 @@ public:
 			(*it)->send(message);
 	}
 
-	bool isValidIdentifier(const string& identifier) {
+	static bool isValidIdentifier(const string& identifier) {
 		return identifier[0] == '#';
 	}
 };

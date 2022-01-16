@@ -40,7 +40,7 @@ private:
 public:
 	OptionalCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
-	bool isRequired() {
+	bool isRequired() const {
 		return false;
 	}
 
@@ -112,10 +112,10 @@ namespace GenericArguments {
 	// 	return new OptionalCommandElement(subtype);
 	// }
 
-	template <class T>
-	static ListCommandElement<T> *list(CommandElement *subtype) {
-		return new ListCommandElement<T>(subtype);
-	}
+	// template <class T>
+	// static ListCommandElement<T> *list(CommandElement *subtype) {
+	// 	return new ListCommandElement<T>(subtype);
+	// }
 };
 
 #endif /* FT_IRC_API_GENERIC_ARGUMENTS */

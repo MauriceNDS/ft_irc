@@ -14,13 +14,10 @@ class UserCommandElement : public CommandElement {
 public:
 	void *parseValue(const string& arg, MessageEvent& event) const {
 		User *user = Irc::getInstance().findUser(arg);
-		if (!user)
-			return nullptr;
-		return user;
-	}
-
-	void destroy(void *user) const {
-		delete static_cast<User*>(user);
+		if (user)
+			return user;
+		event.getSender().send(ERR_NOSUCHNICK);
+		return nullptr;
 	}
 };
 

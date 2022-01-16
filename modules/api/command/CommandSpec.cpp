@@ -15,11 +15,18 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 		if (tokens_it != tokens.end())
 			token = *tokens_it++;
 		else if (it->second->isRequired()) {
-			event.getSender().send(ERR_NEEDMOREPARAMS);
+			event.getSender().send(it->second->notProvidedResponse());
 			event.setCancelled(true);
 			break ;
 		}
-		args.insert(make_pair(it->first, it->second->parseValue(token, event)));
+		void *value = it->second->parseValue(token, event);
+		if (value)
+			args.insert(make_pair(it->first, value));
+		else {
+			it->second->destroy(value);
+			event.setCancelled(true);
+			break ;
+		}
 	}
 
 	// Launch command
@@ -30,7 +37,9 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 	// Destroy all the created elements
 	for (it = _parameters.begin(); it != _parameters.end(); it++) {
 		try {
-			it->second->destroy(args.at(it->first));
+			void *arg = args.at(it->first);
+			if (arg)
+				it->second->destroy(arg);
 		} catch (const std::out_of_range& e) {}
 	}
 }
