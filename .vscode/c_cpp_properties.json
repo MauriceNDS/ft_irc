@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "name": "macOS 10.14 x64",
+            "includePath": [
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/includes/modules"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c89",
+            "cppStandard": "c++98",
+            "intelliSenseMode": "macos-clang-x64"
+        },
+        {
+            "name": "macOS 12.1 arm64",
+            "includePath": [
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/includes/modules"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c89",
+            "cppStandard": "c++98",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}

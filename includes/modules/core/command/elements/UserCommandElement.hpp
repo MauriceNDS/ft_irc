@@ -3,20 +3,21 @@
 
 #include "ft_irc.hpp"
 
-#include "core/interface/User.hpp"
+#include "api/User.hpp"
+#include "api/command/CommandElement.hpp"
+#include "api/exception/ArgumentParseException.hpp"
+#include "api/event/MessageEvent.hpp"
 
-#include "commands/CommandElement.hpp"
-#include "commands/exception/ArgumentParseException.hpp"
-
-// TODO test
-User global_user("meuh");
+#include "core/Irc.hpp"
 
 class UserCommandElement : public CommandElement {
 public:
-	void *parseValue(const string& arg) const {
-		if (arg == "NotAUser" || arg == "NAU")
-			throw ArgumentParseException(string(arg) + " is not a user");
-		return &global_user;
+	void *parseValue(const string& arg, MessageEvent& event) const {
+		User *user = Irc::getInstance().findUser(arg);
+		if (user)
+			return user;
+		event.getSender().send(ERR_NOSUCHNICK);
+		return NULL;
 	}
 };
 

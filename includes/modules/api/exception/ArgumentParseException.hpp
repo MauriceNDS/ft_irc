@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE_ARGUMENT_PARSE_EXCEPTION
-#define FT_IRC_CORE_ARGUMENT_PARSE_EXCEPTION
+#ifndef FT_IRC_API_ARGUMENT_PARSE_EXCEPTION
+#define FT_IRC_API_ARGUMENT_PARSE_EXCEPTION
 
 #include <exception>
 
@@ -9,4 +9,4 @@ struct ArgumentParseException : public std::logic_error {
 	ArgumentParseException(const string& message) : std::logic_error(message) {}
 };
 
-#endif /* FT_IRC_CORE_ARGUMENT_PARSE_EXCEPTION */
+#endif /* FT_IRC_API_ARGUMENT_PARSE_EXCEPTION */
