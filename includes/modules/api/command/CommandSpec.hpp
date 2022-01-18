@@ -39,7 +39,7 @@ public:
 		Middleware *_middleware;
 
 	public:
-		Builder() : _executor(nullptr), _middleware(nullptr) {}
+		Builder() : _executor(NULL), _middleware(NULL) {}
 
 		Builder& name(string name) {
 			this->_name = name;

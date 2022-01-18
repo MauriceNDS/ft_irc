@@ -46,8 +46,11 @@ public:
 
 	void *parseValue(const string& arg, MessageEvent& event) const {
 		if (arg.empty())
-			return new const void*(nullptr);
-		return new const void*(subtype->parseValue(arg, event));
+			return new const void*(NULL);
+		void *val = subtype->parseValue(arg, event);
+		if (!val)
+			return NULL;
+		return new const void*(val);
 	}
 
 	void destroy(void *arg) const {
@@ -70,7 +73,7 @@ public:
 	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
 	void *parseValue(const string& arg, MessageEvent& event) const {
-		vector<T*> *val = new vector<T*>();
+		vector<T *> *args = new vector<T *>();
 		vector<string> tokens;
 		vector<string>::iterator tokens_it;
 
@@ -80,15 +83,21 @@ public:
 			tokens.push_back(temp);
 
 		for (tokens_it = tokens.begin(); tokens_it != tokens.end(); tokens_it++) {
-			val->push_back(static_cast<T*>(subtype->parseValue(*tokens_it, event)));
+			void *val = subtype->parseValue(*tokens_it, event);
+			if (val)
+				args->push_back(static_cast<T *>(val));
 		}
-		return val;
+		if (args->size() != tokens.size()) {
+			destroy(args);
+			return NULL;
+		}
+		return args;
 	}
 
 	void destroy(void *arg) const {
-		vector<T*>* base = static_cast<vector<T*>* >(arg);
+		vector<T *> *base = static_cast<vector<T *> *>(arg);
 
-		typename vector<T*>::const_iterator it = base->begin();
+		typename vector<T *>::const_iterator it = base->begin();
 		while (it != base->end())
 			subtype->destroy(*it++);
 		delete base;

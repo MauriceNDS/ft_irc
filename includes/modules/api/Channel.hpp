@@ -12,9 +12,9 @@ private:
     vector<User *> users;
 
 public:
-	Channel(string name) : name(name) {}
+	Channel(const string& name) : name(name) {}
 
-	vector<User *> getUsers() {
+	const vector<User *>& getUsers() {
 		return users;
 	}
 	

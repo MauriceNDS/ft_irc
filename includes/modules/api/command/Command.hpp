@@ -16,9 +16,10 @@ private:
 public:
 	template <class T>
 	T &getArg(const string& name) const {
-		try {
-			return *static_cast<T*>(_args.at(name));
-		} catch(const std::out_of_range& e) {
+		map<string, void *const>::const_iterator arg = _args.find(name);
+		if (arg != _args.end()) {
+			return *static_cast<T*>(arg->second);
+		} else {
 			throw ArgumentNotFoundException();
 		}
 	}

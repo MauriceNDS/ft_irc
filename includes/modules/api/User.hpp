@@ -10,14 +10,9 @@ private:
 	string nickname;
 	string username;
 	string realname;
-	bool oper;
 
 public:
-	// TODO test
-	User(Connection *connection) : Client(connection), oper(false) {}
-
-	void setOperator()	{ oper = true; }
-	bool isOperator()	{ return oper; }
+	User(Connection *connection) : Client(connection) {}
 
 	void setNickName(const string& nickname)		{ this->nickname = nickname; }
 	void setUserName(const string& username)		{ this->username = username; }

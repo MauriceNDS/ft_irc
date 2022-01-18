@@ -26,7 +26,10 @@ void Irc::start() {
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("NICK")
-		.argument("nickname", GenericArguments::string())
+		.argument("nickname", CommandElement::Builder()
+			.element(GenericArguments::string())
+			.ifNotProvided(ERR_NONICKNAMEGIVEN)
+			.build())
 		.middleware(new UserMiddleware())
 		.executor(new NickCommand())
 		.build()
@@ -52,4 +55,4 @@ Irc::~Irc() {
 	}
 }
 
-Irc *Irc::instance = nullptr;
+Irc *Irc::instance = NULL;

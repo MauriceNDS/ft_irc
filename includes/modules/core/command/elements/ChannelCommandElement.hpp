@@ -13,7 +13,7 @@ public:
 		if (Channel::isValidIdentifier(arg)) {
 		}
 		event.getSender().send(ERR_NOSUCHCHANNEL);
-		return nullptr;
+		return NULL;
 	}
 };
 

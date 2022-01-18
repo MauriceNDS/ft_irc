@@ -16,9 +16,7 @@ class NickCommand : public CommandExecutor {
 		User& user = dynamic_cast<User&>(sender);
 
 		string nickname = cmd.getArg<string>("nickname");
-		if (nickname.empty())
-			return ERR_NONICKNAMEGIVEN;
-		if (nickname.find(' ') != string::npos)
+		if (nickname.empty() || nickname.find(' ') != string::npos)
 			return ERR_ERRONEUSNICKNAME;
 
 		user.setNickName(nickname);

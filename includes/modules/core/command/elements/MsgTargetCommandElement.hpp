@@ -24,7 +24,7 @@ public:
 				return user;
 		}
 		event.getSender().send(ERR_NOSUCHNICK);
-		return nullptr;
+		return NULL;
 	}
 };
 
