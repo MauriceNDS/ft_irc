@@ -46,7 +46,7 @@ void Irc::start() {
 		.build()
 	);
 
-	server.listen();
+	// server.listen();
 }
 
 Irc::~Irc() {

@@ -5,23 +5,26 @@
 
 #include "api/User.hpp"
 #include "api/Connection.hpp"
+#include <unistd.h>
 
 class Server {
 private:
 	string name;
-	map<int, Connection *> connections;
+	vector<Connection *> connections;
+	struct sockaddr_in connectionConfig;
 
-	Connection *simulate_connect(int socket);
-	User *simulate_join(Connection *connection, string name);
+	void incomingConnection();
+	void incomingRequest(vector<Connection *>::iterator connection);
+	void closeConnection(vector<Connection *>::iterator connection);
 
 public:
-	Server(const string& name) : name(name) {}
+	Server(const string& name);
 
-	const string& getName() {
-		return name;
-	}
+	const string& getName();
 
-	void listen();
+	void start();
+
+	~Server();
 };
 
 #endif /* FT_IRC_SERVER_SERVER */
