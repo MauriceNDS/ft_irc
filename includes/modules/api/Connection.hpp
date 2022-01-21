@@ -12,6 +12,7 @@ class Client;
 struct Connection {
 	Client *client;
 	struct pollfd socket;
+	string request;
 	bool closeConnection;
 
 	Connection(const struct pollfd& socket) : client(NULL), socket(socket), closeConnection(false) {}

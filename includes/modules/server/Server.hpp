@@ -11,11 +11,13 @@ class Server {
 private:
 	string name;
 	vector<Connection *> connections;
+	vector<struct pollfd> allSockets;
 	struct sockaddr_in connectionConfig;
 
 	void incomingConnection();
-	void incomingRequest(vector<Connection *>::iterator connection);
-	void closeConnection(vector<Connection *>::iterator connection);
+	void incomingRequest(size_t index);
+	void closeConnection(size_t	index);
+	void addConnection(const struct pollfd &connection);
 
 public:
 	Server(const string& name);
