@@ -9,7 +9,6 @@
 void Server::addConnection(const struct pollfd &connection) {
 	Connection *newConnect = new Connection(connection);
 	connections.push_back(newConnect);
-	allSockets.push_back(connection);
 }
 
 Server::Server(const string& name) : name(name) {
@@ -53,11 +52,11 @@ void Server::start() {
 
 	std::cout << "Waiting for connections..." << std::endl;
 	while (true) {
-		poll(&allSockets[0], allSockets.size(), -1);
-		for (size_t i = 0; i < allSockets.size(); i++) {
-			if (allSockets[i].revents == 0)
+		poll(&Connection::sockets[0], Connection::sockets.size(), -1);
+		for (size_t i = 0; i < Connection::sockets.size(); i++) {
+			if (Connection::sockets[i].revents == 0)
 				continue ;
-			if (allSockets[i].fd == allSockets[0].fd) {
+			if (Connection::sockets[i].fd == Connection::sockets[0].fd) {
 				std::cout << "  IncomingConnection..." << std::endl;
 				incomingConnection();
 				break ;
@@ -81,7 +80,7 @@ void Server::incomingConnection() {
 	newSocket.events = POLLIN;
 
 	while (true) {
-		if ((newSocket.fd = accept(allSockets[0].fd, NULL, NULL)) < 0) {
+		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0) {
 			if (errno != EWOULDBLOCK)
 				exit(1);
 			break ;
@@ -91,16 +90,16 @@ void Server::incomingConnection() {
 }
 
 void Server::closeConnection(size_t index) {
-	close(allSockets[index].fd);
+	close(Connection::sockets[index].fd);
 	connections.erase(connections.begin() + index);
-	allSockets.erase(allSockets.begin() + index);
+	Connection::sockets.erase(Connection::sockets.begin() + index);
 }
 
 void Server::incomingRequest(size_t index) {
 	vector<char> buffer(MAX_BUFFER_LENGTH);
 
 	while (true) {
-		int ret = recv(allSockets[index].fd, &buffer[0], buffer.size(), 0);
+		int ret = recv(Connection::sockets[index].fd, &buffer[0], buffer.size(), 0);
 		if (ret < 0) {
 			if (errno != EWOULDBLOCK) {
 				connections[index]->closeConnection = true;
@@ -116,7 +115,7 @@ void Server::incomingRequest(size_t index) {
 		buffer.resize(MAX_BUFFER_LENGTH);
 		if (connections[index]->request.find('\n') != string::npos) {
 			std::cout << "    Message recieved: " << connections[index]->request;
-			ret = send(allSockets[index].fd, connections[index]->request.c_str(), connections[index]->request.length(), 0);
+			ret = send(Connection::sockets[index].fd, connections[index]->request.c_str(), connections[index]->request.length(), 0);
 			connections[index]->request.clear();
 			if (ret < 0) {
 				connections[index]->closeConnection = true;
@@ -127,9 +126,8 @@ void Server::incomingRequest(size_t index) {
 }
 
 Server::~Server() {
-	vector<Connection *>::iterator it;
-	for (it = connections.begin(); it != connections.end(); it++) {
-		close((*it)->socket.fd);
-		free(*it);
+	for (size_t i = 0; i < connections.size(); i++) {
+		close(Connection::sockets[i].fd);
+		free(connections[i]);
 	}
 }

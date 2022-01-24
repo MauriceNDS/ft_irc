@@ -11,7 +11,6 @@ class Server {
 private:
 	string name;
 	vector<Connection *> connections;
-	vector<struct pollfd> allSockets;
 	struct sockaddr_in connectionConfig;
 
 	void incomingConnection();

@@ -11,11 +11,11 @@ class Client;
 
 struct Connection {
 	Client *client;
-	struct pollfd socket;
+	static vector<struct pollfd> sockets;
 	string request;
 	bool closeConnection;
 
-	Connection(const struct pollfd& socket) : client(NULL), socket(socket), closeConnection(false) {}
+	Connection(const struct pollfd& socket);
 };
 
 #endif /* FT_IRC_SERVER_CONNECTION */
