@@ -45,6 +45,13 @@ void Irc::start() {
 		.executor(new TestCommand())
 		.build()
 	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("JOIN")
+		.argument("channels", GenericArguments::list<string>(GenericArguments::string())) //??????
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
+		.build()
+	);
 
 	server.listen();
 }

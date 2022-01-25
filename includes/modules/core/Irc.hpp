@@ -64,8 +64,28 @@ public:
 		}
 	}
 
+	Channel *findChannel(const string& channel) {
+		for (vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+			if ((*it)->getName() == channel)
+				return *it;
+		return NULL;
+	}
+
+	void addChannel(Channel *channel) {
+		channels.push_back(channel);
+	}
+
+	void removeChannel(Channel *channel) {
+		for (vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
+			if (*it == channel) {
+				channels.erase(it);
+				break ;
+			}
+		}
+	}
+
 	// const vector<Channel *>& getChannels() const {
-	// 	return channels;
+	//  	return channels;
 	// }
 
 	~Irc();
