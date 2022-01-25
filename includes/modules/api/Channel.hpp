@@ -18,6 +18,10 @@ public:
 		return users;
 	}
 	
+	void addUser(User *user) {
+		users.push_back(user);
+	}
+
 	const string& getName() {
 		return name;
 	}

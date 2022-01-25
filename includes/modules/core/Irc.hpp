@@ -71,7 +71,7 @@ public:
 		return NULL;
 	}
 
-	void addChannel(Channel *channel) {
+	Channel * addChannel(Channel *channel) {
 		channels.push_back(channel);
 	}
 
