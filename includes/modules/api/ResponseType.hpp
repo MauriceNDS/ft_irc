@@ -1,12 +1,15 @@
-#ifndef FT_IRC_SERVER_RESPONSE
-#define FT_IRC_SERVER_RESPONSE
+#ifndef FT_IRC_API_RESPONSE
+#define FT_IRC_API_RESPONSE
 
-enum Response {
+#include "api/command/CommandSpec.hpp"
+
+enum ResponseType {
 	RPL_NONE = 300,
 	ERR_NOSUCHNICK = 401,
 	ERR_NOSUCHCHANNEL = 403,
 	ERR_NORECIPIENT = 411,
 	ERR_NOTEXTTOSEND = 412,
+	ERR_UNKNOWNCOMMAND = 421,
 	ERR_NONICKNAMEGIVEN = 431,
 	ERR_ERRONEUSNICKNAME = 432,
 	ERR_NICKNAMEINUSE = 433,
@@ -16,4 +19,10 @@ enum Response {
 	ERR_ALREADYREGISTRED = 462,
 };
 
-#endif /* FT_IRC_SERVER_RESPONSE */
+void registerResponseTemplate(ResponseType type, const string& str) {
+	CommandSpec::Builder spec = CommandSpec::Builder();
+	
+	
+}
+
+#endif /* FT_IRC_API_RESPONSE */

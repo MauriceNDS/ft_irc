@@ -6,11 +6,11 @@
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseType.hpp"
 
 class UserCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	ResponseType execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
 		if (!(user.getUserName().empty()))

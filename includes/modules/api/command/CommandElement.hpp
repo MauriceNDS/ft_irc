@@ -5,7 +5,7 @@
 
 #include "ft_irc.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseType.hpp"
 
 #include "api/event/MessageEvent.hpp"
 
@@ -17,19 +17,19 @@ public:
 
 	virtual void destroy(void *) const;
 
-	virtual Response notProvidedResponse() const;
+	virtual ResponseType notProvidedResponse() const;
 
 	virtual ~CommandElement();
 
 	class Builder {
 	private:
 		CommandElement *_subtype;
-		Response _ifNotProvided;
+		ResponseType _ifNotProvided;
 
 	public:
 		Builder();
 
-		Builder& ifNotProvided(Response response);
+		Builder& ifNotProvided(ResponseType response);
 		Builder& element(CommandElement *element);
 		CommandElement *build() const;
 	};
@@ -40,11 +40,11 @@ private:
 	friend class CommandElement::Builder;
 
 	CommandElement *subtype;
-	Response ifNotProvided;
-	ComplexeCommandElement(CommandElement *subtype, Response ifNotProvided);
+	ResponseType ifNotProvided;
+	ComplexeCommandElement(CommandElement *subtype, ResponseType ifNotProvided);
 public:
 	void *parseValue(const string& arg, MessageEvent& event) const;
-	Response notProvidedResponse() const;
+	ResponseType notProvidedResponse() const;
 	void destroy(void *arg) const;
 	~ComplexeCommandElement();
 };

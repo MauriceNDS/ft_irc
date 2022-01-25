@@ -3,13 +3,13 @@
 
 #include "ft_irc.hpp"
 
-#include "server/Response.hpp"
-
 struct Connection;
 
 class CommandSender {
 public:
-	virtual void send(Response message) const = 0;
+	virtual void send(const string& message) const = 0;
+
+	virtual const string& getName() const = 0;
 
 	virtual ~CommandSender() {}
 };

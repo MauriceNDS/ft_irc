@@ -8,11 +8,11 @@
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseType.hpp"
 
 class NickCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	ResponseType execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
 		string nickname = cmd.getArg<string>("nickname");

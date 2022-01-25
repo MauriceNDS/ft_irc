@@ -6,8 +6,6 @@
 #include "api/CommandSender.hpp"
 #include "api/Connection.hpp"
 
-#include "server/Response.hpp"
-
 struct Connection;
 
 class Client : public CommandSender {
@@ -21,7 +19,7 @@ public:
 		return connection;
 	}
 
-	void send(Response message) const {
+	void send(const string& message) const {
 		std::cout << "> " << message << std::endl;
 	}
 

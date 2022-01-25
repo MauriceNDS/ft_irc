@@ -5,11 +5,11 @@
 
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseType.hpp"
 
 class TestCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	ResponseType execute(const Command& cmd, CommandSender& sender) {
 		(void)cmd;
 		(void)sender;
 		return RPL_NONE;

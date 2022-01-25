@@ -12,7 +12,7 @@
 
 class MsgTargetCommandElement : public CommandElement {
 public:
-	Response notProvidedResponse() const {
+	ResponseType notProvidedResponse() const {
 		return ERR_NORECIPIENT;
 	}
 

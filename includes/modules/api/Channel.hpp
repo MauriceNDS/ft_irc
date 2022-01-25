@@ -14,15 +14,15 @@ private:
 public:
 	Channel(const string& name) : name(name) {}
 
-	const vector<User *>& getUsers() {
+	const vector<User *>& getUsers() const {
 		return users;
 	}
 	
-	const string& getName() {
+	const string& getName() const {
 		return name;
 	}
 
-	void send(Response message) const {
+	void send(const string& message) const {
 		for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++)
 			(*it)->send(message);
 	}
