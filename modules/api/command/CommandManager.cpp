@@ -5,7 +5,7 @@ void CommandManager::registerCommand(const CommandSpec *spec) {
 		throw DuplicatedCommandException();
 }
 
-void CommandManager::post(MessageEvent& event) {
+void CommandManager::process(MessageEvent& event) {
 	vector<string> tokens;
 	map<string, const CommandSpec *>::iterator it = specs.end();
 

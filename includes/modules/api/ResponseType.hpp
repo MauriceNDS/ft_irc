@@ -19,10 +19,32 @@ enum ResponseType {
 	ERR_ALREADYREGISTRED = 462,
 };
 
-void registerResponseTemplate(ResponseType type, const string& str) {
-	CommandSpec::Builder spec = CommandSpec::Builder();
-	
-	
-}
+class ResponseSpec {
+
+	/**
+	 * @brief Creates a response from a template.
+	 * 
+	 * @param command The command name.
+	 * @param args All the arguments as a template. Example: `<nick> :Erroneous nickname'
+	 */
+	ResponseSpec(const string& command, const string& args) {
+
+	}
+
+	/**
+	 * @brief Generates a string representation of the response.
+	 * 
+	 * @param sender 
+	 * @return string 
+	 */
+	string build(const CommandSender& sender, const string& ...) {
+		string command;
+
+		command += ":";
+		command += sender.getName();
+		command += " ";
+		// TODO Get all args from ...
+	}
+};
 
 #endif /* FT_IRC_API_RESPONSE */

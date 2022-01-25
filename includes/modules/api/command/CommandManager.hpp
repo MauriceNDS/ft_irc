@@ -21,7 +21,7 @@ private:
 public:
 	void registerCommand(const CommandSpec *spec);
 
-	void post(MessageEvent& event);
+	void process(MessageEvent& event);
 
 	~CommandManager();
 };
