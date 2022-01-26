@@ -18,8 +18,9 @@ private:
 	Server server;
 	CommandManager commandManager;
 
-    vector<Channel *> channels;
+    map<string, Channel *> channels;
     vector<User *> users;
+	set<User *> operators;
 
 public:
 	static Irc& getInstance() {
@@ -65,28 +66,32 @@ public:
 	}
 
 	Channel *findChannel(const string& channel) {
-		for (vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
-			if ((*it)->getName() == channel)
-				return *it;
-		return NULL;
+		map<string, Channel *>::iterator it = channels.find(channel);
+		return it != channels.end() ? it->second : NULL;
 	}
 
-	Channel * addChannel(Channel *channel) {
-		channels.push_back(channel);
+	void addChannel(Channel *channel) {
+		channels[channel->getName()] = channel;
 	}
 
 	void removeChannel(Channel *channel) {
-		for (vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
-			if (*it == channel) {
-				channels.erase(it);
-				break ;
-			}
-		}
+		channels.erase(channel->getName());
 	}
 
-	// const vector<Channel *>& getChannels() const {
-	//  	return channels;
-	// }
+	const map<string, Channel *>& getChannels() const {
+	  	return channels;
+	}
+
+	void promoteOperator(User *user) {
+		operators.insert(user);
+	}
+	void demoteOperator(User *user) {
+		operators.erase(user);
+	}
+
+	bool isOperator(User *user) {
+		return operators.find(user) != operators.end();
+	}
 
 	~Irc();
 };

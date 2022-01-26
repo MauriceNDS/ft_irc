@@ -4,7 +4,9 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <set>
 
+using std::set;
 using std::string;
 using std::map;
 using std::vector;
