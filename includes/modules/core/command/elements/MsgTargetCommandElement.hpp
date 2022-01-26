@@ -23,7 +23,7 @@ public:
 			if (user) 
 				return user;
 		}
-		event.getSender().send(ERR_NOSUCHNICK);
+		// event.getSender().send(ERR_NOSUCHNICK);
 		return NULL;
 	}
 };

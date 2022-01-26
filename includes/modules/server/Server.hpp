@@ -17,11 +17,11 @@ private:
 public:
 	Server(const string& name) : name(name) {}
 
-	void send(const string& message) {
+	void send(const string& message) const {
 		std::cout << message << std::endl;
 	}
 
-	const string& getName() {
+	const string& getName() const {
 		return name;
 	}
 

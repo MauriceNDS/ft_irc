@@ -14,8 +14,8 @@ RM = rm -rf
 
 all:    $(MAIN)
 
-$(MAIN): $(OBJS)
-		$(CC) $(CFLAGS) -o $(MAIN) $(OBJS)
+$(MAIN):
+		clang++ -Wall -Wextra -std=c++98 -I includes -I includes/modules `find . -name "*.cpp"`
 
 %.o: %.cpp $(HEADER)
 		$(CC) $(CFLAGS) -c $<  -o $@

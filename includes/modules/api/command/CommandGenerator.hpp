@@ -14,7 +14,7 @@ private:
 	vector<string> arguments;
 
 public:
-	CommandGenerator(const string& name, const string& prefix = "") : _name(name), _prefix(prefix) {}
+	CommandGenerator(const string& name, const string& prefix = "") : _prefix(prefix), _name(name) {}
 
 	CommandGenerator(const ResponseType& response, const string& prefix = "") : _prefix(prefix) {
 		int numeric = static_cast<int>(response);
@@ -32,7 +32,7 @@ public:
 		arguments.push_back(arg);
 	}
 
-	const string& build() const {
+	string build() const {
 		string result;
 		if (!_prefix.empty()) {
 			result += ":";

@@ -15,8 +15,8 @@ public:
 			const User& user = dynamic_cast<const User&>(client);
 			if (user.isRegistered())
 				return true;
-			else
-				user.send(ERR_NOTREGISTERED);
+			// else
+				// user.send(ERR_NOTREGISTERED);
 		} catch (const std::bad_cast& e) {}
 		return false;
 	};

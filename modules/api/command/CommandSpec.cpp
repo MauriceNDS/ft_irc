@@ -19,7 +19,7 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 		if (tokens_it != tokens.end())
 			token = *tokens_it++;
 		else if (it->second->isRequired()) {
-			event.getSender().send(it->second->notProvidedResponse());
+			// event.getSender().send(it->second->notProvidedResponse());
 			event.setCancelled(true);
 			break ;
 		}
@@ -35,7 +35,7 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 
 	// Launch command
 	if (!event.isCancelled()) {
-		event.getSender().send(_executor->execute(Command(_name, args, event.getSender()), event.getSender()));
+		// event.getSender().send(_executor->execute(Command(_name, args, event.getSender()), event.getSender()));
 	}
 
 	// Destroy all the created elements

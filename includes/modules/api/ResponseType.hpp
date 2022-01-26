@@ -19,17 +19,22 @@ enum ResponseType {
 	ERR_ALREADYREGISTRED = 462,
 };
 
-class ResponseSpec {
+#include <algorithm>
+#include <cstdarg>
 
+class ResponseSpec {
+private:
+	string _command;
+	string _args;
+
+public:
 	/**
 	 * @brief Creates a response from a template.
 	 * 
 	 * @param command The command name.
 	 * @param args All the arguments as a template. Example: `<nick> :Erroneous nickname'
 	 */
-	ResponseSpec(const string& command, const string& args) {
-
-	}
+	ResponseSpec(const string& command, const string& args) : _command(command), _args(args) {}
 
 	/**
 	 * @brief Generates a string representation of the response.
@@ -37,13 +42,38 @@ class ResponseSpec {
 	 * @param sender 
 	 * @return string 
 	 */
-	string build(const CommandSender& sender, const string& ...) {
-		string command;
+	string build(const CommandSender& sender) {
+		return build(sender, "");
+	}
 
-		command += ":";
-		command += sender.getName();
-		command += " ";
-		// TODO Get all args from ...
+	/**
+	 * @brief Generates a string representation of the response.
+	 * 
+	 * @param sender 
+	 * @param args 
+	 * @return string 
+	 */
+	string build(const CommandSender& sender, const char *args...) {
+		string cmd = ":";
+
+		cmd += sender.getName() + " " + _command + " " + _args;
+
+		std::va_list argptr;
+    	va_start(argptr, args);
+
+		string replacement = args;
+		size_t begin = cmd.find("<");
+		size_t end = cmd.find(">", begin);
+		while (begin != end) {
+			cmd.replace(begin, end - begin + 1, replacement);
+
+			begin = cmd.find("<", begin + replacement.length());
+			end = cmd.find(">", begin);
+			if (begin != end)
+				replacement = va_arg(argptr, char *);
+		}
+    	va_end(argptr);
+		return cmd;
 	}
 };
 
