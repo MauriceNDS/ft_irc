@@ -13,19 +13,13 @@
 class JoinCommand : public CommandExecutor {
 
 	Response execute(const Command& cmd, CommandSender& sender) {
+		User& user = static_cast<User&>(sender);
 
-        vector<string> channelList = cmd.getArg<vector<string> >("channels");
-		for (vector<string>::iterator it = channelList.begin(); it != channelList.end(); it++)
-		{
-			Channel * chan = Irc::getInstance().findChannel(*it);
-			if (!chan)
-			{
-				Irc::getInstance().addChannel(new Channel(*it));
-				chan = Irc::getInstance().findChannel(*it);
-				chan->addUser(dynamic_cast<User *>(&sender));
-			}
-			else
-				chan->addUser(dynamic_cast<User *>(&sender));
+        vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
+		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
+			(*it)->addUser(static_cast<User *>(&sender));
+			user.send(RPL_NAMREPLY);
+			user.send(RPL_TOPIC);
 		}
 		return RPL_NONE;
 	}
