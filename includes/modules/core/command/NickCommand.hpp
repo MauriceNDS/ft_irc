@@ -8,19 +8,20 @@
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "api/ResponseType.hpp"
+#include "api/ResponseTypes.hpp"
 
 class NickCommand : public CommandExecutor {
 
-	ResponseType execute(const Command& cmd, CommandSender& sender) {
+	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
 		string nickname = cmd.getArg<string>("nickname");
-		if (nickname.empty() || nickname.find(' ') != string::npos)
-			return ERR_ERRONEUSNICKNAME;
+		if (nickname.empty() || nickname.find(' ') != string::npos) {
+			user.send(ResponseTypes::ERR_ERRONEUSNICKNAME(nickname.c_str()));
+			return;
+		}
 
 		user.setNickName(nickname);
-		return RPL_NONE;
 	}
 };
 

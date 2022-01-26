@@ -6,7 +6,7 @@
 #include "api/User.hpp"
 #include "api/middleware/Middleware.hpp"
 
-#include "api/ResponseType.hpp"
+#include "api/ResponseTypes.hpp"
 
 class UserMiddleware : public Middleware {
 public:

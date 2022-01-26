@@ -20,7 +20,7 @@ public:
 	}
 
 	void send(const string& message) const {
-		std::cout << "> " << message << std::endl;
+		std::cout << message << std::endl;
 	}
 
 	virtual ~Client() = 0;

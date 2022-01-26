@@ -6,16 +6,16 @@ bool CommandElement::isRequired() const {
 
 void CommandElement::destroy(void *) const {}
 
-ResponseType CommandElement::notProvidedResponse() const {
-	return ERR_NEEDMOREPARAMS;
+const ResponseSpec& CommandElement::notProvidedResponse() const {
+	return ResponseTypes::ERR_NEEDMOREPARAMS;
 }
 
 CommandElement::~CommandElement() {}
 
-CommandElement::Builder::Builder() : _ifNotProvided(ERR_NEEDMOREPARAMS) {}
+CommandElement::Builder::Builder() : _ifNotProvided(&ResponseTypes::ERR_NEEDMOREPARAMS) {}
 
-CommandElement::Builder& CommandElement::Builder::ifNotProvided(ResponseType response) {
-	this->_ifNotProvided = response;
+CommandElement::Builder& CommandElement::Builder::ifNotProvided(const ResponseSpec& response) {
+	this->_ifNotProvided = &response;
 	return *this;
 }
 
@@ -25,16 +25,16 @@ CommandElement::Builder& CommandElement::Builder::element(CommandElement *elemen
 }
 
 CommandElement *CommandElement::Builder::build() const {
-	return new ComplexeCommandElement(_subtype, _ifNotProvided);
+	return new ComplexeCommandElement(_subtype, *_ifNotProvided);
 }
 
-ComplexeCommandElement::ComplexeCommandElement(CommandElement *subtype, ResponseType ifNotProvided) : subtype(subtype), ifNotProvided(ifNotProvided) {}
+ComplexeCommandElement::ComplexeCommandElement(CommandElement *subtype, const ResponseSpec& ifNotProvided) : subtype(subtype), ifNotProvided(ifNotProvided) {}
 
 void *ComplexeCommandElement::parseValue(const string& arg, MessageEvent& event) const {
 	return subtype->parseValue(arg, event);
 }
 
-ResponseType ComplexeCommandElement::notProvidedResponse() const {
+const ResponseSpec& ComplexeCommandElement::notProvidedResponse() const {
 	return ifNotProvided;
 }
 
