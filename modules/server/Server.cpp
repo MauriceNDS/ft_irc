@@ -12,7 +12,7 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name) : name(name) {
+Server::Server(const string& name, const string& port, const string& password) : name(name), port(port), password(password) {
 	struct pollfd serverSocket;
 	int opt = 1;
 
@@ -34,7 +34,7 @@ Server::Server(const string& name) : name(name) {
 
 	connectionConfig.sin_family = AF_INET;
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
-	connectionConfig.sin_port = htons(8080);
+	connectionConfig.sin_port = htons(stoi(this->port));
 
 	// Can be protected
 	bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig));

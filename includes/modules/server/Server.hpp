@@ -12,6 +12,8 @@ private:
 	string name;
 	vector<Connection *> connections;
 	struct sockaddr_in connectionConfig;
+	const string port;
+	const string password;
 
 	void incomingConnection();
 	void incomingRequest(size_t index);
@@ -19,7 +21,7 @@ private:
 	Connection *addConnection(const struct pollfd &connection);
 
 public:
-	Server(const string& name);
+	Server(const string& name, const string& port, const string& password);
 
 	void send(const string& message) const {
 		std::cout << message << std::endl;
