@@ -91,6 +91,11 @@ void Server::incomingConnection() {
 }
 
 void Server::closeConnection(size_t index) {
+	Client *client = connections[index]->client;
+	User *user = dynamic_cast<User *>(client);
+	if (user)
+		Irc::getInstance().removeUser(user);
+
 	close(Connection::sockets[index].fd);
 	connections.erase(connections.begin() + index);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
@@ -119,7 +124,7 @@ void Server::incomingRequest(size_t index) {
 			line = line.substr(0, line.size() - 1);
 			std::cout << "    < '" << line << "`" << std::endl;
 
-			MessageEvent event = MessageEvent(line, *connections[1]->client);
+			MessageEvent event = MessageEvent(line, *connections[index]->client);
 			Irc::getInstance().getCommandManager().process(event);
 
 			connections[index]->request.clear();
