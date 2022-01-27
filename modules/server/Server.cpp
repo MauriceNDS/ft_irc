@@ -6,9 +6,10 @@
 
 #define MAX_BUFFER_LENGTH 4096
 
-void Server::addConnection(const struct pollfd &connection) {
+Connection *Server::addConnection(const struct pollfd &connection) {
 	Connection *newConnect = new Connection(connection);
 	connections.push_back(newConnect);
+	return newConnect;
 }
 
 Server::Server(const string& name) : name(name) {
@@ -43,7 +44,7 @@ Server::Server(const string& name) : name(name) {
 
 }
 
-const string& Server::getName() {
+const string& Server::getName() const {
 	return name;
 }
 
@@ -85,7 +86,7 @@ void Server::incomingConnection() {
 				exit(1);
 			break ;
 		}
-		addConnection(newSocket);
+		Irc::getInstance().addUser(new User(addConnection(newSocket)));
 	}
 }
 
@@ -96,10 +97,10 @@ void Server::closeConnection(size_t index) {
 }
 
 void Server::incomingRequest(size_t index) {
-	vector<char> buffer(MAX_BUFFER_LENGTH);
+	char buffer[MAX_BUFFER_LENGTH];
 
 	while (true) {
-		int ret = recv(Connection::sockets[index].fd, &buffer[0], buffer.size(), 0);
+		int ret = recv(Connection::sockets[index].fd, buffer, MAX_BUFFER_LENGTH - 1, 0);
 		if (ret < 0) {
 			if (errno != EWOULDBLOCK) {
 				connections[index]->closeConnection = true;
@@ -110,17 +111,18 @@ void Server::incomingRequest(size_t index) {
 			connections[index]->closeConnection = true;
 			return ;
 		}
-		connections[index]->request.append(buffer.cbegin(), buffer.cend());
-		buffer.clear();
-		buffer.resize(MAX_BUFFER_LENGTH);
+		buffer[ret] = 0;
+		connections[index]->request += buffer;
 		if (connections[index]->request.find('\n') != string::npos) {
-			std::cout << "    Message recieved: " << connections[index]->request;
-			ret = send(Connection::sockets[index].fd, connections[index]->request.c_str(), connections[index]->request.length(), 0);
+			string line = connections[index]->request;
+
+			line = line.substr(0, line.size() - 1);
+			std::cout << "    < '" << line << "`" << std::endl;
+
+			MessageEvent event = MessageEvent(line, *connections[1]->client);
+			Irc::getInstance().getCommandManager().process(event);
+
 			connections[index]->request.clear();
-			if (ret < 0) {
-				connections[index]->closeConnection = true;
-				return ;
-			}
 		}
 	}
 }

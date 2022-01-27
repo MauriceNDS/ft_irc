@@ -3,14 +3,14 @@
 
 #include "ft_irc.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 #include "api/CommandSender.hpp"
 #include "api/command/Command.hpp"
 
 class CommandExecutor {
 public:
-	virtual Response execute(const Command& cmd, CommandSender& sender) = 0;
+	virtual void execute(const Command& cmd, CommandSender& sender) = 0;
 
 	virtual ~CommandExecutor() = 0;
 };

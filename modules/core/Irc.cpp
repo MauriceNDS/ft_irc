@@ -28,7 +28,7 @@ void Irc::start() {
 		.name("NICK")
 		.argument("nickname", CommandElement::Builder()
 			.element(GenericArguments::string())
-			.ifNotProvided(ERR_NONICKNAMEGIVEN)
+			.ifNotProvided(ResponseTypes::ERR_NONICKNAMEGIVEN)
 			.build())
 		.middleware(new UserMiddleware())
 		.executor(new NickCommand())
@@ -39,14 +39,14 @@ void Irc::start() {
 		.argument("msgtarget", new MsgTargetCommandElement())
 		.argument("message", CommandElement::Builder()
 			.element(GenericArguments::string())
-			.ifNotProvided(ERR_NOTEXTTOSEND)
+			.ifNotProvided(ResponseTypes::ERR_NOTEXTTOSEND)
 			.build())
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new TestCommand())
 		.build()
 	);
 
-	// server.listen();
+	server.start();
 }
 
 Irc::~Irc() {

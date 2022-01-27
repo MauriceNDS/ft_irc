@@ -12,8 +12,8 @@
 
 class MsgTargetCommandElement : public CommandElement {
 public:
-	Response notProvidedResponse() const {
-		return ERR_NORECIPIENT;
+	const ResponseSpec& notProvidedResponse() const {
+		return ResponseTypes::ERR_NORECIPIENT;
 	}
 
 	void *parseValue(const string& arg, MessageEvent& event) const {
@@ -23,7 +23,7 @@ public:
 			if (user) 
 				return user;
 		}
-		event.getSender().send(ERR_NOSUCHNICK);
+		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK());
 		return NULL;
 	}
 };

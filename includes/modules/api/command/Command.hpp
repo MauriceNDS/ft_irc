@@ -1,17 +1,20 @@
 #ifndef FT_IRC_API_COMMAND
 #define FT_IRC_API_COMMAND
 
-#include "api/command/CommandSpec.hpp"
+#include "api/CommandSender.hpp"
 #include "api/exception/ArgumentNotFoundException.hpp"
+
+class CommandSpec;
 
 class Command {
 private:
 	friend class CommandSpec;
 
-	string _name;
+	const string _name;
 	map<string, void *const> _args;
+	const CommandSender& _sender;
 
-	Command(const string& name, map<string, void *const>& args) : _name(name), _args(args) {}
+	Command(const string& name, map<string, void *const>& args, const CommandSender& sender) : _name(name), _args(args), _sender(sender) {}
 
 public:
 	template <class T>
@@ -22,6 +25,14 @@ public:
 		} else {
 			throw ArgumentNotFoundException();
 		}
+	}
+
+	const string& getCommand() const {
+		return _name;
+	}
+
+	const CommandSender& getSender() const {
+		return _sender;
 	}
 };
 

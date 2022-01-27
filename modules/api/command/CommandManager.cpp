@@ -1,21 +1,24 @@
 #include "api/command/CommandManager.hpp"
+#include "api/ResponseTypes.hpp"
 
 void CommandManager::registerCommand(const CommandSpec *spec) {
-	if (!specs.insert(make_pair(spec->getName(), spec)).second)
+	if (!cspecs.insert(make_pair(spec->getName(), spec)).second)
 		throw DuplicatedCommandException();
 }
 
-void CommandManager::post(MessageEvent& event) {
+void CommandManager::process(MessageEvent& event) {
 	vector<string> tokens;
-	map<string, const CommandSpec *>::iterator it = specs.end();
+	map<string, const CommandSpec *>::iterator it = cspecs.end();
 
 	std::istringstream ss(event.getMessage());
 	string command;
 	std::getline(ss, command, ' ');
 
-	it = specs.find(command);
-	if (it == specs.end())
-		throw CommandNotFoundException();
+	it = cspecs.find(command);
+	if (it == cspecs.end()) {
+		event.getSender().send(ResponseTypes::ERR_UNKNOWNCOMMAND(command.c_str()));
+		return ;
+	}
 
 	bool lastStr = false;
 	string temp;
@@ -39,7 +42,7 @@ void CommandManager::post(MessageEvent& event) {
 
 CommandManager::~CommandManager() {
 	map<string, const CommandSpec *>::iterator it;
-	for (it = specs.begin(); it != specs.end(); it++) {
+	for (it = cspecs.begin(); it != cspecs.end(); it++) {
 		delete it->second;
 	}
 }

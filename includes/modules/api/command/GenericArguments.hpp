@@ -109,20 +109,20 @@ public:
 };
 
 namespace GenericArguments {
-	static StringCommandElement *string() {
+	StringCommandElement *string() {
 		return new StringCommandElement();
 	}
 
-	// static IntegerCommandElement *integer() {
+	// IntegerCommandElement *integer() {
 	// 	return new IntegerCommandElement();
 	// }
 
-	// static OptionalCommandElement *optional(CommandElement *subtype) {
+	// OptionalCommandElement *optional(CommandElement *subtype) {
 	// 	return new OptionalCommandElement(subtype);
 	// }
 
 	// template <class T>
-	// static ListCommandElement<T> *list(CommandElement *subtype) {
+	// ListCommandElement<T> *list(CommandElement *subtype) {
 	// 	return new ListCommandElement<T>(subtype);
 	// }
 };

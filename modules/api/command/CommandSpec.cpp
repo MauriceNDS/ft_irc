@@ -1,4 +1,7 @@
+#include "api/middleware/Middleware.hpp"
 #include "api/command/CommandSpec.hpp"
+#include "api/command/CommandElement.hpp"
+#include "api/command/CommandExecutor.hpp"
 
 void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 	map<string, void *const> args;
@@ -15,7 +18,7 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 		if (tokens_it != tokens.end())
 			token = *tokens_it++;
 		else if (it->second->isRequired()) {
-			event.getSender().send(it->second->notProvidedResponse());
+			event.getSender().send(it->second->notProvidedResponse()(getName().c_str()));
 			event.setCancelled(true);
 			break ;
 		}
@@ -31,7 +34,7 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 
 	// Launch command
 	if (!event.isCancelled()) {
-		event.getSender().send(_executor->execute(Command(_name, args), event.getSender()));
+		_executor->execute(Command(_name, args, event.getSender()), event.getSender());
 	}
 
 	// Destroy all the created elements

@@ -3,8 +3,6 @@
 
 #include "ft_irc.hpp"
 
-#include "server/Response.hpp"
-
 #include "api/User.hpp"
 #include "api/command/CommandSpec.hpp"
 #include "api/event/MessageEvent.hpp"
@@ -13,15 +11,18 @@
 #include "api/exception/DuplicatedCommandException.hpp"
 
 class CommandSpec;
+class ResponseSpec;
 
 class CommandManager {
 private:
-	map<string, const CommandSpec *> specs;
+	map<string, const CommandSpec *> cspecs;
+	map<string, const ResponseSpec *> rspecs;
 
 public:
 	void registerCommand(const CommandSpec *spec);
+	void registerResponse(const ResponseSpec *spec);
 
-	void post(MessageEvent& event);
+	void process(MessageEvent& event);
 
 	~CommandManager();
 };

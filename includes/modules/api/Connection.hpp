@@ -10,12 +10,16 @@
 class Client;
 
 struct Connection {
-	Client *client;
 	static vector<struct pollfd> sockets;
+
+	const int fd;
+	Client *client;
 	string request;
 	bool closeConnection;
 
 	Connection(const struct pollfd& socket);
+
+	void send(const char *str, int len);
 };
 
 #endif /* FT_IRC_SERVER_CONNECTION */

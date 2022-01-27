@@ -7,7 +7,7 @@
 #include "api/Connection.hpp"
 #include <unistd.h>
 
-class Server {
+class Server : public CommandSender {
 private:
 	string name;
 	vector<Connection *> connections;
@@ -16,12 +16,16 @@ private:
 	void incomingConnection();
 	void incomingRequest(size_t index);
 	void closeConnection(size_t	index);
-	void addConnection(const struct pollfd &connection);
+	Connection *addConnection(const struct pollfd &connection);
 
 public:
 	Server(const string& name);
 
-	const string& getName();
+	void send(const string& message) const {
+		std::cout << message << std::endl;
+	}
+
+	const string& getName() const;
 
 	void start();
 
