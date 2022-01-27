@@ -3,22 +3,25 @@
 
 #include "ft_irc.hpp"
 
+#include "core/Irc.hpp"
+
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 class UserCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
-		if (!(user.getUserName().empty()))
-			return ERR_ALREADYREGISTRED;
+		if (!(user.getUserName().empty())) {
+			user.send(ResponseTypes::ERR_ALREADYREGISTRED());
+			return;
+		}
 
 		user.setUserName(cmd.getArg<string>("user"));
 		user.setRealName(cmd.getArg<string>("realname"));
-		return RPL_NONE;
 	}
 };
 

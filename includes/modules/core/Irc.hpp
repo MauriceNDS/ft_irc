@@ -64,6 +64,10 @@ public:
 		}
 	}
 
+	const Server& getServer() const {
+		return server;
+	}
+
 	// const vector<Channel *>& getChannels() const {
 	// 	return channels;
 	// }

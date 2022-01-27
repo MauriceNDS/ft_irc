@@ -6,7 +6,7 @@
 #include "api/User.hpp"
 #include "api/middleware/Middleware.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 class RegisteredUserMiddleware : public Middleware {
 public:
@@ -16,7 +16,7 @@ public:
 			if (user.isRegistered())
 				return true;
 			else
-				user.send(ERR_NOTREGISTERED);
+				user.send(ResponseTypes::ERR_NOTREGISTERED());
 		} catch (const std::bad_cast& e) {}
 		return false;
 	};
