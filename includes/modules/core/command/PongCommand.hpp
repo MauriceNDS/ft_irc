@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE_OPER_COMMAND
-#define FT_IRC_CORE_OPER_COMMAND
+#ifndef FT_IRC_CORE_PONG_COMMAND
+#define FT_IRC_CORE_PONG_COMMAND
 
 #include "ft_irc.hpp"
 
@@ -10,11 +10,11 @@
 
 #include "server/Response.hpp"
 
-class OperCommand : public CommandExecutor {
+class PongCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
         
 	}
 };
 
-#endif /* FT_IRC_CORE_OPER_COMMAND */
+#endif /* FT_IRC_CORE_PONG_COMMAND */

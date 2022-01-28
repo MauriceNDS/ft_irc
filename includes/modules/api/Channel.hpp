@@ -48,7 +48,7 @@ public:
 			chanop.insert(user);
 	}
 
-	const string getTopic() {
+	const string getTopic() const {
 		if (topic.empty())
 			return "No topic is set";
 		return topic;
@@ -63,7 +63,7 @@ public:
 	}
 
 	void send(const string& message) const {
-		for (set<User *>::iterator it = users.begin(); it != users.end(); it++)
+		for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)
 			(*it)->send(message);
 	}
 

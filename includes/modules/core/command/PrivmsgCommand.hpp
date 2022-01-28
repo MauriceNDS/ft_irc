@@ -17,7 +17,7 @@ class PrivmsgCommand : public CommandExecutor {
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
 
-        vector<CommandSender *> target = cmd.getArg<vector<CommandSender *> >("target");
+        vector<CommandSender *> target = cmd.getArg<vector<CommandSender *> >("msgtarget");
         string& message = cmd.getArg<string &>("message");
 
 		for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
