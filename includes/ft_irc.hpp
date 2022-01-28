@@ -13,6 +13,5 @@ using std::make_pair;
 
 // TODO test
 #include <iostream>
-#include <cstdlib>
 
 #endif /* FT_IRC */

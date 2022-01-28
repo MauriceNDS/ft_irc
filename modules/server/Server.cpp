@@ -12,7 +12,7 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name, const int& port, const string& password) : name(name), port(port), password(password) {
+Server::Server(const string& name, const int port, const string& password) : name(name), port(port), password(password) {
 	struct pollfd serverSocket;
 	int opt = 1;
 

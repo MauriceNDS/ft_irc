@@ -26,7 +26,7 @@ private:
 	Connection *addConnection(const struct pollfd &connection);
 
 public:
-	Server(const string& name, const int& port, const string& password);
+	Server(const string& name, const int port, const string& password);
 
 	void send(const string& message) const {
 		std::cout << message << std::endl;

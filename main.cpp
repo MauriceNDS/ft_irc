@@ -2,6 +2,8 @@
 
 #include "core/Irc.hpp"
 
+#include <cstdlib>
+
 bool isNumber(const std::string& s) {
     std::string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it))
