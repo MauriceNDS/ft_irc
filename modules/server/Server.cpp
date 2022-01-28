@@ -12,11 +12,9 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name, const string& port, const string& password) : name(name), password(password) {
+Server::Server(const string& name, const int& port, const string& password) : name(name), port(port), password(password) {
 	struct pollfd serverSocket;
 	int opt = 1;
-
-	std::istringstream(port) >> this->port;
 
 	std::cout << "Setting up the server..." << std::endl;
 
