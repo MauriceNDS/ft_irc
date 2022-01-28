@@ -122,6 +122,8 @@ void Server::incomingRequest(size_t index) {
 			string line = connections[index]->request;
 
 			line = line.substr(0, line.size() - 1);
+			if (line[line.size() - 1] == '\r')
+				line = line.substr(0, line.size() - 1);
 			std::cout << "    < '" << line << "`" << std::endl;
 
 			MessageEvent event = MessageEvent(line, *connections[index]->client);
