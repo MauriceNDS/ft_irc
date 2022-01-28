@@ -26,7 +26,7 @@ public:
 			if (user) 
 				return user;
 		}
-		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK());
+		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK(arg.c_str()));
 		return NULL;
 	}
 };

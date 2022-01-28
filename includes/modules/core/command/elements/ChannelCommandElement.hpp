@@ -26,7 +26,7 @@ public:
 				return (channel);
 			}
 		}
-		event.getSender().send(ResponseTypes::ERR_NOSUCHCHANNEL());
+		event.getSender().send(ResponseTypes::ERR_NOSUCHCHANNEL(arg.c_str()));
 		return NULL;
 	}
 };
