@@ -32,6 +32,14 @@ public:
 
 	bool isChanop(User *user);
 
+	bool isOnChan(User *user)
+	{
+		set<User *>::iterator it = chanop.find(user);
+		if (it == chanop.end())
+			return false;
+		return true;
+	}
+
 	void promoteChanop(User *user)
 	{
 		set<User *>::iterator it = chanop.find(user);

@@ -117,9 +117,9 @@ namespace GenericArguments {
 	// 	return new IntegerCommandElement();
 	// }
 
-	// static OptionalCommandElement *optional(CommandElement *subtype) {
-	// 	return new OptionalCommandElement(subtype);
-	// }
+	static OptionalCommandElement *optional(CommandElement *subtype) {
+		return new OptionalCommandElement(subtype);
+	}
 
 	template <class T>
 	static ListCommandElement<T> *list(CommandElement *subtype) {

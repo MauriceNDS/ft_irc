@@ -71,6 +71,8 @@
 		"stack": "cpp",
 		"filesystem": "cpp",
 		"__functional_03": "cpp",
-		"set": "cpp"
+		"set": "cpp",
+		"*.tcc": "cpp",
+		"hashtable": "cpp"
 	}
 }

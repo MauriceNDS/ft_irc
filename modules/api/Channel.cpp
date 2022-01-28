@@ -11,6 +11,10 @@ bool Channel::isChanop(User *user) {
 }
 
 void Channel::removeUser(User *user) {
+    if (!isOnChan(user)) {
+        user->send(ERR_NOTONCHANNEL);
+        return ;
+    }
     users.erase(user);
     if (!users.size())
         Irc::getInstance().removeChannel(this);
