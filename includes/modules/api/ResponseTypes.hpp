@@ -4,7 +4,6 @@
 #include "api/command/response/ResponseSpec.hpp"
 
 namespace ResponseTypes {
-	
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");
@@ -19,18 +18,5 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif /* FT_IRC_API_RESPONSE */
