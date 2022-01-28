@@ -117,14 +117,14 @@ namespace GenericArguments {
 	// 	return new IntegerCommandElement();
 	// }
 
-	// OptionalCommandElement *optional(CommandElement *subtype) {
-	// 	return new OptionalCommandElement(subtype);
-	// }
+	OptionalCommandElement *optional(CommandElement *subtype) {
+		return new OptionalCommandElement(subtype);
+	}
 
-	// template <class T>
-	// ListCommandElement<T> *list(CommandElement *subtype) {
-	// 	return new ListCommandElement<T>(subtype);
-	// }
+	template <class T>
+	ListCommandElement<T> *list(CommandElement *subtype) {
+		return new ListCommandElement<T>(subtype);
+	}
 };
 
 #endif /* FT_IRC_API_GENERIC_ARGUMENTS */

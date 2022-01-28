@@ -15,7 +15,7 @@ public:
 		User *user = Irc::getInstance().findUser(arg);
 		if (user)
 			return user;
-		// event.getSender().send(ERR_NOSUCHNICK);
+		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK(arg.c_str()));
 		return NULL;
 	}
 };

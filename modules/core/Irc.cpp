@@ -3,7 +3,7 @@
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
 
-#include "core/command/elements/MsgTargetCommandElement.hpp"
+#include "core/command/elements/MsgToCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
 #include "core/command/elements/ChannelCommandElement.hpp"
 
@@ -35,8 +35,40 @@ void Irc::start() {
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
+		.name("JOIN")
+		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(true)))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PART")
+		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(false)))
+		.argument("message", GenericArguments::optional(GenericArguments::string()))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("KICK")
+		.argument("channel", new ChannelCommandElement(false))
+		.argument("user", new UserCommandElement())
+		.argument("message", GenericArguments::optional(GenericArguments::string()))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("TOPIC")
+		.argument("channel", new ChannelCommandElement(false))
+		.argument("topic", GenericArguments::optional(GenericArguments::string()))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new TestCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
 		.name("PRIVMSG")
-		.argument("msgtarget", new MsgTargetCommandElement())
+		.argument("msgtarget", GenericArguments::list<MsgToCommandElement *>(new MsgToCommandElement()))
 		.argument("message", CommandElement::Builder()
 			.element(GenericArguments::string())
 			.ifNotProvided(ResponseTypes::ERR_NOTEXTTOSEND)
