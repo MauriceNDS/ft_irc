@@ -26,7 +26,7 @@ public:
 		return *Irc::instance;
 	}
 
-	Irc(const string& name) : server(name) {
+	Irc(const string& name, const int port, const string& password) : server(name, port, password) {
 		Irc::instance = this;
 	}
 

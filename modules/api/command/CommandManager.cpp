@@ -1,4 +1,5 @@
 #include "api/command/CommandManager.hpp"
+#include "api/ResponseTypes.hpp"
 
 void CommandManager::registerCommand(const CommandSpec *spec) {
 	if (!cspecs.insert(make_pair(spec->getName(), spec)).second)
@@ -14,8 +15,10 @@ void CommandManager::process(MessageEvent& event) {
 	std::getline(ss, command, ' ');
 
 	it = cspecs.find(command);
-	if (it == cspecs.end())
-		throw CommandNotFoundException();
+	if (it == cspecs.end()) {
+		event.getSender().send(ResponseTypes::ERR_UNKNOWNCOMMAND(command.c_str()));
+		return ;
+	}
 
 	bool lastStr = false;
 	string temp;
