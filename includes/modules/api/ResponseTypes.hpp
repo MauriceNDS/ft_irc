@@ -5,6 +5,9 @@
 
 namespace ResponseTypes {
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
+	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
+	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
+	const ResponseSpec RPL_MYINFO = ResponseSpec(4, "<servername> <version> <available user modes> <available channel modes>");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");
 	const ResponseSpec ERR_NOSUCHCHANNEL = ResponseSpec(403, "<channel name> :No such channel");

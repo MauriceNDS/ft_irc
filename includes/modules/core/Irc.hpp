@@ -11,6 +11,9 @@
 
 #include "api/Channel.hpp"
 
+#define CREATION_DATE "28/01/2022"
+#define VERSION "1.0"
+
 class Irc {
 private:
 	static Irc *instance;
