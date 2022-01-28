@@ -4,10 +4,6 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <poll.h>
 
 using std::string;
 using std::map;

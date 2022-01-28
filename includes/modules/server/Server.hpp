@@ -5,14 +5,19 @@
 
 #include "api/User.hpp"
 #include "api/Connection.hpp"
+
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <poll.h>
 
 class Server : public CommandSender {
 private:
 	string name;
 	vector<Connection *> connections;
 	struct sockaddr_in connectionConfig;
-	const string port;
+	int port;
 	const string password;
 
 	void incomingConnection();

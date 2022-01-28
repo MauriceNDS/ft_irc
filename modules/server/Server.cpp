@@ -4,7 +4,7 @@
 
 #include <fstream>
 
-#define MAX_BUFFER_LENGTH 4096
+#define MAX_BUFFER_LENGTH 512
 
 Connection *Server::addConnection(const struct pollfd &connection) {
 	Connection *newConnect = new Connection(connection);
@@ -12,9 +12,11 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name, const string& port, const string& password) : name(name), port(port), password(password) {
+Server::Server(const string& name, const string& port, const string& password) : name(name), password(password) {
 	struct pollfd serverSocket;
 	int opt = 1;
+
+	std::istringstream(port) >> this->port;
 
 	std::cout << "Setting up the server..." << std::endl;
 
@@ -34,7 +36,7 @@ Server::Server(const string& name, const string& port, const string& password) :
 
 	connectionConfig.sin_family = AF_INET;
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
-	connectionConfig.sin_port = htons(stoi(this->port));
+	connectionConfig.sin_port = htons(this->port);
 
 	// Can be protected
 	bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig));
