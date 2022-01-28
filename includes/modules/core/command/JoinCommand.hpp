@@ -5,6 +5,7 @@
 
 #include "core/Irc.hpp"
 
+#include "api/ResponseTypes.hpp"
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
@@ -12,16 +13,15 @@
 
 class JoinCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
 
         vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 			(*it)->addUser(static_cast<User *>(&sender));
-			user.send(RPL_NAMREPLY);
-			user.send(RPL_TOPIC);
+			user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), sender.getName().c_str()));
+			user.send(ResponseTypes::RPL_TOPIC((*it)->getName().c_str(), (*it)->getTopic().c_str()));
 		}
-		return RPL_NONE;
 	}
 };
 

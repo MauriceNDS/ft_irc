@@ -12,6 +12,7 @@ class Irc;
 class Channel : public CommandSender {
 private:
 	string name;
+	string topic;
     set<User *> users;
 	set<User *> chanop;
 
@@ -46,9 +47,15 @@ public:
 		if (it == chanop.end())
 			chanop.insert(user);
 	}
+	
+	const string& getTopic() {
+		if (topic.empty())
+			return "No topic is set";
+		return topic;
+	}
 
-	const string& getName() {
-		return name;
+	void setTopic(string& arg) {
+		topic = arg;
 	}
 
 	void send(Response message) const {

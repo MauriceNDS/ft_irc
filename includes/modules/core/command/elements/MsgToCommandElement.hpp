@@ -10,7 +10,7 @@
 #include "api/command/CommandElement.hpp"
 #include "api/event/MessageEvent.hpp"
 
-class MsgTargetCommandElement : public CommandElement {
+class MsgToCommandElement : public CommandElement {
 public:
 	const ResponseSpec& notProvidedResponse() const {
 		return ResponseTypes::ERR_NORECIPIENT;
@@ -18,6 +18,9 @@ public:
 
 	void *parseValue(const string& arg, MessageEvent& event) const {
 		if (Channel::isValidIdentifier(arg)) {
+			Channel *channel = Irc::getInstance().findChannel(arg);
+			if (channel)
+				return channel;
 		} else {
 			User *user = Irc::getInstance().findUser(arg);
 			if (user) 

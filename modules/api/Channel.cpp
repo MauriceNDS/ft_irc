@@ -1,5 +1,6 @@
 #include "core/Irc.hpp"
 #include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
 
 bool Channel::isChanop(User *user) {
     set<User *>::iterator it = chanop.find(user);
@@ -12,7 +13,7 @@ bool Channel::isChanop(User *user) {
 
 void Channel::removeUser(User *user) {
     if (!isOnChan(user)) {
-        user->send(ERR_NOTONCHANNEL);
+        user->send(ResponseTypes::ERR_NOTONCHANNEL(this->getName().c_str()));
         return ;
     }
     users.erase(user);

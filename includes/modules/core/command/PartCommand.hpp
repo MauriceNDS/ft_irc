@@ -12,16 +12,23 @@
 
 class PartCommand : public CommandExecutor {
 
-	Response execute(const Command& cmd, CommandSender& sender) {
+	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
 
-        string & message = cmd.getArg<string>("message");
+        string *message = cmd.getArg<string *>("message");
         vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
+            if (!*it) {
+                sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
+                continue ;
+            }
 			(*it)->removeUser(static_cast<User *>(&sender));
-			(*it)->send(message);
+            if (message) {
+			    (*it)->send(*message);
+            } else {
+                (*it)->send(sender.getName().c_str());
+            }
 		}
-		return RPL_NONE;
 	}
 };
 
