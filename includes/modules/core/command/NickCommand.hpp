@@ -22,6 +22,9 @@ class NickCommand : public CommandExecutor {
 		}
 
 		user.setNickName(nickname);
+
+		if (user.isRegistered())
+			user.send(ResponseTypes::RPL_WELCOME(user.getNickName().c_str(), user.getUserName().c_str(), Irc::getInstance().getServer().getName().c_str()));
 	}
 };
 

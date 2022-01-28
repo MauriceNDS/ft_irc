@@ -22,6 +22,9 @@ class UserCommand : public CommandExecutor {
 
 		user.setUserName(cmd.getArg<string>("user"));
 		user.setRealName(cmd.getArg<string>("realname"));
+
+		if (user.isRegistered())
+			user.send(ResponseTypes::RPL_WELCOME(user.getNickName().c_str(), user.getUserName().c_str(), Irc::getInstance().getServer().getName().c_str()));
 	}
 };
 
