@@ -19,6 +19,7 @@ string ResponseSpec::operator()(const CommandSender& sender, const char *first, 
 			replacement = va_arg(argptr, const char *);
 	}
 	va_end(argptr);
+	cmd += "\n";
 	return cmd;
 }
 
@@ -39,6 +40,7 @@ string ResponseSpec::operator()(const CommandSender& sender) const {
 	cmd += sender.getName() + " " + _command;
 	if (!_args.empty())
 		cmd += string(" ") + _args;
+	cmd += "\n";
 	return cmd;
 }
 

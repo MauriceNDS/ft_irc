@@ -5,7 +5,6 @@
 
 #include "ft_irc.hpp"
 #include "api/event/MessageEvent.hpp"
-#include "api/exception/TooFewArgumentsException.hpp"
 
 class Middleware;
 class CommandManager;

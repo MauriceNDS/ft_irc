@@ -7,7 +7,6 @@
 #include "api/command/CommandSpec.hpp"
 #include "api/event/MessageEvent.hpp"
 
-#include "api/exception/CommandNotFoundException.hpp"
 #include "api/exception/DuplicatedCommandException.hpp"
 
 class CommandSpec;

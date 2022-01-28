@@ -5,7 +5,6 @@
 
 #include "api/User.hpp"
 #include "api/command/CommandElement.hpp"
-#include "api/exception/ArgumentParseException.hpp"
 #include "api/event/MessageEvent.hpp"
 
 #include "core/Irc.hpp"

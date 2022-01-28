@@ -6,26 +6,37 @@
 #include "api/User.hpp"
 #include "api/Connection.hpp"
 
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <poll.h>
+
 class Server : public CommandSender {
 private:
 	string name;
-	map<int, Connection *> connections;
+	vector<Connection *> connections;
+	struct sockaddr_in connectionConfig;
+	const int port;
+	const string password;
 
-	Connection *simulate_connect(int socket);
-	User *simulate_join(Connection *connection, string name);
+	void incomingConnection();
+	void incomingRequest(size_t index);
+	void closeConnection(size_t	index);
+	Connection *addConnection(const struct pollfd &connection);
 
 public:
-	Server(const string& name) : name(name) {}
+	Server(const string& name, const int port, const string& password);
 
 	void send(const string& message) const {
 		std::cout << message << std::endl;
 	}
 
-	const string& getName() const {
-		return name;
-	}
+	const string& getName() const;
 
-	void listen();
+	void start();
+
+	~Server();
 };
 
 #endif /* FT_IRC_SERVER_SERVER */

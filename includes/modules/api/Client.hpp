@@ -19,9 +19,7 @@ public:
 		return connection;
 	}
 
-	void send(const string& message) const {
-		std::cout << message << std::endl;
-	}
+	void send(const string& message) const;
 
 	virtual ~Client() = 0;
 };
