@@ -4,14 +4,13 @@
 #include <sstream>
 
 #include "ft_irc.hpp"
-#include "api/command/CommandElement.hpp"
-#include "api/command/CommandManager.hpp"
-#include "api/command/CommandExecutor.hpp"
+#include "api/event/MessageEvent.hpp"
 #include "api/exception/TooFewArgumentsException.hpp"
-#include "api/middleware/Middleware.hpp"
 
+class Middleware;
 class CommandManager;
 class CommandExecutor;
+class CommandElement;
 
 class CommandSpec {
 private:

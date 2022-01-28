@@ -109,11 +109,11 @@ public:
 };
 
 namespace GenericArguments {
-	static StringCommandElement *string() {
+	StringCommandElement *string() {
 		return new StringCommandElement();
 	}
 
-	// static IntegerCommandElement *integer() {
+	// IntegerCommandElement *integer() {
 	// 	return new IntegerCommandElement();
 	// }
 

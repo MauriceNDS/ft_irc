@@ -92,6 +92,13 @@ public:
 	bool isOperator(User *user) {
 		return operators.find(user) != operators.end();
 	}
+	const Server& getServer() const {
+		return server;
+	}
+
+	// const vector<Channel *>& getChannels() const {
+	// 	return channels;
+	// }
 
 	~Irc();
 };

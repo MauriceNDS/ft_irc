@@ -26,7 +26,7 @@ public:
 				return (channel);
 			}
 		}
-		event.getSender().send(ERR_NOSUCHCHANNEL);
+		// event.getSender().send(ERR_NOSUCHCHANNEL);
 		return NULL;
 	}
 };

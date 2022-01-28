@@ -27,7 +27,7 @@ void Server::listen() {
 	while (std::getline(std::cin, line)) {
 		if (!line.empty()) {
 			MessageEvent event = MessageEvent(line, *connections[1]->client);
-			Irc::getInstance().getCommandManager().post(event);
+			Irc::getInstance().getCommandManager().process(event);
 		}
 	}
 

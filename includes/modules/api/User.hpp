@@ -22,6 +22,8 @@ public:
 	const string& getUserName() const				{ return this->username; }
 	const string& getRealName() const				{ return this->realname; }
 
+	const string& getName() const					{ return getNickName(); }
+
 	bool isRegistered() const {
 		return !getNickName().empty()
 			&& !getUserName().empty()
