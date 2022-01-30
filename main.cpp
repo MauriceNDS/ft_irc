@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// remove atoi if possible
 	Irc irc("127.0.0.1", std::atoi(argv[1]), argv[2], plugins);
 
 	irc.start();
