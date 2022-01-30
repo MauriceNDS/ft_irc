@@ -1,18 +1,20 @@
-#include "ft_irc.hpp"
-#include "api/Plugin.hpp"
+#include "test.hpp"
 
-class TestPlugin : public Plugin {
-public:
-	void onStart() {
-		std::cout << "Started" << std::endl;
-	}
+#include "api/ResponseTypes.hpp"
 
-	void onStop() {
-		std::cout << "Stopped" << std::endl;
-	}
-};
+PLUGIN(TestPlugin)
 
-extern "C" Plugin *getPlugin() {
-	std::cout << "Called" << std::endl;
-	return new TestPlugin();
+void TestPlugin::onStart(Irc& irc) {
+	irc.getCommandManager().registerCommand(CommandSpec::Builder()
+		.name("TEST")
+		.executor(new MeuhCommand())
+		.build()
+	);
+}
+
+void TestPlugin::onStop() {}
+
+void MeuhCommand::execute(const Command& cmd, CommandSender& sender) {
+	(void)cmd;
+	sender.send("meuh\n");
 }

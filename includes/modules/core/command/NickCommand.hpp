@@ -21,7 +21,7 @@ class NickCommand : public CommandExecutor {
 			return;
 		}
 
-		user.setNickName(nickname);
+		user.setName(nickname);
 	}
 };
 

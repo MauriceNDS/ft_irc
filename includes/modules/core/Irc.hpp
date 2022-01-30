@@ -27,9 +27,7 @@ public:
 		return *Irc::instance;
 	}
 
-	Irc(const string& name, const int port, const string& password) : server(name, port, password) {
-		Irc::instance = this;
-	}
+	Irc(const string& name, const int port, const string& password);
 
 	void start();
 
@@ -43,7 +41,7 @@ public:
 
 	User *findUser(const string& nickname) {
 		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
-			if ((*it)->getNickName() == nickname)
+			if ((*it)->getName() == nickname)
 				return *it;
 		return NULL;
 	}

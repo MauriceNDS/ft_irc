@@ -20,19 +20,6 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NOTREGISTERED = ResponseSpec(451, ":You have not registered");
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 #endif /* FT_IRC_API_RESPONSE */

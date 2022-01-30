@@ -1,48 +1,38 @@
 #include "ft_irc.hpp"
 
-// #include "core/Irc.hpp"
-
-// #include <cstdlib>
-
-// bool isNumber(const std::string& s) {
-//     std::string::const_iterator it = s.begin();
-//     while (it != s.end() && std::isdigit(*it))
-// 		++it;
-//     return !s.empty() && it == s.end();
-// }
-
-// int main(int argc, char *argv[]) {
-// 	if (argc != 3 || !isNumber(argv[1])) {
-// 		std::cout << "Invalid arguments" << std::endl;
-// 		exit(1);
-// 	}
-// 	Irc irc("International Robbers Classification", std::atoi(argv[1]), argv[2]);
-// 	irc.start();
-// 	return 0;
-// }
-
-#include <dlfcn.h>
+#include "core/Irc.hpp"
 #include "api/Plugin.hpp"
 
-void loadPlugin(char *name) {
+#include <cstdlib>
+#include <dlfcn.h>
+
+Plugin *loadPlugin(char *name) {
 	void *dl_handle = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
 	if (!dl_handle) {
 		std::cerr << "Cannot open " << name << std::endl;
-		return;
+		return NULL;
 	}
-	Plugin *(*getPlugin)() = reinterpret_cast<Plugin *(*)()>(dlsym(dl_handle, "getPlugin"));
+	Plugin *(*getPlugin)() = reinterpret_cast<Plugin *(*)()>(reinterpret_cast<long>(dlsym(dl_handle, "getPlugin")));
 	if (!getPlugin) {
 		std::cerr << "Cannot load " << name << ": symbol `getPlugin' not found." << std::endl;
-		return;
+		return NULL;
 	}
-	Plugin *plugin = getPlugin();
-
-	plugin->onStart();
-	plugin->onStop();
+	return getPlugin();
 }
 
-int main() {
-	loadPlugin((char *)"plugins/test.so");
+int main(int argc, char *argv[]) {
+	if (argc != 3 || (string(argv[1]).find_first_not_of("0123456789") != string::npos)) {
+		std::cout << "Invalid arguments" << std::endl;
+		exit(1);
+	}
+
+	Irc irc("127.0.0.1", std::atoi(argv[1]), argv[2]);
+	
+	{
+		Plugin *p = loadPlugin((char *)"plugins/test.so");
+		p->onStart(irc);
+	}
+
+	irc.start();
 	return 0;
 }
-

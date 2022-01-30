@@ -13,7 +13,9 @@
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
 
-void Irc::start() {
+Irc::Irc(const string& name, const int port, const string& password) : server(name, port, password) {
+	Irc::instance = this;
+
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("USER")
 		.argument("user", GenericArguments::string())
@@ -77,7 +79,9 @@ void Irc::start() {
 		.executor(new TestCommand())
 		.build()
 	);
+}
 
+void Irc::start() {
 	server.start();
 }
 
