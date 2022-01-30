@@ -14,10 +14,12 @@ public:
 };
 
 class TestPlugin : public Plugin {
-public:
-	void onStart(Irc& irc);
+private:
+	Irc *irc;
 
-	void onStop();
+public:
+	void construct();
+	void init();
 };
 
 #endif /* FT_IRC_PLUGIN_TEST */

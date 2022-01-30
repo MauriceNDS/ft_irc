@@ -137,4 +137,5 @@ Server::~Server() {
 		close(Connection::sockets[i].fd);
 		delete connections[i];
 	}
+	connections.clear();
 }

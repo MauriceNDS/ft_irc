@@ -6,15 +6,15 @@
 #include <cstdlib>
 #include <dlfcn.h>
 
-Plugin *loadPlugin(char *name) {
-	void *dl_handle = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
+Plugin *loadPlugin(const string& folder, const string& name) {
+	void *dl_handle = dlopen((folder + name).c_str(), RTLD_LAZY | RTLD_LOCAL);
 	if (!dl_handle) {
-		std::cerr << "Cannot open " << name << std::endl;
+		std::cerr << "Plugin loader: Cannot open " << name << std::endl;
 		return NULL;
 	}
 	Plugin *(*getPlugin)() = reinterpret_cast<Plugin *(*)()>(reinterpret_cast<long>(dlsym(dl_handle, "getPlugin")));
 	if (!getPlugin) {
-		std::cerr << "Cannot load " << name << ": symbol `getPlugin' not found." << std::endl;
+		std::cerr << "Plugin loader: Cannot load " << name << ": symbol `getPlugin' not found." << std::endl;
 		return NULL;
 	}
 	return getPlugin();
@@ -26,12 +26,20 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	Irc irc("127.0.0.1", std::atoi(argv[1]), argv[2]);
-	
-	{
-		Plugin *p = loadPlugin((char *)"plugins/test.so");
-		p->onStart(irc);
+	vector<Plugin *> plugins;
+	vector<string> files;
+
+	files.push_back("test.so");
+	for (vector<string>::iterator file = files.begin(); file != files.end(); file++) {
+		Plugin *plugin = loadPlugin("plugins/", *file);
+		if (plugin) {
+			plugins.push_back(plugin);
+			std::cout << "Plugin loader: " << *file << " loaded" << std::endl;
+		}
 	}
+
+	// remove atoi if possible
+	Irc irc("127.0.0.1", std::atoi(argv[1]), argv[2], plugins);
 
 	irc.start();
 	return 0;

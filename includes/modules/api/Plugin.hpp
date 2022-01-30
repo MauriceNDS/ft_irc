@@ -7,8 +7,15 @@
 
 class Plugin {
 public:
-	virtual void onStart(Irc& irc) = 0;
-	virtual void onStop() = 0;
+	virtual void construct() {};
+	virtual void preInit() {};
+	virtual void init() {};
+	virtual void postInit() {};
+	virtual void serverAboutToStart() {};
+	virtual void serverStopping() {};
+	virtual void serverStopped() {};
+
+	virtual ~Plugin() {};
 };
 
 #endif /* FT_IRC_API_PLUGIN */
