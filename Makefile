@@ -17,12 +17,12 @@ RM = rm -rf
 all:    $(NAME)
 
 $(NAME):
-		$(CC) $(CFLAGS) -I includes -I includes/modules -o server/libirc.so --shared `find modules -name "*.cpp"`
+		$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -o server/libirc.so `find modules -name "*.cpp"`
 		install_name_tool -id @rpath/libirc.so server/libirc.so
 
-		$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-rpath,'@executable_path/' -Lserver -lirc -o server/$(NAME) main.cpp
+		$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-rpath,'@executable_path/' -ldl -Lserver -lirc -o server/$(NAME) main.cpp
 
-		$(CC) $(CFLAGS) -I includes -I includes/modules -Lserver -lirc -o server/plugins/test.so --shared `find plugins/test -name "*.cpp"`
+		$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -Lserver -lirc -o server/plugins/test.so `find plugins/test -name "*.cpp"`
 		install_name_tool -id @rpath/plugins/test.so server/plugins/test.so
 
 %.o: %.cpp $(HEADER)	
