@@ -26,10 +26,10 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	vector<Plugin *> plugins;
 	vector<string> files;
-
 	files.push_back("test.so");
+
+	vector<Plugin *> plugins;
 	for (vector<string>::iterator file = files.begin(); file != files.end(); file++) {
 		Plugin *plugin = loadPlugin("plugins/", *file);
 		if (plugin) {
