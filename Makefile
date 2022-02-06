@@ -32,17 +32,12 @@ override INCLUDES	:= -Iincludes -Iincludes/modules
 
 all:		dirs lib $(NAME)
 
-dirs:		| $(DIRS)
+$(OBJS):	| $(DIRS)
 
 $(DIRS):
 			mkdir -p $@
 
-tmp/%.d:	%.cpp
-			@mkdir -p $(dir $@)
-			@set -e; rm -f $@; \
-        		$(CC) -MM $(CPPFLAGS) $(INCLUDES) $< > $@.$$$$; \
-        		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-        		rm -f $@.$$$$
+-include $(DEPS)
 
 build/%.o:	%.cpp
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
@@ -67,5 +62,3 @@ fclean:		clean
 re:			fclean all
 
 .PHONY:		all plugin lib clean fclean re
-
--include $(DEPS)

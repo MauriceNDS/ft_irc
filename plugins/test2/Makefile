@@ -1,47 +1,49 @@
 # Properties
 
-NAME				:= ../../server/plugins/$(notdir $(CURDIR))
+NAME				:= ../../server/plugins/$(notdir $(CURDIR)).so
 
 # Commands
 
 override CC			:= clang++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
+override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
+override LDFLAGS	:= -fPIC
 
 # Sources
 
-override SRCS		:=							\
-				main.cpp						\
-
-override HEADERS	:=							\
-				myplugin.hpp					\
-
-override HEADERS	:= $(addprefix includes/,$(HEADERS))
+override SRCS		:=													\
+				main.cpp												\
 
 override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 
-override OBJDIRS	:= $(sort $(dir $(NAME) $(OBJS)))
+override DEPS		:= $(addprefix tmp/, $(SRCS:.cpp=.d))
+
+override DIRS		:= $(sort $(dir $(NAME) $(OBJS) $(DEPS)))
 
 override INCLUDES	:= -I../../includes -I../../includes/modules
-
-override LDFLAGS	:= -fPIC
 
 # Rules
 
 all:		$(NAME)
 
-build/%.o:	src/%.cpp $(HEADERS)
-			$(CC) $(CPPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
+$(OBJS):	| $(DIRS)
 
-$(OBJS):	| $(OBJDIRS)
-
-$(OBJDIRS):
+$(DIRS):
 			mkdir -p $@
 
+-include $(DEPS)
+
+build/%.o:	%.cpp
+			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
+
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -Lserver -lirc -o $(NAME).so $(OBJS)
+			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -L../../server -lirc -o $(NAME) $(OBJS)
 
 clean:
-			rm -rf build
+			rm -rf build tmp
+
+fclean:		clean
+			rm -f $(NAME)
 
 re:			fclean all
 

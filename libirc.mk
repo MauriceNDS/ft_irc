@@ -37,12 +37,14 @@ override INCLUDES	:= -Iincludes -Iincludes/modules
 
 # Rules
 
-all:		dirs $(NAME)
+all:		$(NAME)
 
-dirs:		| $(DIRS)
+$(OBJS):	| $(DIRS)
 
 $(DIRS):
 			mkdir -p $@
+
+-include $(DEPS)
 
 build/%.o:	%.cpp
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
@@ -50,6 +52,4 @@ build/%.o:	%.cpp
 $(NAME):	$(OBJS)
 			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -o $(NAME) $(OBJS)
 
-.PHONY:		all dirs
-
--include $(DEPS)
+.PHONY:		all
