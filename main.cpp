@@ -6,8 +6,8 @@
 #include <cstdlib>
 #include <dlfcn.h>
 
-Plugin *loadPlugin(const string& folder, const string& name) {
-	void *dl_handle = dlopen((folder + name).c_str(), RTLD_LAZY | RTLD_LOCAL);
+Plugin *loadPlugin(const string& name) {
+	void *dl_handle = dlopen(name.c_str(), RTLD_LAZY | RTLD_LOCAL);
 	if (!dl_handle) {
 		std::cerr << "Plugin loader: Cannot open " << name << std::endl;
 		return NULL;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 	vector<Plugin *> plugins;
 	for (vector<string>::iterator file = files.begin(); file != files.end(); file++) {
-		Plugin *plugin = loadPlugin("plugins/", *file);
+		Plugin *plugin = loadPlugin(*file);
 		if (plugin) {
 			plugins.push_back(plugin);
 			std::cout << "Plugin loader: " << *file << " loaded" << std::endl;
