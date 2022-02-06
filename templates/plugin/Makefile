@@ -19,7 +19,7 @@ override HEADERS	:= $(addprefix includes/,$(HEADERS))
 
 override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 
-override OBJDIRS	:= $(sort $(dir $(NAME) $(OBJS)))
+override DIRS		:= $(sort $(dir $(NAME) $(OBJS)))
 
 # Rules
 
@@ -28,16 +28,16 @@ all:		$(NAME)
 build/%.o:	src/%.cpp $(HEADERS)
 			$(CC) $(CPPFLAGS) -c $< -o $@ -Iincludes
 
-$(OBJS):	| $(OBJDIRS)
+$(OBJS):	| $(DIRS)
 
-$(OBJDIRS):
+$(DIRS):
 			mkdir -p $@
 
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) -I ../../includes -I ../../includes/modules -fPIC --shared -Lserver -lirc -o $(NAME).so $(OBJS)
+			$(CC) $(CPPFLAGS) -I../../includes -I../../includes/modules -fPIC --shared -Lserver -lirc -o $(NAME).so $(OBJS)
 
 clean:
-			rm -r obj
+			rm -rf build
 
 re:			fclean all
 

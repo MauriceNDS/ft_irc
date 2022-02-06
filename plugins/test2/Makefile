@@ -41,7 +41,7 @@ $(NAME):	$(OBJS)
 			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -Lserver -lirc -o $(NAME).so $(OBJS)
 
 clean:
-			rm -r obj
+			rm -rf build
 
 re:			fclean all
 

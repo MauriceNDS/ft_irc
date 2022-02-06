@@ -6,6 +6,13 @@ NAME				:= server/libirc.so
 
 override CC			:= clang++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
+override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
+
+ifeq ($(shell uname),Darwin)
+override LDFLAGS	:= -Wl,-install_name,@rpath/libirc.so -fPIC
+else
+override LDFLAGS	:= -fPIC
+endif
 
 # Sources
 
@@ -20,79 +27,29 @@ override SRCS		:=													\
 				modules/core/Irc.cpp									\
 				modules/server/Server.cpp								\
 
-
-override HEADERS	:=													\
-				ft_irc.hpp												\
-				modules/api/Channel.hpp									\
-				modules/api/Client.hpp									\
-				modules/api/CommandSender.hpp							\
-				modules/api/Connection.hpp								\
-				modules/api/Plugin.hpp									\
-				modules/api/ResponseTypes.hpp							\
-				modules/api/User.hpp									\
-				modules/api/command/Command.hpp							\
-				modules/api/command/CommandElement.hpp					\
-				modules/api/command/CommandExecutor.hpp					\
-				modules/api/command/CommandManager.hpp					\
-				modules/api/command/CommandSpec.hpp						\
-				modules/api/command/GenericArguments.hpp				\
-				modules/api/command/response/ResponseSpec.hpp			\
-				modules/api/event/MessageEvent.hpp						\
-				modules/api/exception/ArgumentNotFoundException.hpp		\
-				modules/api/exception/DuplicatedCommandException.hpp	\
-				modules/api/middleware/Middleware.hpp					\
-				modules/api/middleware/RegisteredUserMiddleware.hpp		\
-				modules/api/middleware/UserMiddleware.hpp				\
-				modules/core/Irc.hpp									\
-				modules/core/command/JoinCommand.hpp					\
-				modules/core/command/KickCommand.hpp					\
-				modules/core/command/NickCommand.hpp					\
-				modules/core/command/OperCommand.hpp					\
-				modules/core/command/PartCommand.hpp					\
-				modules/core/command/PongCommand.hpp					\
-				modules/core/command/PrivmsgCommand.hpp					\
-				modules/core/command/TestCommand.hpp					\
-				modules/core/command/TopicCommand.hpp					\
-				modules/core/command/UserCommand.hpp					\
-				modules/core/command/elements/ChannelCommandElement.hpp	\
-				modules/core/command/elements/MsgToCommandElement.hpp	\
-				modules/core/command/elements/UserCommandElement.hpp	\
-				modules/server/Server.hpp								\
-
-
-override HEADERS	:= $(addprefix includes/,$(HEADERS))
-
 override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 
-override OBJDIRS	:= $(sort $(dir $(NAME) $(OBJS)))
+override DEPS		:= $(addprefix tmp/, $(SRCS:.cpp=.d))
 
-override OS := $(shell uname)
+override DIRS		:= $(sort $(dir $(NAME) $(OBJS) $(DEPS)))
 
-ifeq ($(OS),Darwin)
-override LDFLAGS	:= -Wl,-install_name,@rpath/libirc.so -fPIC
-else
-override LDFLAGS	:= -fPIC
-endif
 override INCLUDES	:= -Iincludes -Iincludes/modules
 
 # Rules
 
-all:		$(NAME)
+all:		dirs $(NAME)
 
-build/%.o:	%.cpp $(HEADERS)
-			$(CC) $(CPPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
+dirs:		| $(DIRS)
 
-$(OBJS):	| $(OBJDIRS)
-
-$(OBJDIRS):
+$(DIRS):
 			mkdir -p $@
+
+build/%.o:	%.cpp
+			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
 
 $(NAME):	$(OBJS)
 			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -o $(NAME) $(OBJS)
 
-clean:
-			rm -r obj
+.PHONY:		all dirs
 
-re:			fclean all
-
-.PHONY:		all clean re
+-include $(DEPS)
