@@ -1,6 +1,6 @@
 # Properties
 
-NAME				:= server/ircserv
+NAME				:= server/libirc.so
 
 # Commands
 
@@ -10,7 +10,15 @@ override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
 # Sources
 
 override SRCS		:=													\
-				main.cpp												\
+				modules/api/Client.cpp									\
+				modules/api/Connection.cpp								\
+				modules/api/command/CommandElement.cpp					\
+				modules/api/command/CommandExecutor.cpp					\
+				modules/api/command/CommandManager.cpp					\
+				modules/api/command/CommandSpec.cpp						\
+				modules/api/command/response/ResponseSpec.cpp			\
+				modules/core/Irc.cpp									\
+				modules/server/Server.cpp								\
 
 
 override HEADERS	:=													\
@@ -61,16 +69,15 @@ override OBJDIRS	:= $(sort $(dir $(NAME) $(OBJS)))
 override OS := $(shell uname)
 
 ifeq ($(OS),Darwin)
-override LOADER_PATH	:= @loader_path
+override LDFLAGS	:= -Wl,-install_name,@rpath/libirc.so -fPIC
 else
-override LOADER_PATH	:= $$ORIGIN
+override LDFLAGS	:= -fPIC
 endif
-override LDFLAGS	:= -Wl,-rpath,'$(LOADER_PATH)' -Wl,-rpath,'$(LOADER_PATH)/plugins'
 override INCLUDES	:= -Iincludes -Iincludes/modules
 
 # Rules
 
-all:		lib $(NAME)
+all:		$(NAME)
 
 build/%.o:	%.cpp $(HEADERS)
 			$(CC) $(CPPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
@@ -81,22 +88,11 @@ $(OBJDIRS):
 			mkdir -p $@
 
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
-
-ifdef N
-plugin:
-			bash scripts/create_plugin.bash $(N)
-endif
-
-lib:
-			$(MAKE) -f libirc.mk
+			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -o $(NAME) $(OBJS)
 
 clean:
 			rm -r obj
 
-fclean:		clean
-			rm -r server
-
 re:			fclean all
 
-.PHONY:		all plugin lib clean fclean re
+.PHONY:		all clean re

@@ -1,5 +1,5 @@
-#ifndef FT_IRC_PLUGIN_TEST
-#define FT_IRC_PLUGIN_TEST
+#ifndef TEST_HPP
+#define TEST_HPP
 
 #include "ft_irc.hpp"
 
@@ -22,4 +22,4 @@ public:
 	void init();
 };
 
-#endif /* FT_IRC_PLUGIN_TEST */
+#endif /* TEST_HPP */
