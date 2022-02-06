@@ -16,14 +16,18 @@ RM = rm -rf
 
 all:    $(NAME)
 
-$(NAME):
-		#$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-install_name,@rpath/libirc.so -fPIC --shared -o server/libirc.so `find modules -name "*.cpp"`
-		#$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-rpath,@loader_path -ldl -Lserver -lirc -o server/$(NAME) main.cpp
-		#$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -Lserver -lirc -o server/plugins/test.so `find plugins/test -name "*.cpp"`
+OS := $(shell uname)
 
+$(NAME):
+ifeq ($(OS),Darwin)
+		$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-install_name,@rpath/libirc.so -fPIC --shared -o server/libirc.so `find modules -name "*.cpp"`
+		$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-rpath,'@loader_path' -Wl,-rpath,'@loader_path/plugins' -ldl -Lserver -lirc -o server/$(NAME) main.cpp
+		$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -Lserver -lirc -o server/plugins/test.so `find plugins/test -name "*.cpp"`
+else
 		$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -o server/libirc.so `find modules -name "*.cpp"`
 		$(CC) $(CFLAGS) -I includes -I includes/modules -Wl,-rpath,'$$ORIGIN' -Wl,-rpath,'$$ORIGIN/plugins' -ldl -Lserver -lirc -o server/$(NAME) main.cpp
 		$(CC) $(CFLAGS) -I includes -I includes/modules -fPIC --shared -Lserver -lirc -o server/plugins/test.so `find plugins/test -name "*.cpp"`
+endif
 
 %.o: %.cpp $(HEADER)	
 		$(CC) $(CFLAGS) -c $<  -o $@
