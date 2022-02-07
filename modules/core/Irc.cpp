@@ -12,6 +12,7 @@
 #include "core/command/TopicCommand.hpp"
 #include "core/command/PassCommand.hpp"
 #include "core/command/NamesCommand.hpp"
+#include "core/command/ListCommand.hpp"
 
 #include "core/command/elements/MsgToCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
@@ -126,6 +127,13 @@ void Irc::start() {
 		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new NamesCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("LIST")
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new ListCommand())
 		.build()
 	);
 
