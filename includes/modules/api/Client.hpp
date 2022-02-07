@@ -15,7 +15,7 @@ private:
 public:
 	Client(Connection *connection);
 
-	const Connection *getConnection() {
+	Connection *getConnection() {
 		return connection;
 	}
 

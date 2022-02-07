@@ -54,6 +54,10 @@ const string& Server::getHost() const {
 	return host;
 }
 
+const string& Server::getPassword() const {
+	return password;
+}
+
 void Server::start() {
 	vector<Connection *>::iterator it;
 

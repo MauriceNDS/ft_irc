@@ -10,6 +10,7 @@
 #include "core/command/PingCommand.hpp"
 #include "core/command/PrivmsgCommand.hpp"
 #include "core/command/TopicCommand.hpp"
+#include "core/command/PassCommand.hpp"
 
 #include "core/command/elements/MsgToCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
@@ -109,6 +110,13 @@ void Irc::start() {
 		.argument("password", GenericArguments::string())
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new OperCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PASS")
+		.argument("password", GenericArguments::string())
+		.middleware(new UserMiddleware())
+		.executor(new PassCommand())
 		.build()
 	);
 
