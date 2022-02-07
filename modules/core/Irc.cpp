@@ -2,6 +2,14 @@
 #include "core/command/TestCommand.hpp"
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
+#include "core/command/JoinCommand.hpp"
+#include "core/command/KickCommand.hpp"
+#include "core/command/NoticeCommand.hpp"
+#include "core/command/OperCommand.hpp"
+#include "core/command/PartCommand.hpp"
+#include "core/command/PingCommand.hpp"
+#include "core/command/PrivmsgCommand.hpp"
+#include "core/command/TopicCommand.hpp"
 
 #include "core/command/elements/MsgToCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
@@ -38,7 +46,7 @@ void Irc::start() {
 		.name("JOIN")
 		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(true)))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new JoinCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -46,7 +54,7 @@ void Irc::start() {
 		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(false)))
 		.argument("message", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new PartCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -55,7 +63,7 @@ void Irc::start() {
 		.argument("user", new UserCommandElement())
 		.argument("message", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new KickCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -63,18 +71,44 @@ void Irc::start() {
 		.argument("channel", new ChannelCommandElement(false))
 		.argument("topic", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new TopicCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("PRIVMSG")
-		.argument("msgtarget", GenericArguments::list<MsgToCommandElement *>(new MsgToCommandElement()))
+		.argument("msgtarget", GenericArguments::list<MsgToCommandElement>(new MsgToCommandElement()))
 		.argument("message", CommandElement::Builder()
 			.element(GenericArguments::string())
 			.ifNotProvided(ResponseTypes::ERR_NOTEXTTOSEND)
 			.build())
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new PrivmsgCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("NOTICE")
+		.argument("msgtarget", GenericArguments::list<MsgToCommandElement>(new MsgToCommandElement()))
+		.argument("message", GenericArguments::string())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new NoticeCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PING")
+		.argument("server", CommandElement::Builder()
+			.element(GenericArguments::string())
+			.ifNotProvided(ResponseTypes::ERR_NOORIGIN)
+			.build())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new PingCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("OPER")
+		.argument("name", GenericArguments::string())
+		.argument("password", GenericArguments::string())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new OperCommand())
 		.build()
 	);
 

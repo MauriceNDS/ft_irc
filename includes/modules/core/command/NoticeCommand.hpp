@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE_PRIVMSG_COMMAND
-#define FT_IRC_CORE_PRIVMSG_COMMAND
+#ifndef FT_IRC_CORE_NOTICE_COMMAND
+#define FT_IRC_CORE_NOTICE_COMMAND
 
 #include "ft_irc.hpp"
 
@@ -12,7 +12,7 @@
 
 #include "api/ResponseTypes.hpp"
 
-class PrivmsgCommand : public CommandExecutor {
+class NoticeCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 
@@ -23,7 +23,6 @@ class PrivmsgCommand : public CommandExecutor {
             try {
                 Channel *channel = dynamic_cast<Channel *>(*it);
                 if (!channel->isOnChan(static_cast<User *>(&sender))) {
-                    sender.send(ResponseTypes::ERR_NOTONCHANNEL((*it)->getName().c_str(), sender.getName().c_str()));
                     continue ;
                 }
             } catch(std::bad_cast& e){}
@@ -32,4 +31,4 @@ class PrivmsgCommand : public CommandExecutor {
 	}
 };
 
-#endif /* FT_IRC_CORE_PRIVMSG_COMMAND */
+#endif /* FT_IRC_CORE_NOTICE_COMMAND */

@@ -11,10 +11,12 @@ namespace ResponseTypes {
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
+	const ResponseSpec RPL_YOUREOPER = ResponseSpec(381, ":You are now an IRC operator");
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");
 	const ResponseSpec ERR_NOTONCHANNEL = ResponseSpec(442, "<channel> :You're not on that channel");
 	const ResponseSpec ERR_NOSUCHCHANNEL = ResponseSpec(403, "<channel name> :No such channel");
 	const ResponseSpec ERR_CHANOPRIVSNEEDED = ResponseSpec(482, "<channel> :You're not channel operator");
+	const ResponseSpec ERR_NOORIGIN = ResponseSpec(409, ":No origin specified");
 	const ResponseSpec ERR_NORECIPIENT = ResponseSpec(411, ":No recipient given (<command>)");
 	const ResponseSpec ERR_NOTEXTTOSEND = ResponseSpec(412, ":No text to send");
 	const ResponseSpec ERR_UNKNOWNCOMMAND = ResponseSpec(421, "<command> :Unknown command");
@@ -24,6 +26,8 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NOTREGISTERED = ResponseSpec(451, ":You have not registered");
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
+	const ResponseSpec ERR_PASSWDMISMATCH = ResponseSpec(464, ":Password incorrect");
+	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");
 };
 
 #endif /* FT_IRC_API_RESPONSE */

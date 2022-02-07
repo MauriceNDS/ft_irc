@@ -8,12 +8,11 @@
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 class PartCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
-		User& user = static_cast<User&>(sender);
 
         string *message = cmd.getArg<string *>("message");
         vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");

@@ -9,7 +9,7 @@
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 class JoinCommand : public CommandExecutor {
 
