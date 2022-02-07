@@ -15,6 +15,7 @@
 class Server : public CommandSender {
 private:
 	string name;
+	string host;
 	vector<Connection *> connections;
 	struct sockaddr_in connectionConfig;
 	const int port;
@@ -33,6 +34,7 @@ public:
 	}
 
 	const string& getName() const;
+	const string& getHost() const;
 
 	void start();
 

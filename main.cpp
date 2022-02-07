@@ -38,8 +38,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	Irc irc("127.0.0.1", std::atoi(argv[1]), argv[2], plugins);
-
+	Irc irc("ft_irc", std::atoi(argv[1]), argv[2], plugins);
 	irc.start();
 	return 0;
 }

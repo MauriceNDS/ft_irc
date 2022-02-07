@@ -3,6 +3,8 @@
 #include "core/Irc.hpp"
 
 #include <fstream>
+#include <algorithm>
+#include <sstream>
 
 #define MAX_BUFFER_LENGTH 512
 
@@ -12,7 +14,7 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name, const int port, const string& password) : name(name), port(port), password(password) {
+Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password) {
 	struct pollfd serverSocket;
 	int opt = 1;
 
@@ -48,6 +50,10 @@ const string& Server::getName() const {
 	return name;
 }
 
+const string& Server::getHost() const {
+	return host;
+}
+
 void Server::start() {
 	vector<Connection *>::iterator it;
 
@@ -81,11 +87,8 @@ void Server::incomingConnection() {
 	newSocket.events = POLLIN;
 
 	while (true) {
-		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0) {
-			if (errno != EWOULDBLOCK)
-				throw std::exception();
+		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0)
 			break ;
-		}
 		Irc::getInstance().addUser(new User(addConnection(newSocket)));
 	}
 }
@@ -106,12 +109,8 @@ void Server::incomingRequest(size_t index) {
 
 	while (true) {
 		int ret = recv(Connection::sockets[index].fd, buffer, MAX_BUFFER_LENGTH - 1, 0);
-		if (ret < 0) {
-			if (errno != EWOULDBLOCK) {
-				connections[index]->closeConnection = true;
-			}
+		if (ret < 0)
 			return ;
-		}
 		else if (ret == 0) {
 			connections[index]->closeConnection = true;
 			return ;
@@ -120,14 +119,20 @@ void Server::incomingRequest(size_t index) {
 		connections[index]->request += buffer;
 		if (connections[index]->request.find('\n') != string::npos) {
 			string line = connections[index]->request;
+			string request;
 
-			line = line.substr(0, line.size() - 1);
-			std::cout << "    < '" << line << "`" << std::endl;
+			line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+			std::istringstream ss(line.c_str());
 
-			MessageEvent event = MessageEvent(line, *connections[index]->client);
-			Irc::getInstance().getCommandManager().process(event);
-
-			connections[index]->request.clear();
+			while (std::getline(ss, request, '\n')) {
+				if (ss.eof() && !request.empty())
+					connections[index]->request = request;
+				else
+					connections[index]->request.clear();
+				std::cout << "    < '" << request << "`" << std::endl;
+				MessageEvent event = MessageEvent(request, *connections[index]->client);
+				Irc::getInstance().getCommandManager().process(event);
+			}
 		}
 	}
 }
