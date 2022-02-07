@@ -18,6 +18,7 @@
 
 #include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
+#include "api/middleware/ValidPassMiddleware.hpp"
 
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
@@ -29,7 +30,7 @@ void Irc::start() {
 		.argument("mode", GenericArguments::string())
 		.argument("unused", GenericArguments::string())
 		.argument("realname", GenericArguments::string())
-		.middleware(new UserMiddleware())
+		.middleware(new ValidPassMiddleware())
 		.executor(new UserCommand())
 		.build()
 	);
@@ -39,7 +40,7 @@ void Irc::start() {
 			.element(GenericArguments::string())
 			.ifNotProvided(ResponseTypes::ERR_NONICKNAMEGIVEN)
 			.build())
-		.middleware(new UserMiddleware())
+		.middleware(new ValidPassMiddleware())
 		.executor(new NickCommand())
 		.build()
 	);

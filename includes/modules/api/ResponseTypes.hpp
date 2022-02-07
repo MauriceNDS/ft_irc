@@ -8,6 +8,7 @@ namespace ResponseTypes {
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
 	const ResponseSpec RPL_MYINFO = ResponseSpec(4, "<servername> <version> <available user modes> <available channel modes>");
+	const ResponseSpec ERR_NOVALIDPASS = ResponseSpec(5, ":You need a valid PASS command");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
