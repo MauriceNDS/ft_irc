@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	vector<string> files;
-	files.push_back("test.so");
+	// files.push_back("plugin.so");
 
 	vector<Plugin *> plugins;
 	for (vector<string>::iterator file = files.begin(); file != files.end(); file++) {
