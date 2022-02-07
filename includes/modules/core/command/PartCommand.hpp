@@ -15,7 +15,7 @@ class PartCommand : public CommandExecutor {
 	void execute(const Command& cmd, CommandSender& sender) {
 
 		string *message = cmd.getArg<string *>("message");
-		vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
+		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 			if (!*it) {
 				sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
