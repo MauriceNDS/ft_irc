@@ -30,7 +30,7 @@ override INCLUDES	:= -Iincludes -Iincludes/modules
 
 # Rules
 
-all:		dirs lib $(NAME)
+all:		lib $(NAME)
 
 $(OBJS):	| $(DIRS)
 
