@@ -13,8 +13,8 @@
 class PingCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
-	string& server = cmd.getArg<string>("server");
-	sender.send("PONG " + server);
+		string& server = cmd.getArg<string>("server");
+		sender.send("PONG " + server);
 	}
 };
 
