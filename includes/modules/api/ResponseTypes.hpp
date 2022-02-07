@@ -4,6 +4,10 @@
 #include "api/command/response/ResponseSpec.hpp"
 
 namespace ResponseTypes {
+	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
+	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
+	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
+	const ResponseSpec RPL_MYINFO = ResponseSpec(4, "<servername> <version> <available user modes> <available channel modes>");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
@@ -21,18 +25,5 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif /* FT_IRC_API_RESPONSE */

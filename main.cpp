@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 		std::cout << "Invalid arguments" << std::endl;
 		exit(1);
 	}
-	Irc irc("International Robbers Classification", std::atoi(argv[1]), argv[2]);
+	Irc irc("ft_irc", std::atoi(argv[1]), argv[2]);
 	irc.start();
 	return 0;
 }
