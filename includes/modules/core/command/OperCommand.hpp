@@ -16,8 +16,8 @@ class OperCommand : public CommandExecutor {
         const string test_name = "operator";
         const string test_password = "1234";
 
-        string& name = cmd.getArg<string &>("name");
-        string& password = cmd.getArg<string &>("password");
+        string& name = cmd.getArg<string>("name");
+        string& password = cmd.getArg<string>("password");
 
         if (name != test_name) {
             sender.send(ResponseTypes::ERR_NOOPERHOST().c_str());
