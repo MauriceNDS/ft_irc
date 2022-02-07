@@ -44,9 +44,11 @@ $(OBJS):	| $(DIRS)
 $(DIRS):
 			mkdir -p $@
 
+$(DEPS):
+
 -include $(DEPS)
 
-build/%.o:	%.cpp
+build/%.o:	%.cpp tmp/%.d
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
 
 $(NAME):	$(OBJS)

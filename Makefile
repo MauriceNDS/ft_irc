@@ -37,6 +37,8 @@ $(OBJS):	| $(DIRS)
 $(DIRS):
 			mkdir -p $@
 
+$(DEPS):
+
 -include $(DEPS)
 
 build/%.o:	%.cpp
