@@ -41,11 +41,11 @@ $(DEPS):
 
 -include $(DEPS)
 
-build/%.o:	%.cpp
+build/%.o:	%.cpp tmp/%.d
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
 
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
+			$(CC) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
 
 ifdef N
 plugin:

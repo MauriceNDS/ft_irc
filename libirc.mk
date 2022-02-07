@@ -5,13 +5,12 @@ NAME				:= server/libirc.so
 # Commands
 
 override CC			:= clang++
-override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
+override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
+override LDFLAGS	:= --shared
 
 ifeq ($(shell uname),Darwin)
-override LDFLAGS	:= -Wl,-install_name,@rpath/libirc.so -fPIC
-else
-override LDFLAGS	:= -fPIC
+LDFLAGS				+= -Wl,-install_name,@rpath/libirc.so
 endif
 
 # Sources
@@ -52,6 +51,6 @@ build/%.o:	%.cpp tmp/%.d
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
 
 $(NAME):	$(OBJS)
-			$(CC) $(CPPFLAGS) $(LDFLAGS) --shared -o $(NAME) $(OBJS)
+			$(CC) $(LDFLAGS) -o $(NAME) $(OBJS)
 
 .PHONY:		all
