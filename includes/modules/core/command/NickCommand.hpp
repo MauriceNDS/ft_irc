@@ -12,7 +12,6 @@
 
 class NickCommand : public CommandExecutor {
 
-
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
