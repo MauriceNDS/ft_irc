@@ -140,6 +140,7 @@ void Server::incomingRequest(size_t index) {
 Server::~Server() {
 	for (size_t i = 0; i < connections.size(); i++) {
 		close(Connection::sockets[i].fd);
-		free(connections[i]);
+		delete connections[i];
 	}
+	connections.clear();
 }

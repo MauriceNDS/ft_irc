@@ -4,6 +4,7 @@
 #include "ft_irc.hpp"
 
 #include "api/User.hpp"
+#include "api/Plugin.hpp"
 #include "api/Channel.hpp"
 #include "api/command/CommandManager.hpp"
 
@@ -22,6 +23,7 @@ private:
 	CommandManager commandManager;
 
     map<string, Channel *> channels;
+	vector<Plugin *> plugins;
     vector<User *> users;
 	set<User *> operators;
 
@@ -30,9 +32,7 @@ public:
 		return *Irc::instance;
 	}
 
-	Irc(const string& name, const int port, const string& password) : server(name, port, password) {
-		Irc::instance = this;
-	}
+	Irc(const string& name, const int port, const string& password, vector<Plugin *> plugins);
 
 	void start();
 
@@ -46,7 +46,7 @@ public:
 
 	User *findUser(const string& nickname) {
 		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
-			if ((*it)->getNickName() == nickname)
+			if ((*it)->getName() == nickname)
 				return *it;
 		return NULL;
 	}

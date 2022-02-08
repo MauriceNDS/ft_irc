@@ -11,6 +11,8 @@ class CommandManager;
 class CommandExecutor;
 class CommandElement;
 
+#include "CommandExecutor.hpp"
+
 class CommandSpec {
 private:
 	friend class CommandManager;

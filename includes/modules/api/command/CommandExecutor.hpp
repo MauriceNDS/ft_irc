@@ -3,8 +3,6 @@
 
 #include "ft_irc.hpp"
 
-#include "api/ResponseTypes.hpp"
-
 #include "api/CommandSender.hpp"
 #include "api/command/Command.hpp"
 

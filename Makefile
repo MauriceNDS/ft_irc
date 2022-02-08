@@ -1,31 +1,66 @@
-CC = clang++
+# Properties
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+NAME				:= server/ircserv
 
-HEADER =	# Headers needed
+# Commands
 
-SRCS =		main.cpp # Source files needed
+override CC			:= clang++
+override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
+override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 
-OBJS = $(SRCS:.cpp=.o)
+ifeq ($(shell uname),Darwin)
+override LOADER_PATH	:= @loader_path
+else
+override LOADER_PATH	:= $$ORIGIN
+endif
+override LDFLAGS	:= -Wl,-rpath,'$(LOADER_PATH)' -Wl,-rpath,'$(LOADER_PATH)/plugins'
 
-MAIN = ircserv # executable file name
+# Sources
 
-RM = rm -rf
+override SRCS		:=													\
+				main.cpp												\
 
-all:    $(MAIN)
+override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 
-$(MAIN):
-		clang++ -Wall -Wextra -std=c++98 -I includes -I includes/modules `find . -name "*.cpp"`
+override DEPS		:= $(addprefix tmp/, $(SRCS:.cpp=.d))
 
-%.o: %.cpp $(HEADER)
-		$(CC) $(CFLAGS) -c $<  -o $@
+override DIRS		:= $(sort $(dir $(NAME) $(OBJS)))
+
+override INCLUDES	:= -Iincludes -Iincludes/modules
+
+# Rules
+
+all:		lib $(NAME)
+
+$(OBJS):	| $(DIRS)
+
+$(DIRS):
+			mkdir -p $@
+
+$(DEPS):
+
+-include $(DEPS)
+
+build/%.o:	%.cpp tmp/%.d
+			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
+
+$(NAME):	$(OBJS)
+			$(CC) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
+
+ifdef N
+plugin:
+			bash scripts/create_plugin.bash $(N)
+endif
+
+lib:
+			$(MAKE) -f libirc.mk
 
 clean:
-		$(RM) $(OBJS)
+			rm -rf build tmp
 
-fclean: clean
-		$(RM) $(MAIN)
+fclean:		clean
+			rm -rf server
 
-re: fclean all
+re:			fclean all
 
-.PHONY: all clean fclean re
+.PHONY:		all plugin lib clean fclean re

@@ -125,6 +125,6 @@ namespace GenericArguments {
 	ListCommandElement<T> *list(CommandElement *subtype) {
 		return new ListCommandElement<T>(subtype);
 	}
-};
+}
 
 #endif /* FT_IRC_API_GENERIC_ARGUMENTS */

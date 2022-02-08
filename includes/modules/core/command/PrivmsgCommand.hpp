@@ -10,7 +10,7 @@
 #include "api/command/CommandExecutor.hpp"
 #include "core/command/elements/MsgToCommandElement.hpp"
 
-#include "server/Response.hpp"
+#include "api/ResponseTypes.hpp"
 
 class PrivmsgCommand : public CommandExecutor {
 
