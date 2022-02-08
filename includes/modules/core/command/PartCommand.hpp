@@ -13,6 +13,8 @@
 class PartCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
+		User &user = static_cast<User &>(sender);
+		string from = user.getNickName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		string *message = cmd.getArg<string *>("message");
 		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
@@ -23,9 +25,9 @@ class PartCommand : public CommandExecutor {
 			}
 			(*it)->removeUser(static_cast<User *>(&sender));
 			if (message) {
-				(*it)->send(*message);
+				(*it)->send(from + " PART " + (*it)->getName() + " :" + *message + "\n");
 			} else {
-				(*it)->send(sender.getName().c_str());
+				(*it)->send(from + " PART " + (*it)->getName() + " :" + sender.getName() + "\n");
 			}
 		}
 	}

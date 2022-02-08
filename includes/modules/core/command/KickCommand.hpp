@@ -13,6 +13,8 @@
 class KickCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
+		User &oper = static_cast<User &>(sender);
+		string from = oper.getNickName() + "!" + oper.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		string *message = cmd.getArg<string *>("message");
 		Channel *channel = cmd.getArg<Channel *>("channel");
@@ -26,9 +28,9 @@ class KickCommand : public CommandExecutor {
 		}
 		channel->removeUser(user);
 		if (message) {
-			channel->send(*message);
+			channel->send(from + " KICK " + channel->getName() + " " + user->getName() + " :" + *message + "\n");
 		} else {
-			channel->send(user->getName().c_str());
+			channel->send(from + " KICK " + channel->getName() + " " + user->getName() + " :" + user->getName() + "\n");
 		}
 	}
 };
