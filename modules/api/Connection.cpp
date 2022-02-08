@@ -11,5 +11,4 @@ Connection::Connection(const struct pollfd& socket) : fd(socket.fd), client(NULL
 void Connection::send(const char *str, int len) {
 	int ret = ::send(fd, str, len, 0);
 	(void)ret;
-
 }
