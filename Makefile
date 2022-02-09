@@ -15,7 +15,7 @@ RM = rm -rf
 all:    $(MAIN)
 
 $(MAIN):
-		clang++ -Wall -Wextra -std=c++98 -fsanitize=address -I includes -I includes/modules `find . -name "*.cpp"`
+		clang++ -Wall -Wextra -std=c++98 -I includes -I includes/modules `find . -name "*.cpp"`
 
 %.o: %.cpp $(HEADER)
 		$(CC) $(CFLAGS) -c $<  -o $@

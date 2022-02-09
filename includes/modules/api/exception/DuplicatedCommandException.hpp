@@ -6,8 +6,8 @@
 struct DuplicatedCommandException : public std::exception {
 
 	const char *what() const throw () {
-    	return "This command already exists.";
-    }
+		return "This command already exists.";
+	}
 };
 
 #endif /* FT_IRC_API_DUPLICATED_COMMAND_EXCEPTION */

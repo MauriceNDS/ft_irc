@@ -10,7 +10,7 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 
 	// Middleware protection
 	if (_middleware && !_middleware->handle(event.getSender()))
-		return ;
+		return;
 
 	// Converting string to elements
 	for (it = _parameters.begin(); it != _parameters.end() && !event.isCancelled(); it++) {
@@ -26,7 +26,6 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 		if (value)
 			args.insert(make_pair(it->first, value));
 		else {
-			it->second->destroy(value);
 			event.setCancelled(true);
 			break ;
 		}

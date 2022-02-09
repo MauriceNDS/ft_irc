@@ -19,10 +19,14 @@ class JoinCommand : public CommandExecutor {
 
 		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
-			(*it)->send(from + " JOIN " + (*it)->getName());
-			(*it)->addUser(static_cast<User *>(&sender));
-			user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), sender.getName().c_str()));
-			user.send(ResponseTypes::RPL_TOPIC((*it)->getName().c_str(), (*it)->getTopic().c_str()));
+			if (!(*it)->isOnChan(&user)) {
+				(*it)->send(from + " JOIN " + (*it)->getName() + "\n");
+				(*it)->addUser(static_cast<User *>(&sender));
+				for (set<User *>::const_iterator users = (*it)->getUsers().begin(); users != (*it)->getUsers().end(); users++) {
+					user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*users)->getName().c_str()));
+				}
+				user.send(ResponseTypes::RPL_TOPIC((*it)->getName().c_str(), (*it)->getTopic().c_str()));
+			}
 		}
 	}
 };

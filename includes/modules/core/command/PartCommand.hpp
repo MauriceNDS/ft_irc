@@ -23,6 +23,10 @@ class PartCommand : public CommandExecutor {
 				sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
 				continue ;
 			}
+			else if (!(*it)->isOnChan(&user)) {
+				user.send(ResponseTypes::ERR_NOTONCHANNEL((*it)->getName().c_str()));
+				continue ;
+			}
 			(*it)->removeUser(static_cast<User *>(&sender));
 			if (message) {
 				(*it)->send(from + " PART " + (*it)->getName() + " :" + *message + "\n");

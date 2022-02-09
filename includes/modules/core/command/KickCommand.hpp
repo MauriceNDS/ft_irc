@@ -17,21 +17,22 @@ class KickCommand : public CommandExecutor {
 		string from = oper.getNickName() + "!" + oper.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		string *message = cmd.getArg<string *>("message");
-		Channel *channel = cmd.getArg<Channel *>("channel");
-		User *user = cmd.getArg<User *>("user");
-		if (!channel) {
-			sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
-			return ;
-		} else if (!channel->isChanop(static_cast<User *>(&sender))) {
-			sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel->getName().c_str()));
+		Channel& channel = cmd.getArg<Channel>("channel");
+		User& user = cmd.getArg<User>("user");
+		if (!channel.isChanop(static_cast<User *>(&sender))) {
+			sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
+			return;
+		}
+		else if (!channel.isOnChan(&user)) {
+			oper.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
 			return ;
 		}
-		channel->removeUser(user);
 		if (message) {
-			channel->send(from + " KICK " + channel->getName() + " " + user->getName() + " :" + *message + "\n");
+			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + *message + "\n");
 		} else {
-			channel->send(from + " KICK " + channel->getName() + " " + user->getName() + " :" + user->getName() + "\n");
+			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + user.getName() + "\n");
 		}
+		channel.removeUser(&user);
 	}
 };
 

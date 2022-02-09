@@ -23,7 +23,7 @@ class OperCommand : public CommandExecutor {
 			sender.send(ResponseTypes::ERR_NOOPERHOST().c_str());
 		} else if (password != test_password) {
 			sender.send(ResponseTypes::ERR_PASSWDMISMATCH().c_str());
-		} else {
+		} else if (!Irc::getInstance().isOperator(static_cast<User *>(&sender))){
 			sender.send(ResponseTypes::RPL_YOUREOPER());
 			Irc::getInstance().promoteOperator(&static_cast<User &>(sender));
 		}

@@ -120,11 +120,11 @@ void Server::incomingRequest(size_t index) {
 			if (errno != EWOULDBLOCK) {
 				connections[index]->closeConnection = true;
 			}
-			return ;
+			return;
 		}
 		else if (ret == 0) {
 			connections[index]->closeConnection = true;
-			return ;
+			return;
 		}
 		buffer[ret] = 0;
 		connections[index]->request += buffer;

@@ -13,7 +13,7 @@ class Channel : public CommandSender {
 private:
 	string name;
 	string topic;
-    set<User *> users;
+	set<User *> users;
 	set<User *> chanop;
 
 public:
@@ -35,8 +35,8 @@ public:
 
 	bool isOnChan(User *user)
 	{
-		set<User *>::iterator it = chanop.find(user);
-		if (it == chanop.end())
+		set<User *>::iterator it = users.find(user);
+		if (it == users.end())
 			return false;
 		return true;
 	}

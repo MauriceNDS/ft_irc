@@ -21,8 +21,8 @@ private:
 	Server server;
 	CommandManager commandManager;
 
-    map<string, Channel *> channels;
-    vector<User *> users;
+	map<string, Channel *> channels;
+	vector<User *> users;
 	set<User *> operators;
 
 public:
@@ -74,7 +74,8 @@ public:
 	}
 
 	void addChannel(Channel *channel) {
-		channels[channel->getName()] = channel;
+		if (channel)
+			channels.insert(make_pair(channel->getName(), channel));
 	}
 
 	void removeChannel(Channel *channel) {

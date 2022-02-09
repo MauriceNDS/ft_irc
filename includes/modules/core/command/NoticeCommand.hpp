@@ -29,7 +29,7 @@ class NoticeCommand : public CommandExecutor {
 					}
 				}
 			}
-			(*it)->send(from + " NOTICE " + (*it)->getName() + " :" + message.c_str());
+			(*it)->send(from + " NOTICE " + (*it)->getName() + " :" + message.c_str() + "\n");
 		}
 	}
 };

@@ -27,6 +27,7 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NONICKNAMEGIVEN = ResponseSpec(431, ":No nickname given");
 	const ResponseSpec ERR_ERRONEUSNICKNAME = ResponseSpec(432, "<nick> :Erroneous nickname");
 	const ResponseSpec ERR_NICKNAMEINUSE = ResponseSpec(433, "<nick> :Nickname is already in use");
+	const ResponseSpec ERR_USERNOTINCHANNEL = ResponseSpec(441, "<nick> <channel> :They aren't on that channel");
 	const ResponseSpec ERR_NOTREGISTERED = ResponseSpec(451, ":You have not registered");
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");

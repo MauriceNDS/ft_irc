@@ -6,8 +6,8 @@
 struct ArgumentNotFoundException : public std::exception {
 
 	const char *what() const throw () {
-    	return "Unknown argument";
-    }
+		return "Unknown argument";
+	}
 };
 
 #endif /* FT_IRC_API_ARGUMENT_NOT_FOUND_EXCEPTION */
