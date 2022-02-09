@@ -16,9 +16,8 @@ class PrivmsgCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User &user = static_cast<User &>(sender);
-
+		string from = user.getNickName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();;
 		vector<CommandSender *>& target = cmd.getArg<vector<CommandSender *> >("msgtarget");
-		string from = user.getNickName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 		string message = cmd.getArg<string>("message") + "\n";
 
 		for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
@@ -33,7 +32,11 @@ class PrivmsgCommand : public CommandExecutor {
 					}
 				}
 			}
-			(*it)->send(from + " PRIVMSG " + (*it)->getName() + " :" + message.c_str());
+			if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
+				(*it)->send("anonymous!anonymous@anonymous PRIVMSG " + (*it)->getName() + " :" + message.c_str());	
+			} else {
+				(*it)->send(from + " PRIVMSG " + (*it)->getName() + " :" + message.c_str());
+			}
 		}
 	}
 };

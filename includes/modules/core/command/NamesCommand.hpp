@@ -24,6 +24,9 @@ class NamesCommand : public CommandExecutor {
 			for (map<string, Channel *>::const_iterator it = channelList.begin(); it != channelList.end(); it++) {
 				const set<User *>& channelUserList = it->second->getUsers();
 
+				if (it->second->getFlag().anonymous)
+					continue;
+
 				for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
 					user.send(ResponseTypes::RPL_NAMREPLY(it->first.c_str(), (*ite)->getNickName().c_str()));
 				}
@@ -36,6 +39,9 @@ class NamesCommand : public CommandExecutor {
 		} else {
 			for (vector<Channel *>::const_iterator it = channelList->begin(); it != channelList->end(); it++) {
 				const set<User *>& channelUserList = (*it)->getUsers();
+				
+				if ((*it)->getFlag().anonymous)
+					continue;
 
 				for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
 					user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*ite)->getNickName().c_str()));

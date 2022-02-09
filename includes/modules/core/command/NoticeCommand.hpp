@@ -29,7 +29,11 @@ class NoticeCommand : public CommandExecutor {
 					}
 				}
 			}
-			(*it)->send(from + " NOTICE " + (*it)->getName() + " :" + message.c_str() + "\n");
+			if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
+				(*it)->send("anonymous!anonymous@anonymous NOTICE " + (*it)->getName() + " :" + message.c_str());	
+			} else {
+				(*it)->send(from + " NOTICE " + (*it)->getName() + " :" + message.c_str());
+			}
 		}
 	}
 };

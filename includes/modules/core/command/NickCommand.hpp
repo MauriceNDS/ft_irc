@@ -15,13 +15,17 @@ class NickCommand : public CommandExecutor {
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = dynamic_cast<User&>(sender);
 
-		string nickname = cmd.getArg<string>("nickname");
+		string& nickname = cmd.getArg<string>("nickname");
 		if (nickname.empty() || nickname.find(' ') != string::npos) {
 			user.send(ResponseTypes::ERR_ERRONEUSNICKNAME(nickname.c_str()));
 			return;
 		}
 		bool wasRegistered = user.isRegistered();
 
+		if (nickname == "anonymous") {
+			user.send(ResponseTypes::ERR_NICKNAMEINUSE());
+			return;
+		}
 		user.setNickName(nickname);
 
 		if (user.isRegistered() && !wasRegistered) {

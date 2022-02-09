@@ -28,7 +28,11 @@ class JoinCommand : public CommandExecutor {
 			} else if (!(*it)->getPassword().empty() && (!passwords /*|| (arg_i > passwords->size() || (*passwords)[arg_i] != (*it)->getPassword())*/)) {
 				user.send(ResponseTypes::ERR_BADCHANNELKEY((*it)->getName().c_str()));
 			} else if (!(*it)->isOnChan(&user)) {
-				(*it)->send(from + " JOIN " + (*it)->getName() + "\n");
+				if (!(*it)->getFlag().anonymous) {
+					(*it)->send(from + " JOIN " + (*it)->getName() + "\n");
+				} else {
+					(*it)->send("anonymous!anonymous@anonymous JOIN " + (*it)->getName() + "\n");
+				}
 				(*it)->addUser(static_cast<User *>(&sender));
 				for (set<User *>::const_iterator users = (*it)->getUsers().begin(); users != (*it)->getUsers().end(); users++) {
 					user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*users)->getName().c_str()));

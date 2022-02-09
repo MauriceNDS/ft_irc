@@ -27,7 +27,11 @@ class KickCommand : public CommandExecutor {
 			oper.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
 			return ;
 		}
-		if (message) {
+		if (channel.getFlag().anonymous && message) {
+			channel.send("anonymous!anonymous@anonymous KICK " + channel.getName() + " anonymous :" + *message + "\n");
+		} else if (channel.getFlag().anonymous && !message) {
+			channel.send("anonymous!anonymous@anonymous KICK " + channel.getName() + " anonymous :" + user.getName() + "\n");
+		} if (message) {
 			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + *message + "\n");
 		} else {
 			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + user.getName() + "\n");
