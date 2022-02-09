@@ -50,6 +50,7 @@ void Irc::start() {
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("JOIN")
 		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(true)))
+		.argument("keys", GenericArguments::optional(GenericArguments::list<string>(GenericArguments::string())))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new JoinCommand())
 		.build()

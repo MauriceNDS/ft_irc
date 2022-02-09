@@ -27,6 +27,7 @@ class InviteCommand : public CommandExecutor {
 				sending.send(ResponseTypes::ERR_NOTONCHANNEL(sending.getName().c_str(), channel_name.c_str()));
 				return ;
 			}
+			channel->second->addInvite(&user);
 		}
 		sending.send(ResponseTypes::RPL_INVITING(channel_name.c_str(), user.getName().c_str()));
 		user.send(ResponseTypes::RPL_INVITING(channel_name.c_str(), user.getName().c_str()));

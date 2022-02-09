@@ -20,29 +20,51 @@ struct flag {
 	bool reop;
 	bool topic;
 	bool password;
-	int user_limit;
+	size_t user_limit;
 };
 
 class Channel : public CommandSender {
 private:
 	string name;
 	string topic;
+	string password;
 	set<User *> users;
 	set<User *> chanop;
 	set<User *> voice_priv;
-	flag flag;
+	set<User *> invite;
+	flag flags;
 
 public:
-	Channel(const string& name) : name(name) {flag.topic = true; flag.user_limit = -1;}
+	Channel(const string& name) : name(name) {
+	flags.anonymous = false; flags.invite = false; flags.moderate = false;
+	flags.outside_message = false; flags.quiet = false; flags.priv = false;
+	flags.secret = false; flags.reop = false; flags.topic = false;
+	flags.password = false; flags.user_limit = 0;}
 
 	const set<User *>& getUsers() {
 		return users;
+	}
+
+	const set<User *>& getInvite() {
+		return invite;
+	}
+
+	const flag& getFlag() {
+		return flags;
+	}
+	const string& getPassword() {
+		return password;
 	}
 	
 	void addUser(User *user) {
 		if (!users.size())
 			promoteChanop(user);
 		users.insert(user);
+	}
+
+	void addInvite(User *user) {
+		if (invite.find(user) != invite.end())
+			invite.insert(user);
 	}
 
 	void removeUser(User *user);
