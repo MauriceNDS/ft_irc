@@ -23,7 +23,7 @@ class TopicCommand : public CommandExecutor {
 			return;
 		}
 		else if (topic) {
-			if (!channel.isChanop(static_cast<User *>(&sender))) {
+			if (channel.getFlag().topic && !channel.isChanop(static_cast<User *>(&sender))) {
 				sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 				return;
 			}
