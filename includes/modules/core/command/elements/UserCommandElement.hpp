@@ -11,7 +11,7 @@
 
 class UserCommandElement : public CommandElement {
 public:
-	void *parseValue(const string& arg, MessageEvent& event) const {
+	void *parseValue(string arg, MessageEvent& event) const {
 		User *user = Irc::getInstance().findUser(arg);
 		if (user)
 			return user;

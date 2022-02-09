@@ -16,7 +16,7 @@ public:
 		return ResponseTypes::ERR_NORECIPIENT;
 	}
 
-	void *parseValue(const string& arg, MessageEvent& event) const {
+	void *parseValue(string arg, MessageEvent& event) const {
 		if (Channel::isValidIdentifier(arg)) {
 			Channel *channel = Irc::getInstance().findChannel(arg);
 			if (channel)

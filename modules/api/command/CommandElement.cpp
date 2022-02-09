@@ -4,6 +4,18 @@ bool CommandElement::isRequired() const {
 	return true;
 }
 
+void *CommandElement::parseValues(list<string> args, MessageEvent& event) const {
+	const string& arg = args.front();
+	args.pop_front();
+	return parseValue(arg, event);
+}
+
+void *CommandElement::parseValue(string arg, MessageEvent& event) const {
+	(void)arg;
+	(void)event;
+	return NULL;
+}
+
 void CommandElement::destroy(void *) const {}
 
 const ResponseSpec& CommandElement::notProvidedResponse() const {
@@ -30,7 +42,11 @@ CommandElement *CommandElement::Builder::build() const {
 
 ComplexeCommandElement::ComplexeCommandElement(CommandElement *subtype, const ResponseSpec& ifNotProvided) : subtype(subtype), ifNotProvided(ifNotProvided) {}
 
-void *ComplexeCommandElement::parseValue(const string& arg, MessageEvent& event) const {
+void *ComplexeCommandElement::parseValues(list<string> args, MessageEvent& event) const {
+	return subtype->parseValues(args, event);
+}
+
+void *ComplexeCommandElement::parseValue(string arg, MessageEvent& event) const {
 	return subtype->parseValue(arg, event);
 }
 
