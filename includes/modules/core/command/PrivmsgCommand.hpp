@@ -24,8 +24,11 @@ class PrivmsgCommand : public CommandExecutor {
 		for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
 			if (Channel::isValidIdentifier((*it)->getName())) {
 				if (Irc::getInstance().getChannels().find((*it)->getName()) != Irc::getInstance().getChannels().end()) {
-					if (!Irc::getInstance().getChannels().find((*it)->getName())->second->isOnChan(static_cast<User *>(&sender))) {
+					if (!Irc::getInstance().getChannels().find((*it)->getName())->second->isOnChan(static_cast<User *>(&sender)) && Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().outside_message) {
 						sender.send(ResponseTypes::ERR_NOTONCHANNEL((*it)->getName().c_str(), sender.getName().c_str()));
+						continue ;
+					} else if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().moderate && !Irc::getInstance().getChannels().find((*it)->getName())->second->isVoiceOp(&user)) {
+						sender.send(ResponseTypes::ERR_CANNOTSENDTOCHAN((*it)->getName().c_str()));
 						continue ;
 					}
 				}

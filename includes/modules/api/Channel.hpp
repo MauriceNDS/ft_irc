@@ -30,7 +30,7 @@ private:
 	string password;
 	set<User *> users;
 	set<User *> chanop;
-	set<User *> voice_priv;
+	set<User *> voiceop;
 	set<User *> invite;
 	flag flags;
 
@@ -38,7 +38,7 @@ public:
 	Channel(const string& name) : name(name) {
 	flags.anonymous = false; flags.invite = false; flags.moderate = false;
 	flags.outside_message = false; flags.quiet = false; flags.priv = false;
-	flags.secret = false; flags.reop = false; flags.topic = false;
+	flags.secret = false; flags.reop = false; flags.topic = true;
 	flags.password = false; flags.user_limit = 0;}
 
 	const set<User *>& getUsers() {
@@ -68,6 +68,13 @@ public:
 	}
 
 	void removeUser(User *user);
+
+	bool isVoiceOp(User *user) {
+		set<User *>::iterator it = voiceop.find(user);
+		if (it == users.end() && !isChanop(user))
+			return false;
+		return true;
+	};
 
 	bool isChanop(User *user);
 

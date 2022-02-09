@@ -19,6 +19,7 @@ namespace ResponseTypes {
 	const ResponseSpec RPL_YOUREOPER = ResponseSpec(381, ":You are now an IRC operator");
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");
 	const ResponseSpec ERR_NOSUCHCHANNEL = ResponseSpec(403, "<channel name> :No such channel");
+	const ResponseSpec ERR_CANNOTSENDTOCHAN = ResponseSpec(404, "<channel name> :Cannot send to channel");
 	const ResponseSpec ERR_CHANOPRIVSNEEDED = ResponseSpec(482, "<channel> :You're not channel operator");
 	const ResponseSpec ERR_NOORIGIN = ResponseSpec(409, ":No origin specified");
 	const ResponseSpec ERR_NORECIPIENT = ResponseSpec(411, ":No recipient given (<command>)");
