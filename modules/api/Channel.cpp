@@ -13,6 +13,10 @@ bool Channel::isChanop(User *user) {
 
 void Channel::removeUser(User *user) {
 	users.erase(user);
-	if (!users.size())
+	chanop.erase(user);
+	if (!users.size()) {
 		Irc::getInstance().removeChannel(this);
+	} else if (!chanop.size() && flags.reop) {
+		chanop.insert(*users.begin());
+	}
 }
