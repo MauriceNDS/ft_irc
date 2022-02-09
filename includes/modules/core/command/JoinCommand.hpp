@@ -18,14 +18,14 @@ class JoinCommand : public CommandExecutor {
 		string from = user.getNickName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
-		vector<string &> *passwords = cmd.getArg<vector<string &> *>("keys");
+		vector<string *> *passwords = cmd.getArg<vector<string *> *>("keys");
 		size_t arg_i = 0;
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 			if ((*it)->getFlag().invite && (*it)->getInvite().find(&user) == (*it)->getInvite().end()) {
 				user.send(ResponseTypes::ERR_INVITEONLYCHAN((*it)->getName().c_str()));
 			} else if ((*it)->getFlag().user_limit && (*it)->getUsers().size() >= (*it)->getFlag().user_limit) {
 				user.send(ResponseTypes::ERR_CHANNELISFULL((*it)->getName().c_str()));
-			} else if (!(*it)->getPassword().empty() && (!passwords /*|| (arg_i > passwords->size() || (*passwords)[arg_i] != (*it)->getPassword())*/)) {
+			} else if (!(*it)->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != (*it)->getPassword()))) {
 				user.send(ResponseTypes::ERR_BADCHANNELKEY((*it)->getName().c_str()));
 			} else if (!(*it)->isOnChan(&user)) {
 				if (!(*it)->getFlag().anonymous) {
