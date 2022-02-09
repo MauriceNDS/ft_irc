@@ -39,6 +39,6 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_INVITEONLYCHAN = ResponseSpec(473, "<channel> :Cannot join channel (+i)");
 	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
 	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");
-};
+}
 
 #endif /* FT_IRC_API_RESPONSE */

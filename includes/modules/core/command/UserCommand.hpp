@@ -24,7 +24,7 @@ class UserCommand : public CommandExecutor {
 		user.setRealName(cmd.getArg<string>("realname"));
 
 		if (user.isRegistered()) {
-			user.send(ResponseTypes::RPL_WELCOME(user.getNickName().c_str(), user.getUserName().c_str(), Irc::getInstance().getServer().getHost().c_str()));
+			user.send(ResponseTypes::RPL_WELCOME(user.getName().c_str(), user.getUserName().c_str(), Irc::getInstance().getServer().getHost().c_str()));
 			user.send(ResponseTypes::RPL_YOURHOST(Irc::getInstance().getServer().getName().c_str(), VERSION));
 			user.send(ResponseTypes::RPL_CREATED(CREATION_DATE));
 			user.send(ResponseTypes::RPL_MYINFO(Irc::getInstance().getServer().getName().c_str(), VERSION, "0", "0"));

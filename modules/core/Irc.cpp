@@ -26,7 +26,15 @@
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
 
-void Irc::start() {
+Irc::Irc(const string& name, const int port, const string& password, vector<Plugin *> plugins) : server(name, port, password), plugins(plugins) {
+	Irc::instance = this;
+
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->construct();
+
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->preInit();
+
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("USER")
 		.argument("user", GenericArguments::string())
@@ -147,13 +155,35 @@ void Irc::start() {
 		.build()
 	);
 
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->init();
+
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->postInit();
+}
+
+void Irc::start() {
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->serverAboutToStart();
+
 	server.start();
 }
 
 Irc::~Irc() {
-	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i) {
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->serverStopping();
+
+	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i)
 		delete *i;
-	}
+
+	users.clear();
+
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		(*plugin)->serverStopped();
+	
+	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+		delete *plugin;
+	plugins.clear();
 }
 
 Irc *Irc::instance = NULL;

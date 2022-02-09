@@ -17,7 +17,7 @@ public:
 				return true;
 			else
 				user.send(ResponseTypes::ERR_NOTREGISTERED());
-		} catch (const std::bad_cast& e) {}
+		} catch (...) {}
 		return false;
 	};
 };

@@ -91,11 +91,8 @@ void Server::incomingConnection() {
 	newSocket.events = POLLIN;
 
 	while (true) {
-		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0) {
-			if (errno != EWOULDBLOCK)
-				exit(1);
+		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0)
 			break ;
-		}
 		Irc::getInstance().addUser(new User(addConnection(newSocket)));
 	}
 }
@@ -116,12 +113,8 @@ void Server::incomingRequest(size_t index) {
 
 	while (true) {
 		int ret = recv(Connection::sockets[index].fd, buffer, MAX_BUFFER_LENGTH - 1, 0);
-		if (ret < 0) {
-			if (errno != EWOULDBLOCK) {
-				connections[index]->closeConnection = true;
-			}
-			return;
-		}
+		if (ret < 0)
+			return ;
 		else if (ret == 0) {
 			connections[index]->closeConnection = true;
 			return;
@@ -151,6 +144,7 @@ void Server::incomingRequest(size_t index) {
 Server::~Server() {
 	for (size_t i = 0; i < connections.size(); i++) {
 		close(Connection::sockets[i].fd);
-		free(connections[i]);
+		delete connections[i];
 	}
+	connections.clear();
 }

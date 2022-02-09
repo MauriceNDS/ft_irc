@@ -13,7 +13,9 @@ class CommandElement {
 public:
 	virtual bool isRequired() const;
 
-	virtual void *parseValue(const string& arg, MessageEvent& event) const = 0;
+	virtual void *parseValues(list<string> args, MessageEvent& event) const;
+
+	virtual void *parseValue(string arg, MessageEvent& event) const;
 
 	virtual void destroy(void *) const;
 
@@ -43,7 +45,8 @@ private:
 	const ResponseSpec& ifNotProvided;
 	ComplexeCommandElement(CommandElement *subtype, const ResponseSpec& ifNotProvided);
 public:
-	void *parseValue(const string& arg, MessageEvent& event) const;
+	void *parseValues(list<string> args, MessageEvent& event) const;
+	void *parseValue(string arg, MessageEvent& event) const;
 	const ResponseSpec& notProvidedResponse() const;
 	void destroy(void *arg) const;
 	~ComplexeCommandElement();

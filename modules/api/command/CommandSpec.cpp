@@ -3,9 +3,8 @@
 #include "api/command/CommandElement.hpp"
 #include "api/command/CommandExecutor.hpp"
 
-void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
+void CommandSpec::call(list<string>& tokens, MessageEvent& event) const {
 	map<string, void *const> args;
-	vector<string>::iterator tokens_it = tokens.begin();
 	vector<pair<string, CommandElement *> >::const_iterator it;
 
 	// Middleware protection
@@ -14,15 +13,12 @@ void CommandSpec::call(vector<string>& tokens, MessageEvent& event) const {
 
 	// Converting string to elements
 	for (it = _parameters.begin(); it != _parameters.end() && !event.isCancelled(); it++) {
-		string token = "";
-		if (tokens_it != tokens.end())
-			token = *tokens_it++;
-		else if (it->second->isRequired()) {
+		if (tokens.empty() && it->second->isRequired()) {
 			event.getSender().send(it->second->notProvidedResponse()(getName().c_str()));
 			event.setCancelled(true);
 			break ;
 		}
-		void *value = it->second->parseValue(token, event);
+		void *value = it->second->parseValues(tokens, event);
 		if (value)
 			args.insert(make_pair(it->first, value));
 		else {

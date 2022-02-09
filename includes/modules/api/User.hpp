@@ -7,7 +7,7 @@
 
 class User : public Client {
 private:
-	string nickname;
+	string name;
 	string username;
 	string realname;
 	bool validPassword;
@@ -15,20 +15,18 @@ private:
 public:
 	User(Connection *connection) : Client(connection) {}
 
-	void setNickName(const string& nickname)		{ this->nickname = nickname; }
+	void setName(const string& name)				{ this->name = name; }
 	void setUserName(const string& username)		{ this->username = username; }
 	void setRealName(const string& realname)		{ this->realname = realname; }
 	void setValidPassword(bool arg)					{ this->validPassword = arg; }
 
-	const string& getNickName() const				{ return this->nickname; }
+	const string& getName() const					{ return this->name; }
 	const string& getUserName() const				{ return this->username; }
 	const string& getRealName() const				{ return this->realname; }
 	bool getValidPassword() const					{ return this->validPassword; }
 
-	const string& getName() const					{ return getNickName(); }
-
 	bool isRegistered() const {
-		return !getNickName().empty()
+		return !getName().empty()
 			&& !getUserName().empty()
 			&& !getRealName().empty()
 			&& getValidPassword();

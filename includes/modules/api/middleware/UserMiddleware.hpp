@@ -14,7 +14,7 @@ public:
 		try {
 			(void)dynamic_cast<const User&>(client);
 			return true;
-		} catch (const std::bad_cast& e) {}
+		} catch (...) {}
 		return false;
 	};
 };
