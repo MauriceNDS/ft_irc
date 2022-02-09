@@ -14,32 +14,16 @@
 #define CREATION_DATE "28/01/2022"
 #define VERSION "1.0"
 
-struct flag {
-	bool anonymous;
-	bool invite;
-	bool moderate;
-	bool outside_message;
-	bool quiet;
-	bool priv;
-	bool secret;
-	bool reop;
-	bool topic;
-	bool password;
-	int user_limit;
-};
-
 class Irc {
 private:
 	static Irc *instance;
 
 	Server server;
-	flag flag;
 	CommandManager commandManager;
 
 	map<string, Channel *> channels;
 	vector<User *> users;
 	set<User *> operators;
-	set<User *> voice_priv;
 
 public:
 	static Irc& getInstance() {

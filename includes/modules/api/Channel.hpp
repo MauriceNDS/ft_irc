@@ -9,15 +9,31 @@
 
 class Irc;
 
+struct flag {
+	bool anonymous;
+	bool invite;
+	bool moderate;
+	bool outside_message;
+	bool quiet;
+	bool priv;
+	bool secret;
+	bool reop;
+	bool topic;
+	bool password;
+	int user_limit;
+};
+
 class Channel : public CommandSender {
 private:
 	string name;
 	string topic;
 	set<User *> users;
 	set<User *> chanop;
+	set<User *> voice_priv;
+	flag flag;
 
 public:
-	Channel(const string& name) : name(name) {}
+	Channel(const string& name) : name(name) {flag.topic = true; flag.user_limit = -1;}
 
 	const set<User *>& getUsers() {
 		return users;
