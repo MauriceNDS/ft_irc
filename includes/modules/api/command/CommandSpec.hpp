@@ -22,7 +22,7 @@ private:
 	CommandExecutor *_executor;
 	Middleware *_middleware;
 
-	void call(vector<string>& tokens, MessageEvent& event) const;
+	void call(list<string>& tokens, MessageEvent& event) const;
 
 	CommandSpec(const CommandSpec&);
 	CommandSpec& operator=(const CommandSpec&);

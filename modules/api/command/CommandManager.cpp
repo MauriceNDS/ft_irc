@@ -7,7 +7,7 @@ void CommandManager::registerCommand(const CommandSpec *spec) {
 }
 
 void CommandManager::process(MessageEvent& event) {
-	vector<string> tokens;
+	list<string> tokens;
 	map<string, const CommandSpec *>::iterator it = cspecs.end();
 
 	std::istringstream ss(event.getMessage());

@@ -5,7 +5,9 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <list>
 
+using std::list;
 using std::set;
 using std::string;
 using std::map;

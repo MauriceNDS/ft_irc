@@ -10,25 +10,13 @@
 
 class StringCommandElement : public CommandElement {
 public:
-	void *parseValue(const string& arg, MessageEvent& event) const {
+	void *parseValue(string arg, MessageEvent& event) const {
 		(void)event;
 		return new string(arg);
 	}
 
 	void destroy(void *arg) const {
 		delete static_cast<string*>(arg);
-	}
-};
-
-class IntegerCommandElement : public CommandElement {
-public:
-	void *parseValue(const string& arg, MessageEvent& event) const {
-		(void)event;
-		return new int(atoi(arg.c_str()));
-	}
-
-	void destroy(void *arg) const {
-		delete static_cast<int*>(arg);
 	}
 };
 
@@ -44,7 +32,16 @@ public:
 		return false;
 	}
 
-	void *parseValue(const string& arg, MessageEvent& event) const {
+	void *parseValues(list<string> args, MessageEvent& event) const {
+		if (args.empty())
+			return new const void*(NULL);
+		void *val = subtype->parseValues(args, event);
+		if (!val)
+			return NULL;
+		return new const void*(val);
+	}
+
+	void *parseValue(string arg, MessageEvent& event) const {
 		if (arg.empty())
 			return new const void*(NULL);
 		void *val = subtype->parseValue(arg, event);
@@ -72,7 +69,7 @@ private:
 public:
 	ListCommandElement(CommandElement *subtype) : subtype(subtype) {}
 
-	void *parseValue(const string& arg, MessageEvent& event) const {
+	void *parseValue(string arg, MessageEvent& event) const {
 		vector<T *> *args = new vector<T *>();
 		vector<string> tokens;
 		vector<string>::iterator tokens_it;
@@ -112,10 +109,6 @@ namespace GenericArguments {
 	StringCommandElement *string() {
 		return new StringCommandElement();
 	}
-
-	// IntegerCommandElement *integer() {
-	// 	return new IntegerCommandElement();
-	// }
 
 	OptionalCommandElement *optional(CommandElement *subtype) {
 		return new OptionalCommandElement(subtype);
