@@ -28,14 +28,14 @@ class PartCommand : public CommandExecutor {
 				continue ;
 			}
 			(*it)->removeUser(static_cast<User *>(&sender));
-			if (message && !(*it)->getFlag().anonymous) {
-				(*it)->send(from + " PART " + (*it)->getName() + " :" + *message + "\n");
-			} else if (message) {
-				(*it)->send("anonymous!anonymous@anonymous PART " + (*it)->getName() + " :" + *message + "\n");
-			} else if (!(*it)->getFlag().anonymous){
-				(*it)->send(from + " PART " + (*it)->getName() + " :" + sender.getName() + "\n");
+			if ((*it)->getFlag().anonymous && message) {
+				(*it)->send(ResponseTypes::PART.anonymous((*it)->getName().c_str(), message->c_str()));
+			} else if ((*it)->getFlag().anonymous && !message) {
+				(*it)->send(ResponseTypes::PART.anonymous((*it)->getName().c_str(), user.getName().c_str()));
+			} if (message) {
+				(*it)->send(ResponseTypes::PART(sender, (*it)->getName().c_str(), message->c_str()));
 			} else {
-				(*it)->send("anonymous!anonymous@anonymous PART " + (*it)->getName() + " :anonymous" + "\n");
+				(*it)->send(ResponseTypes::PART(sender, (*it)->getName().c_str(), user.getName().c_str()));
 			}
 		}
 	}

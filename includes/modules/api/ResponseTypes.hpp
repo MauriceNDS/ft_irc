@@ -4,6 +4,13 @@
 #include "api/command/response/ResponseSpec.hpp"
 
 namespace ResponseTypes {
+	const ResponseSpec ERROR = ResponseSpec("ERROR");
+	const ResponseSpec PRIVMSG = ResponseSpec("PRIVMSG <user> :<message>");
+	const ResponseSpec NOTICE = ResponseSpec("NOTICE <user> :<message>");
+	const ResponseSpec JOIN = ResponseSpec("JOIN <channel>");
+	const ResponseSpec KICK = ResponseSpec("KICK <channel> :<message>");
+	const ResponseSpec PART = ResponseSpec("PART <channel> :<message>");
+	const ResponseSpec PONG = ResponseSpec("PONG <server>");
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");

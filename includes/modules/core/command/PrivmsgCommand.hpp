@@ -32,16 +32,12 @@ class PrivmsgCommand : public CommandExecutor {
 					}
 				}
 			}
+			std::cout << (*it)->getName() << " , " << message.c_str() << std::endl;
 			if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
-				(*it)->send("anonymous!anonymous@anonymous PRIVMSG " + (*it)->getName() + " :" + message.c_str());	
+				(*it)->send(ResponseTypes::PRIVMSG.anonymous((*it)->getName().c_str(), message.c_str()));	
 			} else {
-				(*it)->send(from + " PRIVMSG " + (*it)->getName() + " :" + message.c_str());
+				(*it)->send(ResponseTypes::PRIVMSG(sender, (*it)->getName().c_str(), message.c_str()));
 			}
-			// if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
-			// 	(*it)->send(ResponseTypes::PRIVMSG((*it)->getName().c_str(), message.c_str()));	
-			// } else {
-			// 	(*it)->send(ResponseTypes::PRIVMSG(user, (*it)->getName().c_str(), message.c_str()));
-			// }
 		}
 	}
 };

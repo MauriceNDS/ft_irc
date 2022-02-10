@@ -22,7 +22,7 @@ class NickCommand : public CommandExecutor {
 		}
 		bool wasRegistered = user.isRegistered();
 
-		if (nickname == "anonymous") {
+		if (nickname == "anonymous" || Irc::getInstance().findUser(nickname)) {
 			user.send(ResponseTypes::ERR_NICKNAMEINUSE());
 			return;
 		}

@@ -14,7 +14,7 @@ class PingCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		string& server = cmd.getArg<string>("server");
-		sender.send("PONG " + server);
+		sender.send(ResponseTypes::PONG(server.c_str()));
 	}
 };
 

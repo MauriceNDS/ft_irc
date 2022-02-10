@@ -14,7 +14,6 @@ class KickCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User &oper = static_cast<User &>(sender);
-		string from = oper.getName() + "!" + oper.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		string *message = cmd.getArg<string *>("message");
 		Channel& channel = cmd.getArg<Channel>("channel");
@@ -28,13 +27,13 @@ class KickCommand : public CommandExecutor {
 			return ;
 		}
 		if (channel.getFlag().anonymous && message) {
-			channel.send("anonymous!anonymous@anonymous KICK " + channel.getName() + " anonymous :" + *message + "\n");
+			channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), message->c_str()));
 		} else if (channel.getFlag().anonymous && !message) {
-			channel.send("anonymous!anonymous@anonymous KICK " + channel.getName() + " anonymous :" + user.getName() + "\n");
+			channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), user.getName().c_str()));
 		} if (message) {
-			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + *message + "\n");
+			channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), message->c_str()));
 		} else {
-			channel.send(from + " KICK " + channel.getName() + " " + user.getName() + " :" + user.getName() + "\n");
+			channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), user.getName().c_str()));
 		}
 		channel.removeUser(&user);
 	}

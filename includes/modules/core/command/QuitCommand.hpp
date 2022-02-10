@@ -27,7 +27,7 @@ class QuitCommand : public CommandExecutor {
 			}
 		}
 		Client& client = static_cast<Client &>(sender);
-		//send Error to client;
+		sender.send(ResponseTypes::ERROR());
 		client.getConnection()->closeConnection = true;
 	}
 };

@@ -15,7 +15,6 @@ class JoinCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
-		string from = user.getName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
 		vector<string *> *passwords = cmd.getArg<vector<string *> *>("keys");
@@ -29,9 +28,9 @@ class JoinCommand : public CommandExecutor {
 				user.send(ResponseTypes::ERR_BADCHANNELKEY((*it)->getName().c_str()));
 			} else if (!(*it)->isOnChan(&user)) {
 				if (!(*it)->getFlag().anonymous) {
-					(*it)->send(from + " JOIN " + (*it)->getName() + "\n");
+					(*it)->send(ResponseTypes::JOIN(user, (*it)->getName().c_str()));
 				} else {
-					(*it)->send("anonymous!anonymous@anonymous JOIN " + (*it)->getName() + "\n");
+					(*it)->send(ResponseTypes::JOIN.anonymous((*it)->getName().c_str()));
 				}
 				(*it)->addUser(static_cast<User *>(&sender));
 				for (set<User *>::const_iterator users = (*it)->getUsers().begin(); users != (*it)->getUsers().end(); users++) {
