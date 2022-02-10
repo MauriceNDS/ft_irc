@@ -37,6 +37,11 @@ class PrivmsgCommand : public CommandExecutor {
 			} else {
 				(*it)->send(from + " PRIVMSG " + (*it)->getName() + " :" + message.c_str());
 			}
+			// if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
+			// 	(*it)->send(ResponseTypes::PRIVMSG((*it)->getName().c_str(), message.c_str()));	
+			// } else {
+			// 	(*it)->send(ResponseTypes::PRIVMSG(user, (*it)->getName().c_str(), message.c_str()));
+			// }
 		}
 	}
 };
