@@ -50,3 +50,14 @@ string ResponseSpec::operator()(const CommandSender& sender, const char *args...
 
 	return operator()(sender, args, argptr);
 }
+
+string ResponseSpec::anonymous() const {
+	return operator()(ResponseSpec::AnonymousSender());
+}
+
+string ResponseSpec::anonymous(const char *args...) const {
+	std::va_list argptr;
+	va_start(argptr, args);
+
+	return operator()(ResponseSpec::AnonymousSender(), args, argptr);
+}

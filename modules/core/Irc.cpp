@@ -27,14 +27,16 @@
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
 
-Irc::Irc(const string& name, const int port, const string& password, vector<Plugin *> plugins) : server(name, port, password), plugins(plugins) {
+Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : server(name, port, password) {
 	Irc::instance = this;
 
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->construct();
+	getPluginLoader().loadPlugins(plugins);
 
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->preInit();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->construct();
+
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->preInit();
 
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("USER")
@@ -163,35 +165,31 @@ Irc::Irc(const string& name, const int port, const string& password, vector<Plug
 		.build()
 	);
 
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->init();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->init();
 
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->postInit();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->postInit();
 }
 
 void Irc::start() {
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->serverAboutToStart();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverAboutToStart();
 
 	server.start();
 }
 
 Irc::~Irc() {
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->serverStopping();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopping();
 
 	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i)
 		delete *i;
 
 	users.clear();
 
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		(*plugin)->serverStopped();
-	
-	for (vector<Plugin *>::iterator plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-		delete *plugin;
-	plugins.clear();
+	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopped();
 }
 
 Irc *Irc::instance = NULL;
