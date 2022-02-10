@@ -9,8 +9,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	vector<string> files;
-	files.push_back("test.so");
-	files.push_back("test2.so");
 
 	Irc irc("ft_irc", std::atoi(argv[1]), argv[2], files);
 	irc.start();
