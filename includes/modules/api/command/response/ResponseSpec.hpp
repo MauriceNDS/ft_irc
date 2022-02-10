@@ -14,6 +14,22 @@ private:
 	string _command;
 	string _args;
 
+	class AnonymousSender : public CommandSender {
+	private:
+		string name;
+
+	public:
+		AnonymousSender() : name("anonymous") {}
+
+		void send(const string& message) const {
+			(void)message;
+		}
+
+		const string& getName() const {
+			return name;
+		}
+	};
+
 	string operator()(const CommandSender& sender, const char *first, va_list argptr) const;
 
 public:
@@ -33,6 +49,9 @@ public:
 	string operator()(const char *args...) const;
 	string operator()(const CommandSender& sender) const;
 	string operator()(const CommandSender& sender, const char *args...) const;
+
+	string anonymous() const;
+	string anonymous(const char *args...) const;
 };
 
 #endif /* FT_IRC_API_RESPONSE_SPEC */

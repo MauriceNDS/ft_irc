@@ -9,13 +9,13 @@
 struct Connection;
 
 class Client : public CommandSender {
-private:
+protected:
 	Connection *const connection;
 
 public:
 	Client(Connection *connection);
 
-	const Connection *getConnection() {
+	const Connection *getConnection() const {
 		return connection;
 	}
 

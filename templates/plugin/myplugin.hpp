@@ -12,6 +12,8 @@ private:
 	Irc *irc;
 
 public:
+	string getId() const;
+
 	void construct();
 };
 

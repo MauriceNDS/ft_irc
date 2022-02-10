@@ -6,6 +6,7 @@
 #include "api/User.hpp"
 #include "api/Plugin.hpp"
 #include "api/Channel.hpp"
+#include "api/PluginLoader.hpp"
 #include "api/command/CommandManager.hpp"
 
 #include "server/Server.hpp"
@@ -21,9 +22,9 @@ private:
 
 	Server server;
 	CommandManager commandManager;
+	PluginLoader pluginLoader;
 
     map<string, Channel *> channels;
-	vector<Plugin *> plugins;
     vector<User *> users;
 	set<User *> operators;
 
@@ -32,7 +33,7 @@ public:
 		return *Irc::instance;
 	}
 
-	Irc(const string& name, const int port, const string& password, vector<Plugin *> plugins);
+	Irc(const string& name, const int port, const string& password, const vector<string>& plugins);
 
 	void start();
 
@@ -40,8 +41,16 @@ public:
 		return this->commandManager;
 	}
 
+	PluginLoader& getPluginLoader() {
+		return this->pluginLoader;
+	}
+
 	const CommandManager& getCommandManager() const {
 		return this->commandManager;
+	}
+
+	const PluginLoader& getPluginLoader() const {
+		return this->pluginLoader;
 	}
 
 	User *findUser(const string& nickname) {
@@ -95,13 +104,10 @@ public:
 	bool isOperator(User *user) {
 		return operators.find(user) != operators.end();
 	}
+
 	const Server& getServer() const {
 		return server;
 	}
-
-	// const vector<Channel *>& getChannels() const {
-	// 	return channels;
-	// }
 
 	~Irc();
 };
