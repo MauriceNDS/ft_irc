@@ -57,6 +57,9 @@ const string& Server::getHost() const {
 void Server::start() {
 	vector<Connection *>::iterator it;
 
+	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStarted();
+
 	std::cout << "Waiting for connections..." << std::endl;
 	while (true) {
 		poll(&Connection::sockets[0], Connection::sockets.size(), -1);
