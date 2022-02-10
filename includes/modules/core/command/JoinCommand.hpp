@@ -15,7 +15,7 @@ class JoinCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
-		string from = user.getNickName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
+		string from = user.getName() + "!" + user.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		vector<Channel *>& channelList = cmd.getArg<vector<Channel *> >("channels");
 		vector<string *> *passwords = cmd.getArg<vector<string *> *>("keys");

@@ -14,7 +14,7 @@ class KickCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User &oper = static_cast<User &>(sender);
-		string from = oper.getNickName() + "!" + oper.getUserName() + "@" + Irc::getInstance().getServer().getHost();
+		string from = oper.getName() + "!" + oper.getUserName() + "@" + Irc::getInstance().getServer().getHost();
 
 		string *message = cmd.getArg<string *>("message");
 		Channel& channel = cmd.getArg<Channel>("channel");

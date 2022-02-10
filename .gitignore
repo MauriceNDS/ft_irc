@@ -1,4 +1,5 @@
 ircserv
+INFO
 
 # Prerequisites
 *.d
@@ -35,4 +36,3 @@ ircserv
 
 # macOS
 .DS_Store
-INFO

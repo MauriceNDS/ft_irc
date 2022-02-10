@@ -28,12 +28,12 @@ class NamesCommand : public CommandExecutor {
 					continue;
 
 				for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-					user.send(ResponseTypes::RPL_NAMREPLY(it->first.c_str(), (*ite)->getNickName().c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY(it->first.c_str(), (*ite)->getName().c_str()));
 				}
 				user.send(ResponseTypes::RPL_ENDOFNAMES(it->first.c_str()));
 			}
 			for (vector<User *>::const_iterator it = userList.begin(); it != userList.end(); it++) {
-				user.send(ResponseTypes::RPL_NAMREPLY("*", (*it)->getNickName().c_str()));
+				user.send(ResponseTypes::RPL_NAMREPLY("*", (*it)->getName().c_str()));
 			}
 			user.send(ResponseTypes::RPL_ENDOFNAMES("*"));
 		} else {
@@ -44,7 +44,7 @@ class NamesCommand : public CommandExecutor {
 					continue;
 
 				for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-					user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*ite)->getNickName().c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*ite)->getName().c_str()));
 				}
 				user.send(ResponseTypes::RPL_ENDOFNAMES((*it)->getName().c_str()));
 			}

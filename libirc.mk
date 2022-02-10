@@ -17,6 +17,7 @@ endif
 
 override SRCS		:=													\
 				modules/api/Client.cpp									\
+				modules/api/Channel.cpp									\
 				modules/api/Connection.cpp								\
 				modules/api/command/CommandElement.cpp					\
 				modules/api/command/CommandExecutor.cpp					\
