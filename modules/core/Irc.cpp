@@ -14,6 +14,7 @@
 #include "core/command/NamesCommand.hpp"
 #include "core/command/InviteCommand.hpp"
 #include "core/command/ListCommand.hpp"
+#include "core/command/QuitCommand.hpp"
 
 #include "core/command/elements/MsgToCommandElement.hpp"
 #include "core/command/elements/UserCommandElement.hpp"
@@ -152,6 +153,13 @@ Irc::Irc(const string& name, const int port, const string& password, vector<Plug
 		.argument("channel", GenericArguments::string())
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new InviteCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("QUIT")
+		.argument("message", GenericArguments::optional(GenericArguments::string()))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new QuitCommand())
 		.build()
 	);
 

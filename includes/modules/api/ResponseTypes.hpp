@@ -4,7 +4,6 @@
 #include "api/command/response/ResponseSpec.hpp"
 
 namespace ResponseTypes {
-	const ResponseSpec PRIVMSG = ResponseSpec(sender, "PRIVMSG <user> :<message>");
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
