@@ -24,7 +24,7 @@ private:
 	void incomingConnection();
 	void incomingRequest(size_t index);
 	void closeConnection(size_t	index);
-	Connection *addConnection(const struct pollfd &connection);
+	Connection *addConnection(const struct pollfd &connection, const struct sockaddr_in& addr);
 
 public:
 	Server(const string& name, const int port, const string& password);

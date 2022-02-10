@@ -24,6 +24,8 @@ class NickCommand : public CommandExecutor {
 
 		user.setName(nickname);
 
+		user.send(user.getName() + "@" + user.getUserName() + "!" + user.getConnection()->getIP() + "\n");
+
 		if (user.isRegistered() && !wasRegistered) {
 			user.send(ResponseTypes::RPL_WELCOME(user.getName().c_str(), user.getUserName().c_str(), Irc::getInstance().getServer().getHost().c_str()));
 			user.send(ResponseTypes::RPL_YOURHOST(Irc::getInstance().getServer().getName().c_str(), VERSION));

@@ -6,7 +6,7 @@
 #include "api/CommandSender.hpp"
 #include "api/Connection.hpp"
 
-struct Connection;
+class Connection;
 
 class Client : public CommandSender {
 protected:

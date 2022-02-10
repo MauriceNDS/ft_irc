@@ -3,7 +3,7 @@
 
 #include "ft_irc.hpp"
 
-struct Connection;
+class Connection;
 
 class CommandSender {
 public:

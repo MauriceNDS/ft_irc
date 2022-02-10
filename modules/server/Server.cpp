@@ -8,8 +8,8 @@
 
 #define MAX_BUFFER_LENGTH 512
 
-Connection *Server::addConnection(const struct pollfd &connection) {
-	Connection *newConnect = new Connection(connection);
+Connection *Server::addConnection(const struct pollfd& connection, const struct sockaddr_in& addr) {
+	Connection *newConnect = new Connection(connection, addr);
 	connections.push_back(newConnect);
 	return newConnect;
 }
@@ -31,8 +31,7 @@ Server::Server(const string& name, const int port, const string& password) : nam
 	// Can be protected -- Set socket to be nonblocking
 	ioctl(serverSocket.fd, FIONBIO, (char *)&opt);
 
-	addConnection(serverSocket);
-
+	addConnection(serverSocket, connectionConfig);
 
 	connectionConfig.sin_family = AF_INET;
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
@@ -86,13 +85,16 @@ void Server::start() {
 
 void Server::incomingConnection() {
 	struct pollfd newSocket;
+	struct sockaddr_in newConnection;
+	int clen;
 
 	newSocket.events = POLLIN;
-
 	while (true) {
-		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0)
+		clen = sizeof(newConnection);
+		if ((newSocket.fd = accept(Connection::sockets[0].fd, (struct sockaddr *)&newConnection, (socklen_t*)&clen)) < 0)
 			break ;
-		Irc::getInstance().addUser(new User(addConnection(newSocket)));
+
+		Irc::getInstance().addUser(new User(addConnection(newSocket, newConnection)));
 	}
 }
 
