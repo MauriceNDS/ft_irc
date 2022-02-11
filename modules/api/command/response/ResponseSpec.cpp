@@ -1,9 +1,9 @@
 #include "api/command/response/ResponseSpec.hpp"
 
-string ResponseSpec::operator()(const CommandSender& sender, const char *first, va_list argptr) const {
+string ResponseSpec::build(const CommandSender& sender, const char *first, va_list argptr) const {
 	string cmd = ":";
 
-	cmd += sender.getName() + " " + _command;
+	cmd += sender.getSenderName() + " " + _command;
 	if (!_args.empty())
 		cmd += string(" ") + _args;
 
@@ -31,13 +31,13 @@ string ResponseSpec::operator()(const char *args...) const {
 	std::va_list argptr;
 	va_start(argptr, args);
 
-	return operator()(Irc::getInstance().getServer(), args, argptr);
+	return build(Irc::getInstance().getServer(), args, argptr);
 }
 
 string ResponseSpec::operator()(const CommandSender& sender) const {
 	string cmd = ":";
 
-	cmd += sender.getName() + " " + _command;
+	cmd += sender.getSenderName() + " " + _command;
 	if (!_args.empty())
 		cmd += string(" ") + _args;
 	cmd += "\n";
@@ -48,7 +48,7 @@ string ResponseSpec::operator()(const CommandSender& sender, const char *args...
 	std::va_list argptr;
 	va_start(argptr, args);
 
-	return operator()(sender, args, argptr);
+	return build(sender, args, argptr);
 }
 
 string ResponseSpec::anonymous() const {
@@ -59,5 +59,5 @@ string ResponseSpec::anonymous(const char *args...) const {
 	std::va_list argptr;
 	va_start(argptr, args);
 
-	return operator()(ResponseSpec::AnonymousSender(), args, argptr);
+	return build(ResponseSpec::AnonymousSender(), args, argptr);
 }

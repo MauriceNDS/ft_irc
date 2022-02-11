@@ -36,6 +36,8 @@ public:
 	const string& getName() const;
 	const string& getHost() const;
 
+	string getSenderName() const;
+
 	void start();
 
 	~Server();

@@ -22,6 +22,10 @@ public:
 	const string& getUserName() const				{ return this->username; }
 	const string& getRealName() const				{ return this->realname; }
 
+	string getSenderName() const  {
+		return getName() + "@" + getUserName() + "!" + getConnection()->getIP();
+	}
+
 	bool isRegistered() const {
 		return !getName().empty()
 			&& !getUserName().empty()

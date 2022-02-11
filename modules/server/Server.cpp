@@ -49,6 +49,10 @@ const string& Server::getName() const {
 	return name;
 }
 
+string Server::getSenderName() const {
+	return connections[0]->getIP();
+}
+
 const string& Server::getHost() const {
 	return host;
 }
@@ -99,6 +103,7 @@ void Server::incomingConnection() {
 }
 
 void Server::closeConnection(size_t index) {
+	// Contains the server !
 	Client *client = connections[index]->client;
 	User *user = dynamic_cast<User *>(client);
 	if (user)
