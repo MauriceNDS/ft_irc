@@ -14,7 +14,17 @@ Connection *Server::addConnection(const struct pollfd &connection) {
 	return newConnect;
 }
 
-Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password) {
+Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password) {}
+
+const string& Server::getName() const {
+	return name;
+}
+
+const string& Server::getHost() const {
+	return host;
+}
+
+void Server::start() {
 	struct pollfd serverSocket;
 	int opt = 1;
 
@@ -43,18 +53,7 @@ Server::Server(const string& name, const int port, const string& password) : nam
 
 	// Can be protected
 	listen(serverSocket.fd, 32);
-
-}
-
-const string& Server::getName() const {
-	return name;
-}
-
-const string& Server::getHost() const {
-	return host;
-}
-
-void Server::start() {
+	
 	vector<Connection *>::iterator it;
 
 	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
@@ -101,7 +100,6 @@ void Server::closeConnection(size_t index) {
 	User *user = dynamic_cast<User *>(client);
 	if (user)
 		Irc::getInstance().removeUser(user);
-
 	close(Connection::sockets[index].fd);
 	connections.erase(connections.begin() + index);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
