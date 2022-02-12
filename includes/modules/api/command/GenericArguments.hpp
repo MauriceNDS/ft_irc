@@ -32,7 +32,7 @@ public:
 		return false;
 	}
 
-	void *parseValues(list<string> args, MessageEvent& event) const {
+	void *parseValues(list<string>& args, MessageEvent& event) const {
 		if (args.empty())
 			return new const void*(NULL);
 		void *val = subtype->parseValues(args, event);

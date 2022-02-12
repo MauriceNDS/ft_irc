@@ -34,10 +34,10 @@ public:
 	void send(const char *str, int len) const;
 
 	string getIP() const {
-		return itoa(int(addr.sin_addr.s_addr & 0xFF)) + '.'
-			+ itoa(int((addr.sin_addr.s_addr & 0xFF00) >> 8)) + '.'
-			+ itoa(int((addr.sin_addr.s_addr & 0xFF0000) >> 16)) + '.'
-			+ itoa(int((addr.sin_addr.s_addr & 0xFF000000) >> 24));
+		return itoa(addr.sin_addr.s_addr & 0xFF) + '.'
+			+ itoa((addr.sin_addr.s_addr & 0xFF00) >> 8) + '.'
+			+ itoa((addr.sin_addr.s_addr & 0xFF0000) >> 16) + '.'
+			+ itoa((addr.sin_addr.s_addr & 0xFF000000) >> 24);
 	}
 };
 
