@@ -19,10 +19,14 @@ class QuitCommand : public CommandExecutor {
 		map<string, Channel *> chan_list = Irc::getInstance().getChannels();
 		for (map<string, Channel *>::const_iterator it = chan_list.begin(); it != chan_list.end(); it++) {
 			if (it->second->isOnChan(&user)) {
-				if (message) {
-					it->second->send(":" + user.getName() + " QUIT :" + *message + "\n");
+				if (message && it->second->getFlag().anonymous) {
+					it->second->send(ResponseTypes::QUIT.anonymous(message->c_str()));
+				} else if (it->second->getFlag().anonymous) {
+					it->second->send(ResponseTypes::QUIT.anonymous("anonymous"));
+				} else if (message) {
+					it->second->send(ResponseTypes::QUIT(user, message->c_str()));
 				} else {
-					it->second->send(":" + user.getName() + " QUIT :" + user.getName() + "\n");
+					it->second->send(ResponseTypes::QUIT(user, user.getName().c_str()));
 				}
 			}
 		}
