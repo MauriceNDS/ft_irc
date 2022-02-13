@@ -20,6 +20,7 @@ namespace ResponseTypes {
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec RPL_LIST = ResponseSpec(322, "<channel> # visible :<topic>");
 	const ResponseSpec RPL_LISTEND = ResponseSpec(323, ":End of LIST");
+	const ResponseSpec RPL_CHANNELMODEIS = ResponseSpec(324, "<channel> <mode> <mode params>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
 	const ResponseSpec RPL_INVITING = ResponseSpec(341, "<channel> <nick> :Invitation send");
 	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
@@ -43,7 +44,9 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
 	const ResponseSpec ERR_PASSWDMISMATCH = ResponseSpec(464, ":Password incorrect");
+	const ResponseSpec ERR_KEYSET = ResponseSpec(467, "<channel> :Channel key already set");
 	const ResponseSpec ERR_CHANNELISFULL = ResponseSpec(471, "<channel> :Cannot join channel (+l)");
+	const ResponseSpec ERR_UNKNOWNMODE = ResponseSpec(472, "<char> :is unknown mode char to me for <channel>");
 	const ResponseSpec ERR_INVITEONLYCHAN = ResponseSpec(473, "<channel> :Cannot join channel (+i)");
 	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
 	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");

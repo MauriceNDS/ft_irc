@@ -20,9 +20,9 @@ class QuitCommand : public CommandExecutor {
 		for (map<string, Channel *>::const_iterator it = chan_list.begin(); it != chan_list.end(); it++) {
 			if (it->second->isOnChan(&user)) {
 				if (message && it->second->getFlag().anonymous) {
-					it->second->send(ResponseTypes::QUIT.anonymous(message->c_str()));
+					it->second->send(ResponseTypes::PART.anonymous(message->c_str()));
 				} else if (it->second->getFlag().anonymous) {
-					it->second->send(ResponseTypes::QUIT.anonymous("anonymous"));
+					it->second->send(ResponseTypes::PART.anonymous("anonymous"));
 				} else if (message) {
 					it->second->send(ResponseTypes::QUIT(user, message->c_str()));
 				} else {

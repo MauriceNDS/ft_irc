@@ -49,10 +49,10 @@ public:
 		return invite;
 	}
 
-	const flag& getFlag() {
+	flag& getFlag() {
 		return flags;
 	}
-	const string& getPassword() {
+	string& getPassword() {
 		return password;
 	}
 	
@@ -86,11 +86,42 @@ public:
 		return true;
 	}
 
+	void promoteVoiceOp(User *user)
+	{
+		if (!user)
+			return;
+		set<User *>::iterator it = voiceop.find(user);
+		if (it == voiceop.end())
+			voiceop.insert(user);
+	}
+
+	void demoteVoiceOp(User *user)
+	{
+		if (!user)
+			return;
+		set<User *>::iterator it = voiceop.find(user);
+		if (it == voiceop.end())
+			voiceop.erase(user);
+	}
+
 	void promoteChanop(User *user)
 	{
+		if (!user)
+			return;
 		set<User *>::iterator it = chanop.find(user);
 		if (it == chanop.end())
 			chanop.insert(user);
+	}
+
+	void demoteChanop(User *user)
+	{
+		if (!user)
+			return;
+		set<User *>::iterator it = chanop.find(user);
+		if (it == chanop.end())
+			chanop.erase(user);
+		if (!chanop.size() && flags.reop)
+        	chanop.insert(*users.begin());
 	}
 
 	const string getTopic() const {
