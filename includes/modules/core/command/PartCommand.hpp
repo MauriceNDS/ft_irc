@@ -19,14 +19,14 @@ class PartCommand : public CommandExecutor {
         vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
 		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
             if (!*it) {
-                sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
+                user.send(ResponseTypes::ERR_NOSUCHCHANNEL());
                 continue ;
             }
-			(*it)->removeUser(static_cast<User *>(&sender));
+			(*it)->removeUser(&user);
             if (message) {
 			    (*it)->send(*message);
             } else {
-                (*it)->send(sender.getName().c_str());
+                (*it)->send(user.getName().c_str());
             }
 		}
 	}
