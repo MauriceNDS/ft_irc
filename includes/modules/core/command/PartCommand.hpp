@@ -32,7 +32,7 @@ class PartCommand : public CommandExecutor {
 				(*it)->send(ResponseTypes::PART.anonymous((*it)->getName().c_str(), message->c_str()));
 			} else if ((*it)->getFlag().anonymous && !message) {
 				(*it)->send(ResponseTypes::PART.anonymous((*it)->getName().c_str(), "anonymous"));
-			} if (message) {
+			} else if (message) {
 				(*it)->send(ResponseTypes::PART(sender, (*it)->getName().c_str(), message->c_str()));
 			} else {
 				(*it)->send(ResponseTypes::PART(sender, (*it)->getName().c_str(), user.getName().c_str()));
