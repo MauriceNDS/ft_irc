@@ -19,7 +19,7 @@ public:
 		return connection;
 	}
 
-	void send(const string& message) const;
+	virtual void send(const string& message) const;
 
 	virtual ~Client() = 0;
 };
