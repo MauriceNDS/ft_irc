@@ -17,9 +17,9 @@
 #include "core/command/QuitCommand.hpp"
 #include "core/command/ModeCommand.hpp"
 
-#include "core/command/elements/MsgToCommandElement.hpp"
-#include "core/command/elements/UserCommandElement.hpp"
-#include "core/command/elements/ChannelCommandElement.hpp"
+#include "core/command/element/MsgToCommandElement.hpp"
+#include "core/command/element/UserCommandElement.hpp"
+#include "core/command/element/ChannelCommandElement.hpp"
 
 #include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
@@ -27,6 +27,8 @@
 
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
+
+#include "api/command/element/FlagsCommandElement.hpp"
 
 Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : server(name, port, password) {
 	Irc::instance = this;
@@ -168,8 +170,7 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("MODE")
 		.argument("channel", new ChannelCommandElement(false))
-		.argument("mode", GenericArguments::optional(GenericArguments::string()))
-		.argument("modeparams", GenericArguments::optional(GenericArguments::list<string *>(GenericArguments::string())))
+		.argument("mode", GenericArguments::optional(new FlagsCommandElement("o:v:aimnqpsrtk:l:")))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new ModeCommand())
 		.build()

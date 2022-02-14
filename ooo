@@ -1,0 +1,6 @@
+PASS password
+NICK 0
+USER 1 2 3 4
+JOIN #meuh
+MODE #meuh
+MODE #meuh +nqpsr

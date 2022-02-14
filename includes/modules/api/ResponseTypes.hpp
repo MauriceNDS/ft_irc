@@ -46,7 +46,7 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_PASSWDMISMATCH = ResponseSpec(464, ":Password incorrect");
 	const ResponseSpec ERR_KEYSET = ResponseSpec(467, "<channel> :Channel key already set");
 	const ResponseSpec ERR_CHANNELISFULL = ResponseSpec(471, "<channel> :Cannot join channel (+l)");
-	const ResponseSpec ERR_UNKNOWNMODE = ResponseSpec(472, "<char> :is unknown mode char to me for <channel>");
+	const ResponseSpec ERR_UNKNOWNMODE = ResponseSpec(472, "<char> :is unknown mode");
 	const ResponseSpec ERR_INVITEONLYCHAN = ResponseSpec(473, "<channel> :Cannot join channel (+i)");
 	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
 	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");

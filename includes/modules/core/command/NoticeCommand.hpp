@@ -8,7 +8,7 @@
 #include "api/ResponseTypes.hpp"
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
-#include "core/command/elements/MsgToCommandElement.hpp"
+#include "core/command/element/MsgToCommandElement.hpp"
 
 #include "api/ResponseTypes.hpp"
 

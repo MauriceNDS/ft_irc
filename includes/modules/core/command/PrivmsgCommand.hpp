@@ -8,7 +8,6 @@
 #include "api/ResponseTypes.hpp"
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
-#include "core/command/elements/MsgToCommandElement.hpp"
 
 #include "api/ResponseTypes.hpp"
 
@@ -18,25 +17,22 @@ class PrivmsgCommand : public CommandExecutor {
 		User& user = static_cast<User &>(sender);
 		vector<CommandSender *>& target = cmd.getArg<vector<CommandSender *> >("msgtarget");
 		string message = cmd.getArg<string>("message") + "\n";
-
 		for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
-			if (Channel::isValidIdentifier((*it)->getName())) {
-				if (Irc::getInstance().getChannels().find((*it)->getName()) != Irc::getInstance().getChannels().end()) {
-					if (!Irc::getInstance().getChannels().find((*it)->getName())->second->isOnChan(&user) && Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().outside_message) {
-						sender.send(ResponseTypes::ERR_NOTONCHANNEL((*it)->getName().c_str(), sender.getName().c_str()));
-						continue ;
-					} else if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().moderate && !Irc::getInstance().getChannels().find((*it)->getName())->second->isVoiceOp(&user)) {
-						sender.send(ResponseTypes::ERR_CANNOTSENDTOCHAN((*it)->getName().c_str()));
-						continue ;
-					}
+			const string& identifier = (*it)->getName();
+			Channel *channel = Irc::getInstance().findChannel(identifier);
+			if (channel) {
+				if (!channel->isOnChan(&user) && channel->getFlag().outside_message) {
+					sender.send(ResponseTypes::ERR_NOTONCHANNEL(identifier.c_str(), sender.getName().c_str()));
+					continue;
+				} else if (channel->getFlag().moderate && !channel->isVoiceOp(&user)) {
+					sender.send(ResponseTypes::ERR_CANNOTSENDTOCHAN(identifier.c_str()));
+					continue;
+				} else if (channel->getFlag().anonymous) {
+					(*it)->send(ResponseTypes::PRIVMSG.anonymous(identifier.c_str(), message.c_str()));	
+					continue;
 				}
 			}
-			std::cout << (*it)->getName() << " , " << message.c_str() << std::endl;
-			if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
-				(*it)->send(ResponseTypes::PRIVMSG.anonymous((*it)->getName().c_str(), message.c_str()));	
-			} else {
-				(*it)->send(ResponseTypes::PRIVMSG(sender, (*it)->getName().c_str(), message.c_str()));
-			}
+			(*it)->send(ResponseTypes::PRIVMSG(sender, identifier.c_str(), message.c_str()));
 		}
 	}
 };

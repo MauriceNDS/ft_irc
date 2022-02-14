@@ -24,6 +24,10 @@ const string& Server::getHost() const {
 	return host;
 }
 
+const string& Server::getPassword() const {
+	return password;
+}
+
 void Server::start() {
 	struct pollfd serverSocket;
 	int opt = 1;

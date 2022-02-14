@@ -9,7 +9,7 @@
 
 class Irc;
 
-struct flag {
+struct Modes {
 	bool anonymous;
 	bool invite;
 	bool moderate;
@@ -19,27 +19,24 @@ struct flag {
 	bool secret;
 	bool reop;
 	bool topic;
-	bool password;
+	string password;
 	size_t user_limit;
+
+	Modes() : anonymous(false), invite(false), moderate(false), outside_message(false), quiet(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
 };
 
 class Channel : public CommandSender {
 private:
 	string name;
 	string topic;
-	string password;
 	set<User *> users;
 	set<User *> chanop;
 	set<User *> voiceop;
 	set<User *> invite;
-	flag flags;
+	Modes flags;
 
 public:
-	Channel(const string& name) : name(name) {
-	flags.anonymous = false; flags.invite = false; flags.moderate = false;
-	flags.outside_message = false; flags.quiet = false; flags.priv = false;
-	flags.secret = false; flags.reop = false; flags.topic = true;
-	flags.password = false; flags.user_limit = 0;}
+	Channel(const string& name) : name(name) {}
 
 	const set<User *>& getUsers() {
 		return users;
@@ -49,11 +46,11 @@ public:
 		return invite;
 	}
 
-	flag& getFlag() {
+	Modes& getFlag() {
 		return flags;
 	}
 	string& getPassword() {
-		return password;
+		return flags.password;
 	}
 	
 	void addUser(User *user) {
@@ -78,8 +75,7 @@ public:
 
 	bool isChanop(User *user);
 
-	bool isOnChan(User *user)
-	{
+	bool isOnChan(User *user) {
 		set<User *>::iterator it = users.find(user);
 		if (it == users.end())
 			return false;
@@ -95,8 +91,7 @@ public:
 			voiceop.insert(user);
 	}
 
-	void demoteVoiceOp(User *user)
-	{
+	void demoteVoiceOp(User *user) {
 		if (!user)
 			return;
 		set<User *>::iterator it = voiceop.find(user);
@@ -104,8 +99,7 @@ public:
 			voiceop.erase(user);
 	}
 
-	void promoteChanop(User *user)
-	{
+	void promoteChanop(User *user) {
 		if (!user)
 			return;
 		set<User *>::iterator it = chanop.find(user);
@@ -113,8 +107,7 @@ public:
 			chanop.insert(user);
 	}
 
-	void demoteChanop(User *user)
-	{
+	void demoteChanop(User *user) {
 		if (!user)
 			return;
 		set<User *>::iterator it = chanop.find(user);
