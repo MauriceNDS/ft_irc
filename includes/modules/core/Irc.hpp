@@ -30,26 +30,33 @@ public:
 	static Irc& getInstance();
 
 	Irc(const string& name, const int port, const string& password, const vector<string>& plugins);
+	~Irc();
 
+	// Server
+	const Server& getServer() const;
 	void start();
 
-	CommandManager& getCommandManager();
+	// PluginLoader
 	PluginLoader& getPluginLoader();
-	const CommandManager& getCommandManager() const;
 	const PluginLoader& getPluginLoader() const;
 
-	void broadcast(const string& string) const;
+	// CommandManager
+	CommandManager& getCommandManager();
+	const CommandManager& getCommandManager() const;
 
+	// Users
 	const vector<User *>& getUsers() const;
 	User *findUser(const string& nickname) const;
 	void addUser(User *user);
 	void removeUser(User *user);
 
+	// Channels
 	const map<string, Channel *>& getChannels() const;
 	Channel *findChannel(const string& channel) const;
 	void addChannel(Channel *channel);
 	void removeChannel(Channel *channel);
 
+	// Operators
 	void promoteOperator(User *user);
 	void demoteOperator(User *user);
 	bool isOperator(const User *user) const;

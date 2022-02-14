@@ -23,7 +23,7 @@ struct Modes {
 	Modes() : anonymous(false), invite(false), moderate(false), outside_message(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
 };
 
-class Channel : public CommandSender {
+class Channel : public CommandSender, public Group {
 private:
 	string name;
 	string topic;

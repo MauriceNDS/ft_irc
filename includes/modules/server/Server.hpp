@@ -32,9 +32,7 @@ private:
 public:
 	Server(const string& name, const int port, const string& password);
 
-	void send(const string& message) const {
-		std::cout << message << std::endl;
-	}
+	void send(const string& message) const;
 
 	const string& getName() const;
 	const Connection& getConnection() const;

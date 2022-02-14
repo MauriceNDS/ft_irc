@@ -157,6 +157,34 @@ void Channel::send(const CommandSender& sender, const string& message) const {
 	}
 }
 
+Channel::Channel(const string& name) : name(name) {}
+
+const set<User *>& Channel::getUsers() const {
+	return users;
+}
+
+void Channel::addUser(User *user) {
+	if (!users.size()) {
+		promoteChanop(user);
+		users.insert(user);
+	}
+}
+
+void Channel::removeUser(User *user) {
+	users.erase(user);
+	chanop.erase(user);
+	// if (!users.size()) {
+	//	 Irc::getInstance().removeChannel(this);
+	// } else if (!chanop.size() && flags.reop) {
+	//	 chanop.insert(*users.begin());
+	// }
+}
+
+bool Channel::isChanop(User *user) {
+	set<User *>::iterator it = chanop.find(user);
+	return it != chanop.end();
+}
+
 string Channel::getSenderName() const {
 	return getName() + "!" + Irc::getInstance().getServer().getConnection().getIP();
 }

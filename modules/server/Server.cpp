@@ -19,6 +19,10 @@ Connection *Server::addConnection(const struct pollfd& connection, const struct 
 
 Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password), running(true) {}
 
+void Server::send(const string& message) const {
+	std::cout << message << std::endl;
+}
+
 const string& Server::getName() const {
 	return name;
 }

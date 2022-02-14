@@ -221,12 +221,6 @@ void Irc::start() {
 	server.start();
 }
 
-void Irc::broadcast(const string& message) const {
-	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
-		(*it)->send(message);
-	}
-}
-
 User *Irc::findUser(const string& nickname) const {
 	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
 		User *user = *it;
@@ -259,8 +253,7 @@ Channel *Irc::findChannel(const string& channel) const {
 }
 
 void Irc::addChannel(Channel *channel) {
-	if (channel)
-		channels.insert(make_pair(channel->getName(), channel));
+	channels[channel->getName()] = channel;
 }
 
 void Irc::removeChannel(Channel *channel) {
