@@ -39,8 +39,6 @@ class ModeCommand : public CommandExecutor {
 				mod += 'm';
 			if (flags.outside_message)
 				mod += 'n';
-			if (flags.quiet)
-				mod += 'q';
 			if (flags.priv)
 				mod += 'p';
 			if (flags.secret)
@@ -94,10 +92,9 @@ class ModeCommand : public CommandExecutor {
 				else
 					channel.demoteChanop(server.findUser(i->value));
 				break;
-			case 'p': flags.quiet = enabled; break;
-			case 'q': flags.priv = enabled; break;
-			case 'r': flags.secret = enabled; break;
-			case 's': flags.reop = enabled; break;
+			case 'p': flags.priv = enabled; break;
+			case 's': flags.secret = enabled; break;
+			case 'r': flags.reop = enabled; break;
 			case 't': flags.topic = enabled; break;
 			case 'v':
 				if (enabled)
