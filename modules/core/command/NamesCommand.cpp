@@ -11,7 +11,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 		for (map<string, Channel *>::const_iterator it = channelList.begin(); it != channelList.end(); it++) {
 			const set<User *>& channelUserList = it->second->getUsers();
 
-			if (it->second->getFlag().anonymous)
+			if (it->second->getFlag().anonymous || it->second->getFlag().secret || it->second->getFlag().priv)
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
@@ -27,7 +27,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 		for (vector<Channel *>::const_iterator it = channelList->begin(); it != channelList->end(); it++) {
 			const set<User *>& channelUserList = (*it)->getUsers();
 			
-			if ((*it)->getFlag().anonymous)
+			if ((*it)->getFlag().anonymous || (*it)->getFlag().secret)
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {

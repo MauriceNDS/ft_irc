@@ -15,7 +15,10 @@ void TopicCommand::execute(const Command& cmd, CommandSender& sender) {
 			return;
 		}
 		channel.setTopic(*topic);
+	} else if (channel.getFlag().topic) {
+		if (!channel.getFlag().secret)
+			user.send(ResponseTypes::RPL_TOPIC(channel.getName().c_str(), channel.getTopic().c_str()));
 	} else {
-		user.send(ResponseTypes::RPL_TOPIC(channel.getName().c_str(), channel.getTopic().c_str()));
+		user.send(ResponseTypes::ERR_NOCHANMODES(channel.getName().c_str()));
 	}
 }

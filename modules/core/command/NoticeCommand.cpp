@@ -8,17 +8,18 @@ void NoticeCommand::execute(const Command& cmd, CommandSender& sender) {
 	string& message = cmd.getArg<string>("message");
 
 	for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
-		if(Channel::isValidIdentifier((*it)->getName())) {
-			if (Irc::getInstance().getChannels().find((*it)->getName()) != Irc::getInstance().getChannels().end()) {
-				if (!Irc::getInstance().getChannels().find((*it)->getName())->second->isOnChan(static_cast<User *>(&sender))) {
-					continue ;
-				}
+		const string& identifier = (*it)->getName();
+		Channel *channel = Irc::getInstance().findChannel(identifier);
+		if (channel) {
+			if (!channel->isOnChan(&user) && channel->getFlag().outside_message) {
+				continue;
+			} else if (channel->getFlag().moderate && !channel->isVoiceOp(&user)) {
+				continue;
+			} else if (channel->getFlag().anonymous) {
+				(*it)->send(ResponseTypes::NOTICE.anonymous(identifier.c_str(), message.c_str()));	
+				continue;
 			}
 		}
-		if (Irc::getInstance().getChannels().find((*it)->getName())->second->getFlag().anonymous) {
-			(*it)->send(ResponseTypes::NOTICE.anonymous((*it)->getName().c_str(), message.c_str()));	
-		} else {
-			(*it)->send(ResponseTypes::NOTICE(sender, (*it)->getName().c_str(), message.c_str()));
-		}
+		(*it)->send(ResponseTypes::NOTICE(sender, identifier.c_str(), message.c_str()));
 	}
 }

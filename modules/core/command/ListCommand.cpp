@@ -8,12 +8,14 @@ void ListCommand::execute(const Command& cmd, CommandSender& sender) {
 		const map<string, Channel *>& channelList = Irc::getInstance().getChannels();
 
 		for (map<string, Channel *>::const_iterator it = channelList.begin(); it != channelList.end(); it++) {
-			user.send(ResponseTypes::RPL_LIST(it->first.c_str(), it->second->getTopic().c_str()));
+			if (!it->second->getFlag().secret || !it->second->getFlag().priv)
+				user.send(ResponseTypes::RPL_LIST(it->first.c_str(), it->second->getTopic().c_str()));
 		}
 		user.send(ResponseTypes::RPL_LISTEND());
 	} else {
 		for (vector<Channel *>::iterator it = channelList->begin(); it != channelList->end(); it++) {
-			user.send(ResponseTypes::RPL_LIST((*it)->getName().c_str(), (*it)->getTopic().c_str()));
+			if (!(*it)->getFlag().secret)
+				user.send(ResponseTypes::RPL_LIST((*it)->getName().c_str(), (*it)->getTopic().c_str()));
 		}
 		user.send(ResponseTypes::RPL_LISTEND());
 	}	

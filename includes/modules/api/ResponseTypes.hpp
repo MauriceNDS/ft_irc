@@ -49,6 +49,7 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_UNKNOWNMODE = ResponseSpec(472, "<char> :is unknown mode");
 	const ResponseSpec ERR_INVITEONLYCHAN = ResponseSpec(473, "<channel> :Cannot join channel (+i)");
 	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
+	const ResponseSpec ERR_NOCHANMODES = ResponseSpec(477, "<channel> :Channel doesn't support modes");
 	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");
 }
 
