@@ -10,13 +10,7 @@
 
 class UserMiddleware : public Middleware {
 public:
-	bool handle(const Client& client) const {
-		try {
-			(void)dynamic_cast<const User&>(client);
-			return true;
-		} catch (...) {}
-		return false;
-	};
+	bool handle(const Client& client) const;
 };
 
 #endif /* FT_IRC_API_USER_MIDDLEWARE */

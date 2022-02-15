@@ -23,7 +23,11 @@ override SRCS		:=													\
 				modules/api/command/CommandExecutor.cpp					\
 				modules/api/command/CommandManager.cpp					\
 				modules/api/command/CommandSpec.cpp						\
+				modules/api/command/element/FlagsCommandElement.cpp		\
 				modules/api/command/response/ResponseSpec.cpp			\
+				modules/api/middleware/RegisteredUserMiddleware.cpp		\
+				modules/api/middleware/UserMiddleware.cpp				\
+				modules/api/middleware/ValidPassMiddleware.cpp			\
 				modules/core/command/InviteCommand.cpp					\
 				modules/core/command/JoinCommand.cpp					\
 				modules/core/command/KickCommand.cpp					\
