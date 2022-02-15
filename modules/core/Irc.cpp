@@ -1,5 +1,4 @@
 #include "core/Irc.hpp"
-#include "core/command/TestCommand.hpp"
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
 #include "core/command/JoinCommand.hpp"
