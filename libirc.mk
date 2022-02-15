@@ -18,6 +18,7 @@ endif
 override SRCS		:=													\
 				modules/api/Client.cpp									\
 				modules/api/User.cpp									\
+				modules/api/Group.cpp									\
 				modules/api/Channel.cpp									\
 				modules/api/Connection.cpp								\
 				modules/api/Flag.cpp									\

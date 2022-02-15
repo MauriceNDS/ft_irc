@@ -4,6 +4,7 @@
 #include "ft_irc.hpp"
 
 #include "api/interface/CommandSender.hpp"
+#include "api/Group.hpp"
 
 class Irc;
 class User;
@@ -25,52 +26,39 @@ struct Modes {
 
 class Channel : public CommandSender, public Group {
 private:
-	string name;
 	string topic;
 	set<User *> users;
-	set<User *> chanop;
 	set<User *> voiceop;
 	set<User *> invite;
 	Modes flags;
 
 public:
 	Channel(const string& name);
-
-	const string& getName() const;
-	string getSenderName() const;
-
-	void send(const string& message) const;
-	void send(const CommandSender& sender, const string& message) const;
-
-	const set<User *>& getUsers() const;
-	const set<User *>& getInvites() const;
-
-	Modes& getFlags();
-	const Modes& getFlags() const;
-	string getSymbol() const;
 	
 	const string& getPassword() const;
 	void setPassword(const string& password);
 
-	void addUser(User *user);
-	void removeUser(User *user);
+	// CommandSender
+	string getSenderName() const;
+	void send(const string& message) const;
+	void send(const CommandSender& sender, const string& message) const;
 
-	void addInvite(User *user);
-
-	bool isChanop(User *user);
-	bool isVoiceOp(User *user);
-
-	bool isOnChan(User *user);
-
-	void promoteChanop(User *user);
-	void demoteChanop(User *user);
-	void promoteVoiceOp(User *user);
-	void demoteVoiceOp(User *user);
-
+	// Channel
 	string getTaggedUserName(User *user) const;
 
 	const string getTopic() const;
 	void setTopic(string& arg);
+
+	const Modes& getFlags() const;
+	Modes& getFlags();
+	string getSymbol() const;
+
+	void promoteVoiceOp(User *user);
+	void demoteVoiceOp(User *user);
+	bool isVoiceOp(User *user);
+
+	const set<User *>& getInvites() const;
+	void addInvite(User *user);
 
 	static bool isValidIdentifier(const string& identifier);
 };

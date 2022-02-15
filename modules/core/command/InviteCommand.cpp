@@ -13,10 +13,10 @@ void InviteCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& target = cmd.getArg<User>("nickname");
 	map<string, Channel *>::const_iterator channel = Irc::getInstance().getChannels().find(channel_name);
 	if (Irc::getInstance().getChannels().end() != channel) {
-		if (channel->second->isOnChan(&target)) {
+		if (channel->second->containsUser(&target)) {
 			user.send(ResponseTypes::ERR_USERONCHANNEL(user.getName().c_str(), target.getName().c_str(), channel_name.c_str()));
 			return;
-		} else if (!channel->second->isOnChan(&user)) {
+		} else if (!channel->second->containsUser(&user)) {
 			user.send(ResponseTypes::ERR_NOTONCHANNEL(user.getName().c_str(), user.getName().c_str(), channel_name.c_str()));
 			return;
 		}

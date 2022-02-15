@@ -23,11 +23,16 @@ void Group::addChild(Group *child) {
 		throw DuplicatedGroupException();
 }
 
-void Group::removeChild(const string& name) {
-	// TODO
-	if (!childs.insert(make_pair(child->getIdentifier(), child)).second)
-		throw DuplicatedGroupException();
+void Group::removeChild(const string& identifier) {
+	childs.erase(identifier);
 }
+
+#include "api/event/GroupJoinEvent.hpp"
+
+// Events
+void Group::onJoin(GroupJoinEvent&) {}
+// void Group::onJoin(GroupJoinEvent::Before& event) {}
+// void Group::onJoin(GroupJoinEvent::After& event) {}
 
 // Users
 const set<User *>& Group::getUsers() const {
@@ -38,9 +43,22 @@ bool Group::containsUser(User *user) const {
 	return users.find(user) != users.end();
 }
 
-void Group::addUser(User *user) {
-	if (users.insert(user).second && parent)
-		parent->addUser(user);
+bool Group::addUser(User *user) {
+	if (containsUser(user))
+		return true;
+
+	GroupJoinEvent::Before before(*this, *user);
+	onJoin(before);
+
+	if (before.isCancelled())
+		return false;
+	if (parent && !parent->addUser(user))
+		return false;
+	users.insert(user);
+
+	GroupJoinEvent::After after(*this, *user);
+	onJoin(after);
+	return true;
 }
 
 void Group::removeUser(User *user) {

@@ -15,7 +15,7 @@ void KickCommand::execute(const Command& cmd, CommandSender& sender) {
 		// If user is not an operator
 		sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 		return;
-	} else if (!channel.isOnChan(&target)) {
+	} else if (!channel.containsUser(&target)) {
 		// If target is not on the channel
 		user.send(ResponseTypes::ERR_USERNOTINCHANNEL(target.getName().c_str(), channel.getName().c_str()));
 		return ;

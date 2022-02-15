@@ -253,7 +253,7 @@ Channel *Irc::findChannel(const string& channel) const {
 }
 
 void Irc::addChannel(Channel *channel) {
-	channels[channel->getName()] = channel;
+	channels[channel->getIdentifier()] = channel;
 }
 
 void Irc::removeChannel(Channel *channel) {

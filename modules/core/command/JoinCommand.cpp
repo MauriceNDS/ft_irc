@@ -19,7 +19,7 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 			user.send(ResponseTypes::ERR_CHANNELISFULL(channel->getName().c_str()));
 		} else if (!channel->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != channel->getPassword()))) {
 			user.send(ResponseTypes::ERR_BADCHANNELKEY(channel->getName().c_str()));
-		} else if (!channel->isOnChan(&user)) {
+		} else if (!channel->containsUser(&user)) {
 			channel->addUser(static_cast<User *>(&sender));
 			if (!channel->getFlags().anonymous)
 				channel->send(ResponseTypes::JOIN(user, channel->getName().c_str()));

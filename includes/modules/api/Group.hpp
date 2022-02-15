@@ -3,10 +3,10 @@
 
 #include "ft_irc.hpp"
 
-#include "api/CommandSender.hpp"
 #include "api/User.hpp"
 
 class Irc;
+class GroupJoinEvent;
 
 class Group {
 private:
@@ -15,6 +15,7 @@ private:
 	map<string, Group *> childs;
 
 	void addChild(Group *child);
+	void removeChild(const string& identifier);
 
 protected:
 	set<User *> users;
@@ -27,14 +28,15 @@ public:
 	Group *getParent() const;
 	const map<string, Group *>& getChilds() const;
 
+	// Events
+	virtual void onJoin(GroupJoinEvent& event);
+	// virtual void onJoin(GroupJoinEvent::After& event);
+
 	// Users
 	const set<User *>& getUsers() const;
 	bool containsUser(User *user) const;	
-	void addUser(User *user);
+	bool addUser(User *user);
 	void removeUser(User *user);
-
-	virtual bool middleware(User *user);
-	virtual void onJoin(User *user);
 
 	// Operators
 	const set<User *>& getOperators() const;

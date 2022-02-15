@@ -3,11 +3,7 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
-Channel::Channel(const string& name) : name(name) {}
-
-const set<User *>& Channel::getUsers() const {
-	return users;
-}
+Channel::Channel(const string& name) : Group(name, NULL) {}
 
 const set<User *>& Channel::getInvites() const {
 	return invite;
@@ -37,24 +33,6 @@ void Channel::setPassword(const string& password) {
 	flags.password = password;
 }
 
-void Channel::addUser(User *user) {
-	if (!users.size())
-		promoteChanop(user);
-	if (invite.find(user) != invite.end())
-		invite.erase(user);
-	users.insert(user);
-}
-
-void Channel::removeUser(User *user) {
-	users.erase(user);
-	chanop.erase(user);
-	if (!users.size()) {
-		Irc::getInstance().removeChannel(this);
-	} else if (!chanop.size() && flags.reop) {
-		chanop.insert(*users.begin());
-	}
-}
-
 void Channel::addInvite(User *user) {
 	if (invite.find(user) == invite.end())
 		invite.insert(user);
@@ -62,26 +40,10 @@ void Channel::addInvite(User *user) {
 
 bool Channel::isVoiceOp(User *user) {
 	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end() && !isChanop(user))
+	if (it == voiceop.end() && !isOperator(user))
 		return false;
 	return true;
 };
-
-bool Channel::isChanop(User *user) {
-	set<User *>::iterator it = chanop.find(user);
-	if (it == chanop.end()) {
-		if (!Irc::getInstance().isOperator(user))
-			return (false);
-	}
-	return (true);
-}
-
-bool Channel::isOnChan(User *user) {
-	set<User *>::iterator it = users.find(user);
-	if (it == users.end())
-		return false;
-	return true;
-}
 
 string Channel::getTaggedUserName(User *user) const{
 	if (user && users.find(user) != users.end()) {
@@ -109,24 +71,6 @@ void Channel::demoteVoiceOp(User *user) {
 		voiceop.erase(user);
 }
 
-void Channel::promoteChanop(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = chanop.find(user);
-	if (it == chanop.end())
-		chanop.insert(user);
-}
-
-void Channel::demoteChanop(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = chanop.find(user);
-	if (it != chanop.end())
-		chanop.erase(user);
-	if (!chanop.size() && flags.reop)
-		chanop.insert(*users.begin());
-}
-
 const string Channel::getTopic() const {
 	if (topic.empty())
 		return "No topic is set";
@@ -137,8 +81,8 @@ void Channel::setTopic(string& arg) {
 	topic = arg;
 }
 
-const string& Channel::getName() const {
-	return name;
+string Channel::getSenderName() const {
+	return getName() + "!" + Irc::getInstance().getServer().getConnection().getIP();
 }
 
 void Channel::send(const string& message) const {
@@ -155,38 +99,6 @@ void Channel::send(const CommandSender& sender, const string& message) const {
 			user->send(message);
 		}
 	}
-}
-
-Channel::Channel(const string& name) : name(name) {}
-
-const set<User *>& Channel::getUsers() const {
-	return users;
-}
-
-void Channel::addUser(User *user) {
-	if (!users.size()) {
-		promoteChanop(user);
-		users.insert(user);
-	}
-}
-
-void Channel::removeUser(User *user) {
-	users.erase(user);
-	chanop.erase(user);
-	// if (!users.size()) {
-	//	 Irc::getInstance().removeChannel(this);
-	// } else if (!chanop.size() && flags.reop) {
-	//	 chanop.insert(*users.begin());
-	// }
-}
-
-bool Channel::isChanop(User *user) {
-	set<User *>::iterator it = chanop.find(user);
-	return it != chanop.end();
-}
-
-string Channel::getSenderName() const {
-	return getName() + "!" + Irc::getInstance().getServer().getConnection().getIP();
 }
 
 bool Channel::isValidIdentifier(const string& identifier) {

@@ -13,7 +13,7 @@ void NoticeCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
 		Channel *channel = dynamic_cast<Channel *>(*it);
 		if (channel) {
-			if (!channel->isOnChan(&user) && channel->getFlags().outside_message) {}
+			if (!channel->containsUser(&user) && channel->getFlags().outside_message) {}
 			else if (channel->getFlags().moderate && !channel->isVoiceOp(&user)) {}
 			else if (channel->getFlags().anonymous)
 				channel->send(sender, ResponseTypes::NOTICE.anonymous(channel->getName().c_str(), message.c_str()));

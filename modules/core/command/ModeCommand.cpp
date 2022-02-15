@@ -27,7 +27,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	Irc& irc = Irc::getInstance();
 	Modes &flags = channel.getFlags();
 
-	if (!channel.isOnChan(&user)) {
+	if (!channel.containsUser(&user)) {
 		sender.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
 		return ;
 	}

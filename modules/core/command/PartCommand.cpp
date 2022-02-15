@@ -12,7 +12,7 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 		Channel *channel = *it;
 
-		if (!channel->isOnChan(&user)) {
+		if (!channel->containsUser(&user)) {
 			sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str()));
 			continue;
 		}
