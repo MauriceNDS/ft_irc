@@ -16,14 +16,17 @@ class ModeCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender) {
 		User& user = static_cast<User&>(sender);
-
-		std::cout << "OOO" << std::endl;
 		Channel& channel = cmd.getArg<Channel>("channel");
 		vector<Flag> *modes = cmd.getArg<vector<Flag> *>("mode");
 
 		Irc& server = Irc::getInstance();
 		Modes &flags = channel.getFlag();
 
+		if (!channel.isOnChan(&user)) {
+			sender.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
+			return ;
+		}
+		
 		if (!modes) {
 			string mod;
 			string params;
@@ -58,10 +61,8 @@ class ModeCommand : public CommandExecutor {
 			return ;
 		}
 
-		if (!channel.isOnChan(&user)) {
-			sender.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
-			return ;
-		} else if (!channel.isChanop(&user)) {
+		
+		if (!channel.isChanop(&user)) {
 			sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 			return ;
 		}
@@ -72,8 +73,18 @@ class ModeCommand : public CommandExecutor {
 			case 'a': flags.anonymous = enabled; break;
 			case 'i': flags.invite = enabled; break;
 			case 'k':
+				if (enabled && !channel.getPassword().empty())
+					sender.send(ResponseTypes::ERR_KEYSET(channel.getName().c_str()));
+				else if (enabled)
+					channel.getPassword() = i->value;
+				else
+					channel.getPassword().clear();
 				break;
-			case 'l':
+			case 'l': 
+				if (enabled)
+					flags.user_limit = static_cast<int>(atoi(i->value.c_str()));
+				else
+					flags.user_limit = 0;
 				break;
 			case 'm': flags.moderate = enabled; break;
 			case 'n': flags.outside_message = enabled; break;
@@ -90,71 +101,11 @@ class ModeCommand : public CommandExecutor {
 			case 't': flags.topic = enabled; break;
 			case 'v':
 				if (enabled)
-					channel.promoteChanop(server.findUser(i->value));
+					channel.promoteVoiceOp(server.findUser(i->value));
 				else
-					channel.demoteChanop(server.findUser(i->value));
+					channel.demoteVoiceOp(server.findUser(i->value));
 				break;
 			}
-
-			// if ((*mode)[i] == 'o') {
-			// 	if (!modeparams || param_i > (*modeparams).size()) {
-			// 		sender.send(ResponseTypes::ERR_NEEDMOREPARAMS());
-				// } else if (sign == 1) {
-			// 		channel.promoteChanop(server.findUser(*((*modeparams)[param_i])));
-			// 	} else if (sign == 2){
-			// 		channel.demoteChanop(server.findUser(*((*modeparams)[param_i])));
-			// 	}
-			// 	param_i++;
-			// } else if ((*mode)[i] == 'v') {
-			// 	if (!modeparams || param_i > (*modeparams).size()) {
-			// 		sender.send(ResponseTypes::ERR_NEEDMOREPARAMS());
-			// 	} else if (sign == 1) {
-			// 		channel.promoteVoiceOp(server.findUser(*((*modeparams)[param_i])));
-			// 	} else if (sign == 2){
-			// 		channel.demoteVoiceOp(server.findUser(*((*modeparams)[param_i])));
-			// 	}
-			// 	param_i++;
-			// } else if ((*mode)[i] == 'a') {
-			// 	flags.anonymous = flags.anonymous ? 0 : 1;
-			// } else if ((*mode)[i] == 'i') {
-			// 	flags.invite = flags.invite ? 0 : 1;
-			// } else if ((*mode)[i] == 'm') {
-			// 	flags.moderate = flags.moderate ? 0 : 1;
-			// } else if ((*mode)[i] == 'n') {
-			// 	flags.outside_message = flags.outside_message ? 0 : 1;
-			// } else if ((*mode)[i] == 'q') {
-			// 	flags.quiet = flags.quiet ? 0 : 1;
-			// } else if ((*mode)[i] == 'p') {
-			// 	flags.priv = flags.priv ? 0 : 1;
-			// } else if ((*mode)[i] == 's') {
-			// 	flags.secret = flags.secret ? 0 : 1;
-			// } else if ((*mode)[i] == 'r') {
-			// 	flags.reop = flags.reop ? 0 : 1;
-			// } else if ((*mode)[i] == 't') {
-			// 	flags.topic = flags.topic ? 0 : 1;
-			// } else if ((*mode)[i] == 'k') {
-			// 	if ((!modeparams || param_i > (*modeparams).size()) && sign == 1) {
-			// 		sender.send(ResponseTypes::ERR_NEEDMOREPARAMS());
-			// 	} else if (sign == 1 && !channel.getPassword().empty()) {
-			// 		sender.send(ResponseTypes::ERR_KEYSET(channel.getName().c_str()));
-			// 	} else if (sign == 1) {
-			// 		channel.getPassword() = *((*modeparams)[param_i]);
-			// 	} else if (sign == 2){
-			// 		channel.getPassword().clear();
-			// 	}
-			// 	param_i++;
-			// } else if ((*mode)[i] == 'l') {
-			// 	if ((!modeparams || param_i > (*modeparams).size()) && sign == 1) {
-			// 		sender.send(ResponseTypes::ERR_NEEDMOREPARAMS());
-			// 	} else if (sign == 1) {
-			// 		flags.user_limit = atoi((*((*modeparams)[param_i])).c_str());
-			// 	} else if (sign == 2){
-			// 		flags.user_limit = 0;
-			// 	}
-			// 	param_i++;
-			// } else {
-			// 	sender.send(ResponseTypes::ERR_UNKNOWNMODE(&(*mode)[i], channel.getName().c_str()));
-			// }
 		}
 	}
 };
