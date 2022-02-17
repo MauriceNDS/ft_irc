@@ -169,7 +169,7 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("MODE")
 		.argument("channel", new ChannelCommandElement(false))
-		.argument("mode", GenericArguments::optional(new FlagsCommandElement("o:v:aimnqpsrtk:l:")))
+		.argument("mode", GenericArguments::optional(new FlagsCommandElement("o:v:aimnpsrtk:l:")))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new ModeCommand())
 		.build()

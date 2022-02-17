@@ -23,7 +23,7 @@ namespace ResponseTypes {
 	const ResponseSpec RPL_CHANNELMODEIS = ResponseSpec(324, "<channel> <mode> <mode params>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
 	const ResponseSpec RPL_INVITING = ResponseSpec(341, "<channel> <nick> :Invitation send");
-	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
+	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, " = <channel> :<nickname>");
 	const ResponseSpec RPL_ENDOFNAMES = ResponseSpec(366, "<channel> :End of NAMES list");
 	const ResponseSpec RPL_YOUREOPER = ResponseSpec(381, ":You are now an IRC operator");
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");

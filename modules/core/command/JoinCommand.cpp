@@ -20,10 +20,10 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 				(*it)->send(ResponseTypes::JOIN.anonymous((*it)->getName().c_str()));
 			}
 			for (set<User *>::const_iterator users = (*it)->getUsers().begin(); users != (*it)->getUsers().end(); users++) {
-				user.send(ResponseTypes::RPL_NAMREPLY((*it)->getName().c_str(), (*users)->getName().c_str()));
+				user.send(ResponseTypes::RPL_NAMREPLY(user, (*it)->getName().c_str(), (*users)->getName().c_str()));
 			}
 			(*it)->addUser(static_cast<User *>(&sender));
-			user.send(ResponseTypes::RPL_TOPIC((*it)->getName().c_str(), (*it)->getTopic().c_str()));
+			user.send(ResponseTypes::RPL_TOPIC(user, (*it)->getName().c_str(), (*it)->getTopic().c_str()));
 		}
 		arg_i++;
 	}
