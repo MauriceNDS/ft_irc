@@ -5,18 +5,17 @@
 
 namespace ResponseTypes {
 	const ResponseSpec ERROR = ResponseSpec("ERROR");
-	const ResponseSpec PRIVMSG = ResponseSpec("PRIVMSG <user> :<message>");
-	const ResponseSpec NOTICE = ResponseSpec("NOTICE <user> :<message>");
-	const ResponseSpec JOIN = ResponseSpec("JOIN <channel>");
-	const ResponseSpec KICK = ResponseSpec("KICK <channel> :<message>");
-	const ResponseSpec PART = ResponseSpec("PART <channel> :<message>");
-	const ResponseSpec PONG = ResponseSpec("PONG <server>");
-	const ResponseSpec QUIT = ResponseSpec("QUIT :<message>");
+	const ResponseSpec PRIVMSG = ResponseSpec("PRIVMSG", "<user> :<message>");
+	const ResponseSpec NOTICE = ResponseSpec("NOTICE", "<user> :<message>");
+	const ResponseSpec JOIN = ResponseSpec("JOIN", "<channel>");
+	const ResponseSpec KICK = ResponseSpec("KICK", "<channel> :<message>");
+	const ResponseSpec PART = ResponseSpec("PART", "<channel> :<message>");
+	const ResponseSpec PONG = ResponseSpec("PONG", "<server>");
+	const ResponseSpec QUIT = ResponseSpec("QUIT", ":<message>");
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
 	const ResponseSpec RPL_MYINFO = ResponseSpec(4, "<servername> <version> <available user modes> <available channel modes>");
-	const ResponseSpec ERR_NOVALIDPASS = ResponseSpec(503, ":You need a valid PASS command");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
 	const ResponseSpec RPL_LIST = ResponseSpec(322, "<channel> # visible :<topic>");
 	const ResponseSpec RPL_LISTEND = ResponseSpec(323, ":End of LIST");
@@ -51,6 +50,7 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
 	const ResponseSpec ERR_NOCHANMODES = ResponseSpec(477, "<channel> :Channel doesn't support modes");
 	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");
+	const ResponseSpec ERR_NOVALIDPASS = ResponseSpec(503, ":You need a valid PASS command");
 }
 
 #endif /* FT_IRC_API_RESPONSE */
