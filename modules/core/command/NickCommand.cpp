@@ -1,5 +1,10 @@
 #include "core/command/NickCommand.hpp"
 
+#include "core/Irc.hpp"
+
+#include "api/User.hpp"
+#include "api/ResponseTypes.hpp"
+
 void NickCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = dynamic_cast<User&>(sender);
 

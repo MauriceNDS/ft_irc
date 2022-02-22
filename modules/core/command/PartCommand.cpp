@@ -1,5 +1,9 @@
 #include "core/command/PartCommand.hpp"
 
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
+
 void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 	User &user = static_cast<User &>(sender);
 

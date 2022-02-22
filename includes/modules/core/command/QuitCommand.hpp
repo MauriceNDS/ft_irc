@@ -3,12 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "core/Irc.hpp"
-
-#include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
-
-#include "api/ResponseTypes.hpp"
 
 class QuitCommand : public CommandExecutor {
 

@@ -1,5 +1,9 @@
 #include "core/command/PrivmsgCommand.hpp"
 
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
+
 void PrivmsgCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User &>(sender);
 	vector<CommandSender *>& target = cmd.getArg<vector<CommandSender *> >("msgtarget");
