@@ -2,6 +2,8 @@
 
 #include "core/Irc.hpp"
 
+#include "api/User.hpp"
+
 #include <fstream>
 #include <algorithm>
 #include <sstream>

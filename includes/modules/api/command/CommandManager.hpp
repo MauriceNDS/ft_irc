@@ -3,11 +3,8 @@
 
 #include "ft_irc.hpp"
 
-#include "api/User.hpp"
 #include "api/command/CommandSpec.hpp"
 #include "api/event/MessageEvent.hpp"
-
-#include "api/exception/DuplicatedCommandException.hpp"
 
 class CommandSpec;
 class ResponseSpec;

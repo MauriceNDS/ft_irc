@@ -3,10 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "api/User.hpp"
 #include "api/middleware/Middleware.hpp"
-
-#include "api/ResponseTypes.hpp"
 
 class UserMiddleware : public Middleware {
 public:

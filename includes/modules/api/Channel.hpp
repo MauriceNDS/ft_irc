@@ -4,9 +4,9 @@
 #include "ft_irc.hpp"
 
 #include "api/CommandSender.hpp"
-#include "api/User.hpp"
 
 class Irc;
+class User;
 
 struct Modes {
 	bool anonymous;
@@ -34,111 +34,38 @@ private:
 	Modes flags;
 
 public:
-	Channel(const string& name) : name(name) {}
+	Channel(const string& name);
 
-	const set<User *>& getUsers() {
-		return users;
-	}
-
-	const set<User *>& getInvite() {
-		return invite;
-	}
-
-	Modes& getFlag() {
-		return flags;
-	}
-	string& getPassword() {
-		return flags.password;
-	}
-	
-	void addUser(User *user) {
-		if (!users.size())
-			promoteChanop(user);
-		users.insert(user);
-	}
-
-	void addInvite(User *user) {
-		if (invite.find(user) != invite.end())
-			invite.insert(user);
-	}
-
-	void removeUser(User *user);
-
-	bool isVoiceOp(User *user) {
-		set<User *>::iterator it = voiceop.find(user);
-		if (it == users.end() && !isChanop(user))
-			return false;
-		return true;
-	};
-
-	bool isChanop(User *user);
-
-	bool isOnChan(User *user) {
-		set<User *>::iterator it = users.find(user);
-		if (it == users.end())
-			return false;
-		return true;
-	}
-
-	void promoteVoiceOp(User *user)
-	{
-		if (!user)
-			return;
-		set<User *>::iterator it = voiceop.find(user);
-		if (it == voiceop.end())
-			voiceop.insert(user);
-	}
-
-	void demoteVoiceOp(User *user) {
-		if (!user)
-			return;
-		set<User *>::iterator it = voiceop.find(user);
-		if (it == voiceop.end())
-			voiceop.erase(user);
-	}
-
-	void promoteChanop(User *user) {
-		if (!user)
-			return;
-		set<User *>::iterator it = chanop.find(user);
-		if (it == chanop.end())
-			chanop.insert(user);
-	}
-
-	void demoteChanop(User *user) {
-		if (!user)
-			return;
-		set<User *>::iterator it = chanop.find(user);
-		if (it == chanop.end())
-			chanop.erase(user);
-		if (!chanop.size() && flags.reop)
-        	chanop.insert(*users.begin());
-	}
-
-	const string getTopic() const {
-		if (topic.empty())
-			return "No topic is set";
-		return topic;
-	}
-
-	void setTopic(string& arg) {
-		topic = arg;
-	}
-	
-	const string& getName() const {
-		return name;
-	}
-
+	const string& getName() const;
 	string getSenderName() const;
 
-	void send(const string& message) const {
-		for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)
-			(*it)->send(message);
-	}
+	void send(const string& message) const;
 
-	static bool isValidIdentifier(const string& identifier) {
-		return identifier[0] == '#';
-	}
+	const set<User *>& getUsers();
+	const set<User *>& getInvite();
+
+	Modes& getFlag();
+	string& getPassword();
+
+	void addUser(User *user);
+	void removeUser(User *user);
+
+	void addInvite(User *user);
+
+	bool isChanop(User *user);
+	bool isVoiceOp(User *user);
+
+	bool isOnChan(User *user);
+
+	void promoteChanop(User *user);
+	void demoteChanop(User *user);
+	void promoteVoiceOp(User *user);
+	void demoteVoiceOp(User *user);
+
+	const string getTopic() const;
+	void setTopic(string& arg);
+
+	static bool isValidIdentifier(const string& identifier);
 };
 
 #endif /* FT_IRC_API_CHANNEL */

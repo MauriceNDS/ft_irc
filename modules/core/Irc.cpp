@@ -20,6 +20,9 @@
 #include "core/command/element/UserCommandElement.hpp"
 #include "core/command/element/ChannelCommandElement.hpp"
 
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+
 #include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
 #include "api/middleware/ValidPassMiddleware.hpp"
@@ -28,6 +31,10 @@
 #include "api/command/GenericArguments.hpp"
 
 #include "api/command/element/FlagsCommandElement.hpp"
+
+Irc& Irc::getInstance() {
+	return *Irc::instance;
+}
 
 Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : server(name, port, password) {
 	Irc::instance = this;
@@ -182,11 +189,85 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		plugin->second->postInit();
 }
 
+CommandManager& Irc::getCommandManager() {
+	return this->commandManager;
+}
+
+PluginLoader& Irc::getPluginLoader() {
+	return this->pluginLoader;
+}
+
+const CommandManager& Irc::getCommandManager() const {
+	return this->commandManager;
+}
+
+const PluginLoader& Irc::getPluginLoader() const {
+	return this->pluginLoader;
+}
+
 void Irc::start() {
 	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
 		plugin->second->serverAboutToStart();
 
 	server.start();
+}
+
+User *Irc::findUser(const string& nickname) {
+	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
+		if ((*it)->getName() == nickname)
+			return *it;
+	return NULL;
+}
+
+const vector<User *>& Irc::getUsers() const {
+	return users;
+}
+
+void Irc::addUser(User *user) {
+	users.push_back(user);
+}
+
+void Irc::removeUser(User *user) {
+	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
+		if (*it == user) {
+			users.erase(it);
+			break ;
+		}
+	}
+}
+
+Channel *Irc::findChannel(const string& channel) {
+	map<string, Channel *>::iterator it = channels.find(channel);
+	return it != channels.end() ? it->second : NULL;
+}
+
+void Irc::addChannel(Channel *channel) {
+	if (channel)
+		channels.insert(make_pair(channel->getName(), channel));
+}
+
+void Irc::removeChannel(Channel *channel) {
+	channels.erase(channel->getName());
+}
+
+const map<string, Channel *>& Irc::getChannels() const {
+	return channels;
+}
+
+void Irc::promoteOperator(User *user) {
+	operators.insert(user);
+}
+
+void Irc::demoteOperator(User *user) {
+	operators.erase(user);
+}
+
+bool Irc::isOperator(User *user) {
+	return operators.find(user) != operators.end();
+}
+
+const Server& Irc::getServer() const {
+	return server;
 }
 
 Irc::~Irc() {

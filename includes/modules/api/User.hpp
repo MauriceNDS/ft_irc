@@ -13,28 +13,20 @@ private:
 	bool validPassword;
 
 public:
-	User(Connection *connection) : Client(connection) {}
+	User(Connection *connection);
 
-	void setName(const string& name)				{ this->name = name; }
-	void setUserName(const string& username)		{ this->username = username; }
-	void setRealName(const string& realname)		{ this->realname = realname; }
-	void setValidPassword(bool arg)					{ this->validPassword = arg; }
+	void setName(const string& name);
+	void setUserName(const string& username);
+	void setRealName(const string& realname);
+	void setValidPassword(bool arg);
 
-	const string& getName() const					{ return this->name; }
-	const string& getUserName() const				{ return this->username; }
-	const string& getRealName() const				{ return this->realname; }
-	bool getValidPassword() const					{ return this->validPassword; }
+	const string& getName() const;
+	const string& getUserName() const;
+	const string& getRealName() const;
+	string getSenderName() const;
 
-	string getSenderName() const  {
-		return getName() + "@" + getUserName() + "!" + getConnection()->getIP();
-	}
-
-	bool isRegistered() const {
-		return !getName().empty()
-			&& !getUserName().empty()
-			&& !getRealName().empty()
-			&& getValidPassword();
-	}
+	bool isRegistered() const;
+	bool getValidPassword() const;
 };
 
 #endif /* FT_IRC_API_USER */

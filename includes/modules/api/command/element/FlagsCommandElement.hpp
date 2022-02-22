@@ -3,14 +3,8 @@
 
 #include "ft_irc.hpp"
 
-#include "core/Irc.hpp"
-
-#include "api/ResponseTypes.hpp"
-#include "api/Flag.hpp"
-#include "api/User.hpp"
-#include "api/Channel.hpp"
-#include "api/command/CommandElement.hpp"
 #include "api/event/MessageEvent.hpp"
+#include "api/command/CommandElement.hpp"
 
 class FlagsCommandElement : public CommandElement {
 private:

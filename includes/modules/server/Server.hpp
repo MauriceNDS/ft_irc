@@ -3,7 +3,6 @@
 
 #include "ft_irc.hpp"
 
-#include "api/User.hpp"
 #include "api/Connection.hpp"
 
 #include <unistd.h>

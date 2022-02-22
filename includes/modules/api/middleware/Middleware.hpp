@@ -9,7 +9,7 @@ class Middleware {
 public:
 	virtual bool handle(const Client& client) const = 0;
 
-	virtual ~Middleware() {}
+	virtual ~Middleware();
 };
 
 #endif /* FT_IRC_API_MIDDLEWARE */

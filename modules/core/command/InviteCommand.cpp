@@ -3,6 +3,7 @@
 #include "core/Irc.hpp"
 
 #include "api/User.hpp"
+#include "api/Channel.hpp"
 #include "api/ResponseTypes.hpp"
 
 void InviteCommand::execute(const Command& cmd, CommandSender& sender) {

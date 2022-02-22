@@ -1,7 +1,12 @@
 #include "api/Client.hpp"
+#include "api/Connection.hpp"
 
 Client::Client(Connection *connection) : connection(connection) {
 	connection->client = this;
+}
+
+Connection *Client::getConnection() const {
+	return connection;
 }
 
 void Client::send(const string& message) const {
