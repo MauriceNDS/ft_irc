@@ -2,7 +2,6 @@
 #define FT_IRC_API_CHANNEL
 
 #include "ft_irc.hpp"
-// #include "core/Irc.hpp"
 
 #include "api/CommandSender.hpp"
 #include "api/User.hpp"
@@ -129,6 +128,8 @@ public:
 	const string& getName() const {
 		return name;
 	}
+
+	string getSenderName() const;
 
 	void send(const string& message) const {
 		for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)

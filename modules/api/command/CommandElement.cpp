@@ -6,8 +6,9 @@ bool CommandElement::isRequired() const {
 
 void *CommandElement::parseValues(list<string>& args, MessageEvent& event) const {
 	const string& arg = args.front();
+	void *tmp = parseValue(arg, event);
 	args.pop_front();
-	return parseValue(arg, event);
+	return tmp;
 }
 
 void *CommandElement::parseValue(string arg, MessageEvent& event) const {

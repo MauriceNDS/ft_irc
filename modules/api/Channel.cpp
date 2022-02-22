@@ -1,4 +1,5 @@
 #include "core/Irc.hpp"
+
 #include "api/Channel.hpp"
 #include "api/ResponseTypes.hpp"
 
@@ -19,4 +20,8 @@ void Channel::removeUser(User *user) {
     } else if (!chanop.size() && flags.reop) {
         chanop.insert(*users.begin());
     }
+}
+
+string Channel::getSenderName() const {
+	return Irc::getInstance().getServer().getSenderName();
 }

@@ -28,9 +28,13 @@ private:
 		const string& getName() const {
 			return name;
 		}
+
+		string getSenderName() const {
+			return name;
+		}
 	};
 
-	string operator()(const CommandSender& sender, const char *first, va_list argptr) const;
+	string build(const CommandSender& sender, const char *first, va_list argptr) const;
 
 public:
 	ResponseSpec(int response, const string& args = "") : _args(args) {
