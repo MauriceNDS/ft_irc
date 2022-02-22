@@ -103,7 +103,7 @@ void Server::closeConnection(size_t index) {
 	Client *client = connections[index]->client;
 	User *user = dynamic_cast<User *>(client);
 	if (user)
-		Irc::getInstance().removeUser(user);
+		delete user;
 	close(Connection::sockets[index].fd);
 	connections.erase(connections.begin() + index);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
