@@ -6,7 +6,7 @@
 #include "api/CommandSender.hpp"
 #include "api/Connection.hpp"
 
-struct Connection;
+class Connection;
 
 class Client : public CommandSender {
 protected:
@@ -19,7 +19,7 @@ public:
 		return connection;
 	}
 
-	void send(const string& message) const;
+	virtual void send(const string& message) const;
 
 	virtual ~Client() = 0;
 };

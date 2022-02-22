@@ -8,8 +8,8 @@
 
 #define MAX_BUFFER_LENGTH 512
 
-Connection *Server::addConnection(const struct pollfd &connection) {
-	Connection *newConnect = new Connection(connection);
+Connection *Server::addConnection(const struct pollfd& connection, const struct sockaddr_in& addr) {
+	Connection *newConnect = new Connection(connection, addr);
 	connections.push_back(newConnect);
 	return newConnect;
 }
@@ -18,6 +18,10 @@ Server::Server(const string& name, const int port, const string& password) : nam
 
 const string& Server::getName() const {
 	return name;
+}
+
+string Server::getSenderName() const {
+	return connections[0]->getIP();
 }
 
 const string& Server::getHost() const {
@@ -41,9 +45,6 @@ void Server::start() {
 	// Can be protected -- Set socket to be nonblocking
 	ioctl(serverSocket.fd, FIONBIO, (char *)&opt);
 
-	addConnection(serverSocket);
-
-
 	connectionConfig.sin_family = AF_INET;
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
 	connectionConfig.sin_port = htons(this->port);
@@ -51,9 +52,11 @@ void Server::start() {
 	// Can be protected
 	bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig));
 
+	addConnection(serverSocket, connectionConfig);
+
 	// Can be protected
 	listen(serverSocket.fd, 32);
-	
+
 	vector<Connection *>::iterator it;
 
 	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
@@ -64,11 +67,11 @@ void Server::start() {
 		poll(&Connection::sockets[0], Connection::sockets.size(), -1);
 		for (size_t i = 0; i < Connection::sockets.size(); i++) {
 			if (Connection::sockets[i].revents == 0)
-				continue ;
+				continue;
 			if (Connection::sockets[i].fd == Connection::sockets[0].fd) {
 				std::cout << "  IncomingConnection..." << std::endl;
 				incomingConnection();
-				break ;
+				break;
 			}
 			else {
 				std::cout << "  IncomingRequest..." << std::endl;
@@ -76,7 +79,8 @@ void Server::start() {
 				if (connections[i]->closeConnection) {
 					std::cout << "  CloseConnection..." << std::endl;
 					closeConnection(i);
-					break ;
+					removeConnection(i);
+					break;
 				}
 			}
 		}
@@ -85,24 +89,33 @@ void Server::start() {
 
 void Server::incomingConnection() {
 	struct pollfd newSocket;
+	struct sockaddr_in newConnection;
+	int clen;
 
 	newSocket.events = POLLIN;
-
+	clen = sizeof(newConnection);
 	while (true) {
-		if ((newSocket.fd = accept(Connection::sockets[0].fd, NULL, NULL)) < 0)
-			break ;
-		Irc::getInstance().addUser(new User(addConnection(newSocket)));
+		if ((newSocket.fd = accept(Connection::sockets[0].fd, (struct sockaddr *)&newConnection, (socklen_t*)&clen)) < 0)
+			break;
+
+		Irc::getInstance().addUser(new User(addConnection(newSocket, newConnection)));
 	}
 }
 
 void Server::closeConnection(size_t index) {
 	Client *client = connections[index]->client;
 	User *user = dynamic_cast<User *>(client);
-	if (user)
+	if (user) {
 		Irc::getInstance().removeUser(user);
+		delete user;
+	}
 	close(Connection::sockets[index].fd);
-	connections.erase(connections.begin() + index);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
+}
+
+void Server::removeConnection(size_t index) {
+	delete connections[index];
+	connections.erase(connections.begin() + index);
 }
 
 void Server::incomingRequest(size_t index) {
@@ -111,10 +124,10 @@ void Server::incomingRequest(size_t index) {
 	while (true) {
 		int ret = recv(Connection::sockets[index].fd, buffer, MAX_BUFFER_LENGTH - 1, 0);
 		if (ret < 0)
-			return ;
+			return;
 		else if (ret == 0) {
 			connections[index]->closeConnection = true;
-			return ;
+			return;
 		}
 		buffer[ret] = 0;
 		connections[index]->request += buffer;
@@ -140,7 +153,7 @@ void Server::incomingRequest(size_t index) {
 
 Server::~Server() {
 	for (size_t i = 0; i < connections.size(); i++) {
-		close(Connection::sockets[i].fd);
+		closeConnection(i);
 		delete connections[i];
 	}
 	connections.clear();

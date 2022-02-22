@@ -5,7 +5,7 @@ NAME				:= server/libirc.so
 # Commands
 
 override CC			:= clang++
-override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC
+override CPPFLAGS	:= -g3 -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 override LDFLAGS	:= --shared
 
@@ -17,6 +17,7 @@ endif
 
 override SRCS		:=													\
 				modules/api/Client.cpp									\
+				modules/api/Channel.cpp									\
 				modules/api/Connection.cpp								\
 				modules/api/command/CommandElement.cpp					\
 				modules/api/command/CommandExecutor.cpp					\

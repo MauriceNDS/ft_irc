@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <dlfcn.h>
 
-struct Connection;
+class Connection;
 
 class PluginLoader {
 private:
