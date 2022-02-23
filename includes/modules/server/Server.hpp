@@ -25,6 +25,7 @@ private:
 	void incomingRequest(size_t index);
 	void removeConnection(size_t index);
 	void closeConnection(size_t index);
+	
 	Connection *addConnection(const struct pollfd &connection, const struct sockaddr_in& addr);
 
 public:
