@@ -55,8 +55,10 @@ void Server::start() {
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
 	connectionConfig.sin_port = htons(this->port);
 
-	// Can be protected
-	bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig));
+	if (bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig))) {
+		std::cerr << strerror(errno) << std::endl;
+		exit(errno); 
+	}
 
 	addConnection(serverSocket, connectionConfig);
 
