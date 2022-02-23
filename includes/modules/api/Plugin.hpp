@@ -3,8 +3,6 @@
 
 #include "ft_irc.hpp"
 
-#include "core/Irc.hpp"
-
 #define PLUGIN(clazz, id) extern "C" Plugin *getPlugin() { return new clazz(); } string clazz::getId() const { return id; }
 
 class Plugin {

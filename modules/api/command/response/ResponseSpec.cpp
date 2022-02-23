@@ -1,5 +1,7 @@
 #include "api/command/response/ResponseSpec.hpp"
 
+#include "core/Irc.hpp"
+
 string ResponseSpec::build(const CommandSender& sender, const char *first, va_list argptr) const {
 	string cmd = ":";
 

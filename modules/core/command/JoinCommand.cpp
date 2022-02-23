@@ -1,5 +1,9 @@
 #include "core/command/JoinCommand.hpp"
 
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
+
 void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User&>(sender);
 

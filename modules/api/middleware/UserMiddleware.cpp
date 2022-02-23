@@ -1,3 +1,4 @@
+#include "api/User.hpp"
 #include "api/middleware/UserMiddleware.hpp"
 
 bool UserMiddleware::handle(const Client& client) const {

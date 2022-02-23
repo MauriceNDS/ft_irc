@@ -3,14 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "core/Irc.hpp"
-
-#include "api/ResponseTypes.hpp"
-#include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
-#include "core/command/element/MsgToCommandElement.hpp"
-
-#include "api/ResponseTypes.hpp"
 
 class NoticeCommand : public CommandExecutor {
 

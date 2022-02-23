@@ -3,10 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "api/User.hpp"
 #include "api/middleware/Middleware.hpp"
-
-#include "api/ResponseTypes.hpp"
 
 class ValidPassMiddleware : public Middleware {
 public:

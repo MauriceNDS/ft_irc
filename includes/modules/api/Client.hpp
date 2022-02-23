@@ -4,7 +4,6 @@
 #include "ft_irc.hpp"
 
 #include "api/CommandSender.hpp"
-#include "api/Connection.hpp"
 
 class Connection;
 
@@ -15,9 +14,7 @@ protected:
 public:
 	Client(Connection *connection);
 
-	Connection *getConnection() const {
-		return connection;
-	}
+	Connection *getConnection() const;
 
 	virtual void send(const string& message) const;
 

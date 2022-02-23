@@ -1,11 +1,19 @@
 #include "core/command/ModeCommand.hpp"
 
+#include "core/Irc.hpp"
+
+#include "api/Flag.hpp"
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+
+#include "api/ResponseTypes.hpp"
+
 void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User&>(sender);
 	Channel& channel = cmd.getArg<Channel>("channel");
 	vector<Flag> *modes = cmd.getArg<vector<Flag> *>("mode");
 
-	Irc& server = Irc::getInstance();
+	Irc& irc = Irc::getInstance();
 	Modes &flags = channel.getFlag();
 
 	if (!channel.isOnChan(&user)) {
@@ -44,7 +52,6 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		sender.send(ResponseTypes::RPL_CHANNELMODEIS(channel.getName().c_str(), mod.c_str(), params.c_str()));
 		return ;
 	}
-
 		
 	if (!channel.isChanop(&user)) {
 		sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
@@ -74,9 +81,9 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		case 'n': flags.outside_message = enabled; break;
 		case 'o':
 			if (enabled)
-				channel.promoteChanop(server.findUser(i->value));
+				channel.promoteChanop(irc.findUser(i->value));
 			else
-				channel.demoteChanop(server.findUser(i->value));
+				channel.demoteChanop(irc.findUser(i->value));
 			break;
 		case 'p': flags.priv = enabled; break;
 		case 'r': flags.reop = enabled; break;
@@ -84,9 +91,9 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		case 't': flags.topic = enabled; break;
 		case 'v':
 			if (enabled)
-				channel.promoteVoiceOp(server.findUser(i->value));
+				channel.promoteVoiceOp(irc.findUser(i->value));
 			else
-				channel.demoteVoiceOp(server.findUser(i->value));
+				channel.demoteVoiceOp(irc.findUser(i->value));
 			break;
 		}
 	}

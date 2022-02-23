@@ -1,5 +1,10 @@
 #include "core/command/PassCommand.hpp"
 
+#include "core/Irc.hpp"
+
+#include "api/User.hpp"
+#include "api/ResponseTypes.hpp"
+
 void PassCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User &>(sender);
 

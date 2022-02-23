@@ -2,7 +2,6 @@
 #define FT_IRC_API_RESPONSE_SPEC
 
 #include "ft_irc.hpp"
-#include "core/Irc.hpp"
 #include "api/CommandSender.hpp"
 
 #include <algorithm>

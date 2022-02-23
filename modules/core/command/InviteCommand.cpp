@@ -1,5 +1,11 @@
 #include "core/command/InviteCommand.hpp"
 
+#include "core/Irc.hpp"
+
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
+
 void InviteCommand::execute(const Command& cmd, CommandSender& sender) {
 	User &sending = static_cast<User &>(sender);
 
@@ -10,8 +16,7 @@ void InviteCommand::execute(const Command& cmd, CommandSender& sender) {
 		if (channel->second->isOnChan(&user)) {
 			sending.send(ResponseTypes::ERR_USERONCHANNEL(user.getName().c_str(), channel_name.c_str()));
 			return ;
-		}
-		else if (!channel->second->isOnChan(&sending)) {
+		} else if (!channel->second->isOnChan(&sending)) {
 			sending.send(ResponseTypes::ERR_NOTONCHANNEL(sending.getName().c_str(), channel_name.c_str()));
 			return ;
 		}

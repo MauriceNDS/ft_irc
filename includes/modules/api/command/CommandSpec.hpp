@@ -11,7 +11,10 @@ class CommandManager;
 class CommandExecutor;
 class CommandElement;
 
-#include "CommandExecutor.hpp"
+#include "api/middleware/Middleware.hpp"
+#include "api/command/CommandManager.hpp"
+#include "api/command/CommandExecutor.hpp"
+#include "api/command/CommandElement.hpp"
 
 class CommandSpec {
 private:

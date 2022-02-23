@@ -1,5 +1,10 @@
 #include "core/command/UserCommand.hpp"
 
+#include "core/Irc.hpp"
+
+#include "api/User.hpp"
+#include "api/ResponseTypes.hpp"
+
 void UserCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = dynamic_cast<User&>(sender);
 

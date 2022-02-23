@@ -1,5 +1,6 @@
-#include "api/command/CommandManager.hpp"
 #include "api/ResponseTypes.hpp"
+#include "api/command/CommandManager.hpp"
+#include "api/exception/DuplicatedCommandException.hpp"
 
 void CommandManager::registerCommand(const CommandSpec *spec) {
 	if (!cspecs.insert(make_pair(spec->getName(), spec)).second)

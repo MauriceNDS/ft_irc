@@ -1,3 +1,9 @@
+#include "core/Irc.hpp"
+
+#include "api/Flag.hpp"
+#include "api/User.hpp"
+#include "api/Channel.hpp"
+#include "api/ResponseTypes.hpp"
 #include "api/command/element/FlagsCommandElement.hpp"
 
 FlagsCommandElement::FlagsCommandElement(const string& flags) : flags(flags) {}

@@ -3,18 +3,16 @@
 
 #include "ft_irc.hpp"
 
-#include "api/User.hpp"
-#include "api/Plugin.hpp"
-#include "api/Channel.hpp"
 #include "api/PluginLoader.hpp"
 #include "api/command/CommandManager.hpp"
 
 #include "server/Server.hpp"
 
-#include "api/Channel.hpp"
-
 #define CREATION_DATE "28/01/2022"
 #define VERSION "1.0"
+
+class User;
+class Channel;
 
 class Irc {
 private:
@@ -29,104 +27,32 @@ private:
 	set<User *> operators;
 
 public:
-	static Irc& getInstance() {
-		return *Irc::instance;
-	}
+	static Irc& getInstance();
 
 	Irc(const string& name, const int port, const string& password, const vector<string>& plugins);
 
 	void start();
 
-	CommandManager& getCommandManager() {
-		return this->commandManager;
-	}
+	CommandManager& getCommandManager();
+	PluginLoader& getPluginLoader();
+	const CommandManager& getCommandManager() const;
+	const PluginLoader& getPluginLoader() const;
 
-	PluginLoader& getPluginLoader() {
-		return this->pluginLoader;
-	}
+	const vector<User *>& getUsers() const;
+	User *findUser(const string& nickname);
+	void addUser(User *user);
+	void removeUser(User *user);
 
-	const CommandManager& getCommandManager() const {
-		return this->commandManager;
-	}
+	const map<string, Channel *>& getChannels() const;
+	Channel *findChannel(const string& channel);
+	void addChannel(Channel *channel);
+	void removeChannel(Channel *channel);
 
-	const PluginLoader& getPluginLoader() const {
-		return this->pluginLoader;
-	}
+	void promoteOperator(User *user);
+	void demoteOperator(User *user);
+	bool isOperator(User *user);
 
-	User *findUser(const string& nickname) {
-		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
-			if ((*it)->getName() == nickname)
-				return *it;
-		return NULL;
-	}
-
-	const vector<User *>& getUsers() const {
-		return users;
-	}
-
-	void addUser(User *user) {
-		users.push_back(user);
-	}
-
-	// void closeUserConnection(User *user) {
-	// 	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
-	// 		if (*it == user) {
-	// 			users.erase(it);
-	// 			break ;
-	// 		}
-	// 	}
-	// 	for (map<string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
-	// 		if (*it == user) {
-	// 			users.erase(it);
-	// 			break ;
-	// 		}
-	// 	}
-	// 	Client& client = static_cast<Client &>(*user);
-	// 	user->send(ResponseTypes::ERROR());
-	// 	client.getConnection()->closeConnection = true;
-	// }
-
-	void removeUser(User *user) {
-		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
-			if (*it == user) {
-				users.erase(it);
-				break ;
-			}
-		}
-	}
-
-	Channel *findChannel(const string& channel) {
-		map<string, Channel *>::iterator it = channels.find(channel);
-		return it != channels.end() ? it->second : NULL;
-	}
-
-	void addChannel(Channel *channel) {
-		if (channel)
-			channels.insert(make_pair(channel->getName(), channel));
-	}
-
-	void removeChannel(Channel *channel) {
-		channels.erase(channel->getName());
-	}
-
-	const map<string, Channel *>& getChannels() const {
-	  	return channels;
-	}
-
-	void promoteOperator(User *user) {
-		operators.insert(user);
-	}
-	void demoteOperator(User *user) {
-		operators.erase(user);
-	}
-
-	bool isOperator(User *user) {
-		return operators.find(user) != operators.end();
-	}
-
-	const Server& getServer() const {
-		return server;
-	}
+	const Server& getServer() const;
 
 	~Irc();
 };

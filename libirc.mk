@@ -17,6 +17,7 @@ endif
 
 override SRCS		:=													\
 				modules/api/Client.cpp									\
+				modules/api/User.cpp									\
 				modules/api/Channel.cpp									\
 				modules/api/Connection.cpp								\
 				modules/api/command/CommandElement.cpp					\
@@ -25,6 +26,7 @@ override SRCS		:=													\
 				modules/api/command/CommandSpec.cpp						\
 				modules/api/command/element/FlagsCommandElement.cpp		\
 				modules/api/command/response/ResponseSpec.cpp			\
+				modules/api/middleware/Middleware.cpp					\
 				modules/api/middleware/RegisteredUserMiddleware.cpp		\
 				modules/api/middleware/UserMiddleware.cpp				\
 				modules/api/middleware/ValidPassMiddleware.cpp			\
