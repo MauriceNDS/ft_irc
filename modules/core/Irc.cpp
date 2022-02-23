@@ -1,17 +1,33 @@
 #include "core/Irc.hpp"
-#include "core/command/TestCommand.hpp"
 #include "core/command/UserCommand.hpp"
 #include "core/command/NickCommand.hpp"
+#include "core/command/JoinCommand.hpp"
+#include "core/command/KickCommand.hpp"
+#include "core/command/NoticeCommand.hpp"
+#include "core/command/OperCommand.hpp"
+#include "core/command/PartCommand.hpp"
+#include "core/command/PingCommand.hpp"
+#include "core/command/PrivmsgCommand.hpp"
+#include "core/command/TopicCommand.hpp"
+#include "core/command/PassCommand.hpp"
+#include "core/command/NamesCommand.hpp"
+#include "core/command/InviteCommand.hpp"
+#include "core/command/ListCommand.hpp"
+#include "core/command/QuitCommand.hpp"
+#include "core/command/ModeCommand.hpp"
 
-#include "core/command/elements/MsgToCommandElement.hpp"
-#include "core/command/elements/UserCommandElement.hpp"
-#include "core/command/elements/ChannelCommandElement.hpp"
+#include "core/command/element/MsgToCommandElement.hpp"
+#include "core/command/element/UserCommandElement.hpp"
+#include "core/command/element/ChannelCommandElement.hpp"
 
 #include "api/middleware/UserMiddleware.hpp"
 #include "api/middleware/RegisteredUserMiddleware.hpp"
+#include "api/middleware/ValidPassMiddleware.hpp"
 
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
+
+#include "api/command/element/FlagsCommandElement.hpp"
 
 Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : server(name, port, password) {
 	Irc::instance = this;
@@ -30,7 +46,7 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		.argument("mode", GenericArguments::string())
 		.argument("unused", GenericArguments::string())
 		.argument("realname", GenericArguments::string())
-		.middleware(new UserMiddleware())
+		.middleware(new ValidPassMiddleware())
 		.executor(new UserCommand())
 		.build()
 	);
@@ -40,15 +56,16 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 			.element(GenericArguments::string())
 			.ifNotProvided(ResponseTypes::ERR_NONICKNAMEGIVEN)
 			.build())
-		.middleware(new UserMiddleware())
+		.middleware(new ValidPassMiddleware())
 		.executor(new NickCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("JOIN")
 		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(true)))
+		.argument("keys", GenericArguments::optional(GenericArguments::list<string>(GenericArguments::string())))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new JoinCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -56,7 +73,7 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		.argument("channels", GenericArguments::list<Channel>(new ChannelCommandElement(false)))
 		.argument("message", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new PartCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -65,7 +82,7 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		.argument("user", new UserCommandElement())
 		.argument("message", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new KickCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
@@ -73,18 +90,88 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		.argument("channel", new ChannelCommandElement(false))
 		.argument("topic", GenericArguments::optional(GenericArguments::string()))
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new TopicCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("PRIVMSG")
-		.argument("msgtarget", GenericArguments::list<MsgToCommandElement *>(new MsgToCommandElement()))
+		.argument("msgtarget", GenericArguments::list<MsgToCommandElement>(new MsgToCommandElement()))
 		.argument("message", CommandElement::Builder()
 			.element(GenericArguments::string())
 			.ifNotProvided(ResponseTypes::ERR_NOTEXTTOSEND)
 			.build())
 		.middleware(new RegisteredUserMiddleware())
-		.executor(new TestCommand())
+		.executor(new PrivmsgCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("NOTICE")
+		.argument("msgtarget", GenericArguments::list<MsgToCommandElement>(new MsgToCommandElement()))
+		.argument("message", GenericArguments::string())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new NoticeCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PING")
+		.argument("server", CommandElement::Builder()
+			.element(GenericArguments::string())
+			.ifNotProvided(ResponseTypes::ERR_NOORIGIN)
+			.build())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new PingCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("OPER")
+		.argument("name", GenericArguments::string())
+		.argument("password", GenericArguments::string())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new OperCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("PASS")
+		.argument("password", GenericArguments::string())
+		.middleware(new UserMiddleware())
+		.executor(new PassCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("NAMES")
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new NamesCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("LIST")
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new ListCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("INVITE")
+		.argument("nickname", new UserCommandElement())
+		.argument("channel", GenericArguments::string())
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new InviteCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("QUIT")
+		.argument("message", GenericArguments::optional(GenericArguments::string()))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new QuitCommand())
+		.build()
+	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("MODE")
+		.argument("channel", new ChannelCommandElement(false))
+		.argument("mode", GenericArguments::optional(new FlagsCommandElement("o:v:aimnpsrtk:l:")))
+		.middleware(new RegisteredUserMiddleware())
+		.executor(new ModeCommand())
 		.build()
 	);
 

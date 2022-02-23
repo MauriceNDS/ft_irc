@@ -68,6 +68,24 @@ public:
 		users.push_back(user);
 	}
 
+	// void closeUserConnection(User *user) {
+	// 	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
+	// 		if (*it == user) {
+	// 			users.erase(it);
+	// 			break ;
+	// 		}
+	// 	}
+	// 	for (map<string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
+	// 		if (*it == user) {
+	// 			users.erase(it);
+	// 			break ;
+	// 		}
+	// 	}
+	// 	Client& client = static_cast<Client &>(*user);
+	// 	user->send(ResponseTypes::ERROR());
+	// 	client.getConnection()->closeConnection = true;
+	// }
+
 	void removeUser(User *user) {
 		for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
 			if (*it == user) {
@@ -83,7 +101,8 @@ public:
 	}
 
 	void addChannel(Channel *channel) {
-		channels[channel->getName()] = channel;
+		if (channel)
+			channels.insert(make_pair(channel->getName(), channel));
 	}
 
 	void removeChannel(Channel *channel) {

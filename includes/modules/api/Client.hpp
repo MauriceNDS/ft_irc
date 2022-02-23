@@ -15,7 +15,7 @@ protected:
 public:
 	Client(Connection *connection);
 
-	const Connection *getConnection() const {
+	Connection *getConnection() const {
 		return connection;
 	}
 

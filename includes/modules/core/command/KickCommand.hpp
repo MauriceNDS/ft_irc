@@ -12,25 +12,7 @@
 
 class KickCommand : public CommandExecutor {
 
-	void execute(const Command& cmd, CommandSender& sender) {
-
-        string *message = cmd.getArg<string *>("message");
-        Channel *channel = cmd.getArg<Channel *>("channel");
-        User *user = cmd.getArg<User *>("user");
-        if (!channel) {
-            sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
-            return ;
-        } else if (!channel->isChanop(static_cast<User *>(&sender))) {
-            sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel->getName().c_str()));
-            return ;
-        }
-        channel->removeUser(user);
-        if (message) {
-            channel->send(*message);
-        } else {
-            channel->send(user->getName().c_str());
-        }
-	}
+	void execute(const Command& cmd, CommandSender& sender);
 };
 
 #endif /* FT_IRC_CORE_KICK_COMMAND */

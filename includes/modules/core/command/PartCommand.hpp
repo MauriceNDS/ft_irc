@@ -12,24 +12,7 @@
 
 class PartCommand : public CommandExecutor {
 
-	void execute(const Command& cmd, CommandSender& sender) {
-		User& user = static_cast<User&>(sender);
-
-        string *message = cmd.getArg<string *>("message");
-        vector<Channel *> channelList = cmd.getArg<vector<Channel *> >("channels");
-		for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
-            if (!*it) {
-                user.send(ResponseTypes::ERR_NOSUCHCHANNEL());
-                continue ;
-            }
-			(*it)->removeUser(&user);
-            if (message) {
-			    (*it)->send(*message);
-            } else {
-                (*it)->send(user.getName().c_str());
-            }
-		}
-	}
+	void execute(const Command& cmd, CommandSender& sender);
 };
 
 #endif /* FT_IRC_CORE_PART_COMMAND */

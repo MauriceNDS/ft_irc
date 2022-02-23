@@ -4,26 +4,53 @@
 #include "api/command/response/ResponseSpec.hpp"
 
 namespace ResponseTypes {
+	const ResponseSpec ERROR = ResponseSpec("ERROR");
+	const ResponseSpec PRIVMSG = ResponseSpec("PRIVMSG <user> :<message>");
+	const ResponseSpec NOTICE = ResponseSpec("NOTICE <user> :<message>");
+	const ResponseSpec JOIN = ResponseSpec("JOIN <channel>");
+	const ResponseSpec KICK = ResponseSpec("KICK <channel> :<message>");
+	const ResponseSpec PART = ResponseSpec("PART <channel> :<message>");
+	const ResponseSpec PONG = ResponseSpec("PONG <server>");
+	const ResponseSpec QUIT = ResponseSpec("QUIT :<message>");
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, ":Welcome to the Internet Relay Network <nick>!<user>@<host>");
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, ":Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, ":This server was created <date>");
 	const ResponseSpec RPL_MYINFO = ResponseSpec(4, "<servername> <version> <available user modes> <available channel modes>");
+	const ResponseSpec ERR_NOVALIDPASS = ResponseSpec(503, ":You need a valid PASS command");
 	const ResponseSpec RPL_NONE = ResponseSpec(300);
-	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, "<channel> :<nickname>");
+	const ResponseSpec RPL_LIST = ResponseSpec(322, "<channel> # visible :<topic>");
+	const ResponseSpec RPL_LISTEND = ResponseSpec(323, ":End of LIST");
+	const ResponseSpec RPL_CHANNELMODEIS = ResponseSpec(324, "<channel> <mode> <mode params>");
 	const ResponseSpec RPL_TOPIC = ResponseSpec(332, "<channel> :<topic>");
+	const ResponseSpec RPL_INVITING = ResponseSpec(341, "<channel> <nick> :Invitation send");
+	const ResponseSpec RPL_NAMREPLY = ResponseSpec(353, " = <channel> :<nickname>");
+	const ResponseSpec RPL_ENDOFNAMES = ResponseSpec(366, "<channel> :End of NAMES list");
+	const ResponseSpec RPL_YOUREOPER = ResponseSpec(381, ":You are now an IRC operator");
 	const ResponseSpec ERR_NOSUCHNICK = ResponseSpec(401, "<nickname> :No such nick/channel");
-	const ResponseSpec ERR_NOTONCHANNEL = ResponseSpec(442, "<channel> :You're not on that channel");
 	const ResponseSpec ERR_NOSUCHCHANNEL = ResponseSpec(403, "<channel name> :No such channel");
+	const ResponseSpec ERR_CANNOTSENDTOCHAN = ResponseSpec(404, "<channel name> :Cannot send to channel");
 	const ResponseSpec ERR_CHANOPRIVSNEEDED = ResponseSpec(482, "<channel> :You're not channel operator");
+	const ResponseSpec ERR_NOORIGIN = ResponseSpec(409, ":No origin specified");
 	const ResponseSpec ERR_NORECIPIENT = ResponseSpec(411, ":No recipient given (<command>)");
 	const ResponseSpec ERR_NOTEXTTOSEND = ResponseSpec(412, ":No text to send");
 	const ResponseSpec ERR_UNKNOWNCOMMAND = ResponseSpec(421, "<command> :Unknown command");
 	const ResponseSpec ERR_NONICKNAMEGIVEN = ResponseSpec(431, ":No nickname given");
 	const ResponseSpec ERR_ERRONEUSNICKNAME = ResponseSpec(432, "<nick> :Erroneous nickname");
 	const ResponseSpec ERR_NICKNAMEINUSE = ResponseSpec(433, "<nick> :Nickname is already in use");
+	const ResponseSpec ERR_USERNOTINCHANNEL = ResponseSpec(441, "<nick> <channel> :They aren't on that channel");
+	const ResponseSpec ERR_NOTONCHANNEL = ResponseSpec(442, "<channel> :You're not on that channel");
+	const ResponseSpec ERR_USERONCHANNEL = ResponseSpec(443, "<nick> <channel> :is already on channel");
 	const ResponseSpec ERR_NOTREGISTERED = ResponseSpec(451, ":You have not registered");
 	const ResponseSpec ERR_NEEDMOREPARAMS = ResponseSpec(461, "<command> :Not enough parameters");
 	const ResponseSpec ERR_ALREADYREGISTRED = ResponseSpec(462, ":Unauthorized command (already registered)");
+	const ResponseSpec ERR_PASSWDMISMATCH = ResponseSpec(464, ":Password incorrect");
+	const ResponseSpec ERR_KEYSET = ResponseSpec(467, "<channel> :Channel key already set");
+	const ResponseSpec ERR_CHANNELISFULL = ResponseSpec(471, "<channel> :Cannot join channel (+l)");
+	const ResponseSpec ERR_UNKNOWNMODE = ResponseSpec(472, "<char> :is unknown mode");
+	const ResponseSpec ERR_INVITEONLYCHAN = ResponseSpec(473, "<channel> :Cannot join channel (+i)");
+	const ResponseSpec ERR_BADCHANNELKEY = ResponseSpec(475, "<channel> :Cannot join channel (+k)");
+	const ResponseSpec ERR_NOCHANMODES = ResponseSpec(477, "<channel> :Channel doesn't support modes");
+	const ResponseSpec ERR_NOOPERHOST = ResponseSpec(491, ":No O-lines for your host");
 }
 
 #endif /* FT_IRC_API_RESPONSE */

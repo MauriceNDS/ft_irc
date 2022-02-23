@@ -17,7 +17,7 @@ void CommandManager::process(MessageEvent& event) {
 	it = cspecs.find(command);
 	if (it == cspecs.end()) {
 		event.getSender().send(ResponseTypes::ERR_UNKNOWNCOMMAND(command.c_str()));
-		return ;
+		return;
 	}
 
 	bool lastStr = false;

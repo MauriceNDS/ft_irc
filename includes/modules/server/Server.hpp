@@ -36,6 +36,7 @@ public:
 
 	const string& getName() const;
 	const string& getHost() const;
+	const string& getPassword() const;
 
 	string getSenderName() const;
 

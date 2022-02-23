@@ -1,5 +1,5 @@
-#ifndef FT_IRC_CORE_TOPIC_COMMAND
-#define FT_IRC_CORE_TOPIC_COMMAND
+#ifndef FT_IRC_CORE_NOTICE_COMMAND
+#define FT_IRC_CORE_NOTICE_COMMAND
 
 #include "ft_irc.hpp"
 
@@ -8,12 +8,13 @@
 #include "api/ResponseTypes.hpp"
 #include "api/User.hpp"
 #include "api/command/CommandExecutor.hpp"
+#include "core/command/element/MsgToCommandElement.hpp"
 
 #include "api/ResponseTypes.hpp"
 
-class TopicCommand : public CommandExecutor {
+class NoticeCommand : public CommandExecutor {
 
 	void execute(const Command& cmd, CommandSender& sender);
 };
 
-#endif /* FT_IRC_CORE_TOPIC_COMMAND */
+#endif /* FT_IRC_CORE_NOTICE_COMMAND */
