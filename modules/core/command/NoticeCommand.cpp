@@ -5,7 +5,7 @@
 #include "api/ResponseTypes.hpp"
 
 void NoticeCommand::execute(const Command& cmd, CommandSender& sender) {
-	User &user = static_cast<User &>(sender);
+	User& user = static_cast<User&>(sender);
 
 	vector<CommandSender *>& target = cmd.getArg<vector<CommandSender *> >("msgtarget");
 	string& message = cmd.getArg<string>("message");
