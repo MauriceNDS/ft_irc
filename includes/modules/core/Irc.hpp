@@ -54,6 +54,8 @@ public:
 
 	const Server& getServer() const;
 
+	void sendWelcomeMessage(User& user);
+
 	~Irc();
 };
 

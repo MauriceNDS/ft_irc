@@ -35,6 +35,7 @@ public:
 	}
 
 	const string& getName() const;
+	const Connection& getConnection() const;
 	const string& getHost() const;
 	const string& getPassword() const;
 

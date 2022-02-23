@@ -213,9 +213,11 @@ void Irc::start() {
 }
 
 User *Irc::findUser(const string& nickname) {
-	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++)
-		if ((*it)->getName() == nickname)
+	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
+		User *user = *it;
+		if (nickname == user->getName())
 			return *it;
+	}
 	return NULL;
 }
 
@@ -268,6 +270,13 @@ bool Irc::isOperator(User *user) {
 
 const Server& Irc::getServer() const {
 	return server;
+}
+
+void Irc::sendWelcomeMessage(User& user) {
+	user.send(ResponseTypes::RPL_WELCOME(user.getName().c_str(), user.getSenderName().c_str()));
+	user.send(ResponseTypes::RPL_YOURHOST(user.getName().c_str(), Irc::getInstance().getServer().getName().c_str(), VERSION));
+	user.send(ResponseTypes::RPL_CREATED(user.getName().c_str(), CREATION_DATE));
+	user.send(ResponseTypes::RPL_MYINFO(user.getName().c_str(), Irc::getInstance().getServer().getName().c_str(), VERSION, "0", "0"));
 }
 
 Irc::~Irc() {

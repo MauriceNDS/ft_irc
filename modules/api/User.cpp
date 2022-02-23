@@ -13,7 +13,7 @@ const string& User::getUserName() const				{ return this->username; }
 const string& User::getRealName() const				{ return this->realname; }
 
 string User::getSenderName() const  {
-	return getName() + "@" + getUserName() + "!" + getConnection()->getIP();
+	return getName() + "!" + getUserName() + "@" + getConnection()->getIP();
 }
 
 bool User::isRegistered() const {

@@ -23,11 +23,15 @@ const string& Server::getName() const {
 }
 
 string Server::getSenderName() const {
-	return connections[0]->getIP();
+	return getConnection().getIP();
 }
 
 const string& Server::getHost() const {
 	return host;
+}
+
+const Connection& Server::getConnection() const {
+	return *(connections[0]);
 }
 
 const string& Server::getPassword() const {
@@ -151,7 +155,7 @@ void Server::incomingRequest(size_t index) {
 					connections[index]->request = request;
 				else
 					connections[index]->request.clear();
-				std::cout << "    < '" << request << "`" << std::endl;
+				std::cout << "> '" << request << "`" << std::endl;
 				MessageEvent event = MessageEvent(request, *connections[index]->client);
 				Irc::getInstance().getCommandManager().process(event);
 			}
