@@ -16,6 +16,7 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 			sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str()));
 			continue;
 		}
+		std::cout << "Removing " << user.getSenderName() << " from " << channel->getSenderName() << std::endl;
 		if (channel->getFlag().anonymous && message) {
 			channel->send(ResponseTypes::PART.anonymous("anonymous", message->c_str()));
 		} else if (channel->getFlag().anonymous && !message) {

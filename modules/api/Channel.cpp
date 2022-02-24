@@ -114,7 +114,7 @@ const string& Channel::getName() const {
 }
 
 void Channel::send(const string& message) const {
-	std::cout << "} " << message.c_str();
+	std::cout << "          }-- " << message.c_str();
     for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)
         (*it)->send(message);
 }
