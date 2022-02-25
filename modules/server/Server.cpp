@@ -7,6 +7,7 @@
 #include <fstream>
 #include <algorithm>
 #include <sstream>
+#include <cstring>
 
 #define MAX_BUFFER_LENGTH 512
 
@@ -60,7 +61,7 @@ void Server::start() {
 	connectionConfig.sin_port = htons(this->port);
 
 	if (bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig))) {
-		std::cerr << strerror(errno) << std::endl;
+		std::cerr << std::strerror(errno) << std::endl;
 		exit(errno); 
 	}
 

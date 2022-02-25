@@ -47,7 +47,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		}
 		if (flags.user_limit) {
 			mod += 'l';
-			params += std::to_string(flags.user_limit);
+			params += ::itos(flags.user_limit);
 		}
 		sender.send(ResponseTypes::RPL_CHANNELMODEIS(channel.getName().c_str(), mod.c_str(), params.c_str()));
 		return ;

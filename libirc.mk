@@ -4,7 +4,7 @@ NAME				:= server/libirc.so
 
 # Commands
 
-override CC			:= clang++
+CC					:= clang++
 override CPPFLAGS	:= -g3 -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 override LDFLAGS	:= --shared
@@ -48,6 +48,7 @@ override SRCS		:=													\
 				modules/core/command/UserCommand.cpp					\
 				modules/core/Irc.cpp									\
 				modules/server/Server.cpp								\
+				modules/api/utils.cpp									\
 
 override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 

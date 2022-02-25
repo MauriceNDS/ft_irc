@@ -18,4 +18,6 @@ using std::make_pair;
 // TODO test
 #include <iostream>
 
+string itos(int value);
+
 #endif /* FT_IRC */
