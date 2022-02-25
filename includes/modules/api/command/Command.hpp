@@ -1,7 +1,7 @@
 #ifndef FT_IRC_API_COMMAND
 #define FT_IRC_API_COMMAND
 
-#include "api/CommandSender.hpp"
+#include "api/interface/CommandSender.hpp"
 #include "api/exception/ArgumentNotFoundException.hpp"
 
 class CommandSpec;

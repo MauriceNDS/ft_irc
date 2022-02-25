@@ -21,9 +21,9 @@ void KickCommand::execute(const Command& cmd, CommandSender& sender) {
 		return ;
 	}
 
-	if (channel.getFlag().anonymous && message) {
+	if (channel.getFlags().anonymous && message) {
 		channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), message->c_str()));
-	} else if (channel.getFlag().anonymous && !message) {
+	} else if (channel.getFlags().anonymous && !message) {
 		channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), target.getName().c_str()));
 	} if (message) {
 		channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), message->c_str()));

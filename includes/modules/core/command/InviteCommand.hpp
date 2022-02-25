@@ -6,7 +6,7 @@
 #include "api/command/CommandExecutor.hpp"
 
 class InviteCommand : public CommandExecutor {
-
+public:
 	void execute(const Command& cmd, CommandSender& sender);
 };
 

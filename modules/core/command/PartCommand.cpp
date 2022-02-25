@@ -17,9 +17,9 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 			continue;
 		}
 		std::cout << "Removing " << user.getSenderName() << " from " << channel->getSenderName() << std::endl;
-		if (channel->getFlag().anonymous && message) {
+		if (channel->getFlags().anonymous && message) {
 			channel->send(ResponseTypes::PART.anonymous("anonymous", message->c_str()));
-		} else if (channel->getFlag().anonymous && !message) {
+		} else if (channel->getFlags().anonymous && !message) {
 			channel->send(ResponseTypes::PART.anonymous("anonymous"));
 		} else if (message) {
 			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message->c_str()));

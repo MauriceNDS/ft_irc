@@ -5,8 +5,13 @@
 
 #include "api/command/CommandExecutor.hpp"
 
-class ListCommand : public CommandExecutor {
+class Channel;
 
+class ListCommand : public CommandExecutor {
+private:
+	void sendChan(const Channel *channel, const CommandSender& sender) const;
+
+public:
 	void execute(const Command& cmd, CommandSender& sender);
 };
 

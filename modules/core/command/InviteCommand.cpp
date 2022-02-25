@@ -7,21 +7,21 @@
 #include "api/ResponseTypes.hpp"
 
 void InviteCommand::execute(const Command& cmd, CommandSender& sender) {
-	User &sending = static_cast<User &>(sender);
+	User &user = static_cast<User &>(sender);
 
 	string& channel_name = cmd.getArg<string>("channel");
-	User& user = cmd.getArg<User>("nickname");
+	User& target = cmd.getArg<User>("nickname");
 	map<string, Channel *>::const_iterator channel = Irc::getInstance().getChannels().find(channel_name);
 	if (Irc::getInstance().getChannels().end() != channel) {
-		if (channel->second->isOnChan(&user)) {
-			sending.send(ResponseTypes::ERR_USERONCHANNEL(user.getName().c_str(), channel_name.c_str()));
-			return ;
-		} else if (!channel->second->isOnChan(&sending)) {
-			sending.send(ResponseTypes::ERR_NOTONCHANNEL(sending.getName().c_str(), channel_name.c_str()));
-			return ;
+		if (channel->second->isOnChan(&target)) {
+			user.send(ResponseTypes::ERR_USERONCHANNEL(user.getName().c_str(), target.getName().c_str(), channel_name.c_str()));
+			return;
+		} else if (!channel->second->isOnChan(&user)) {
+			user.send(ResponseTypes::ERR_NOTONCHANNEL(user.getName().c_str(), user.getName().c_str(), channel_name.c_str()));
+			return;
 		}
-		channel->second->addInvite(&user);
+		channel->second->addInvite(&target);
 	}
-	sending.send(ResponseTypes::RPL_INVITING(channel_name.c_str(), user.getName().c_str()));
-	user.send(ResponseTypes::RPL_INVITING(channel_name.c_str(), user.getName().c_str()));
+	user.send(ResponseTypes::RPL_INVITING(user.getName().c_str(), target.getName().c_str(), channel_name.c_str()));
+	target.send(ResponseTypes::RPL_INVITING(user.getName().c_str(), target.getName().c_str(), channel_name.c_str()));
 }

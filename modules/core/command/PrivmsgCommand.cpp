@@ -7,18 +7,18 @@
 void PrivmsgCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User &>(sender);
 	vector<CommandSender *>& target = cmd.getArg<vector<CommandSender *> >("msgtarget");
-	string message = cmd.getArg<string>("message") + "\n";
+	string message = cmd.getArg<string>("message");
 	for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
 		Channel *channel = dynamic_cast<Channel *>(*it);
 		if (channel) {
-			if (!channel->isOnChan(&user) && !channel->getFlag().outside_message)
+			if (!channel->isOnChan(&user) && !channel->getFlags().outside_message)
 				sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str(), channel->getName().c_str()));
-			else if (channel->getFlag().moderate && !channel->isVoiceOp(&user))
+			else if (channel->getFlags().moderate && !channel->isVoiceOp(&user))
 				sender.send(ResponseTypes::ERR_CANNOTSENDTOCHAN(channel->getName().c_str()));
-			else if (channel->getFlag().anonymous)
-				channel->send(ResponseTypes::PRIVMSG.anonymous("anonymous", message.c_str()));
+			else if (channel->getFlags().anonymous)
+				channel->send(sender, ResponseTypes::PRIVMSG.anonymous("anonymous", message.c_str()));
 			else
-				channel->send(ResponseTypes::PRIVMSG(sender, channel->getName().c_str(), message.c_str()));
+				channel->send(sender, ResponseTypes::PRIVMSG(sender, channel->getName().c_str(), message.c_str()));
 			continue;
 		}
 		User *target = dynamic_cast<User *>(*it);

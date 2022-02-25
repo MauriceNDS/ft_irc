@@ -13,24 +13,24 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 		Channel *channel = *it;
 
-		if (channel->getFlag().invite && channel->getInvite().find(&user) == channel->getInvite().end()) {
+		if (channel->getFlags().invite && channel->getInvites().find(&user) == channel->getInvites().end()) {
 			user.send(ResponseTypes::ERR_INVITEONLYCHAN(channel->getName().c_str()));
-		} else if (channel->getFlag().user_limit && channel->getUsers().size() >= channel->getFlag().user_limit) {
+		} else if (channel->getFlags().user_limit && channel->getUsers().size() >= channel->getFlags().user_limit) {
 			user.send(ResponseTypes::ERR_CHANNELISFULL(channel->getName().c_str()));
 		} else if (!channel->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != channel->getPassword()))) {
 			user.send(ResponseTypes::ERR_BADCHANNELKEY(channel->getName().c_str()));
 		} else if (!channel->isOnChan(&user)) {
 			channel->addUser(static_cast<User *>(&sender));
-			if (!channel->getFlag().anonymous)
+			if (!channel->getFlags().anonymous)
 				channel->send(ResponseTypes::JOIN(user, channel->getName().c_str()));
 			else
 				channel->send(ResponseTypes::JOIN.anonymous(channel->getName().c_str()));
 
 			for (set<User *>::const_iterator users = channel->getUsers().begin(); users != channel->getUsers().end(); users++) {
-				if (!channel->getFlag().anonymous)
-					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
+				if (!channel->getFlags().anonymous)
+					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
 				else
-					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getName().c_str(), (*users)->getName().c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
 			}
 			user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), channel->getName().c_str()));
 		}

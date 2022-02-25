@@ -14,7 +14,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	vector<Flag> *modes = cmd.getArg<vector<Flag> *>("mode");
 
 	Irc& irc = Irc::getInstance();
-	Modes &flags = channel.getFlag();
+	Modes &flags = channel.getFlags();
 
 	if (!channel.isOnChan(&user)) {
 		sender.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
@@ -67,9 +67,9 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 			if (enabled && !channel.getPassword().empty())
 				sender.send(ResponseTypes::ERR_KEYSET(channel.getName().c_str()));
 			else if (enabled)
-				channel.getPassword() = i->value;
+				channel.setPassword(i->value);
 			else
-				channel.getPassword().clear();
+				channel.setPassword("");
 			break;
 		case 'l': 
 			if (enabled)

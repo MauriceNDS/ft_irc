@@ -212,8 +212,14 @@ void Irc::start() {
 	server.start();
 }
 
-User *Irc::findUser(const string& nickname) {
-	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
+void Irc::broadcast(const string& message) const {
+	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
+		(*it)->send(message);
+	}
+}
+
+User *Irc::findUser(const string& nickname) const {
+	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
 		User *user = *it;
 		if (nickname == user->getName())
 			return *it;
@@ -238,8 +244,8 @@ void Irc::removeUser(User *user) {
 	}
 }
 
-Channel *Irc::findChannel(const string& channel) {
-	map<string, Channel *>::iterator it = channels.find(channel);
+Channel *Irc::findChannel(const string& channel) const {
+	map<string, Channel *>::const_iterator it = channels.find(channel);
 	return it != channels.end() ? it->second : NULL;
 }
 
