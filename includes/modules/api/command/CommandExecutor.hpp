@@ -3,7 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "api/CommandSender.hpp"
+#include "api/interface/CommandSender.hpp"
 #include "api/command/Command.hpp"
 
 class CommandExecutor {

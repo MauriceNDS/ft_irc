@@ -10,7 +10,7 @@ Connection *Client::getConnection() const {
 }
 
 void Client::send(const string& message) const {
-	std::cout << "< " << message.c_str();
+	std::cout << "          <-- " << message.c_str();
 	connection->send(message.c_str(), message.length());
 }
 

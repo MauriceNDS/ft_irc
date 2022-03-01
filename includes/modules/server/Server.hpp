@@ -4,6 +4,7 @@
 #include "ft_irc.hpp"
 
 #include "api/Connection.hpp"
+#include "api/interface/CommandSender.hpp"
 
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -35,6 +36,7 @@ public:
 	}
 
 	const string& getName() const;
+	const Connection& getConnection() const;
 	const string& getHost() const;
 	const string& getPassword() const;
 

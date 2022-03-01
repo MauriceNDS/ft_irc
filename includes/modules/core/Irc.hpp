@@ -22,8 +22,8 @@ private:
 	CommandManager commandManager;
 	PluginLoader pluginLoader;
 
-    map<string, Channel *> channels;
-    vector<User *> users;
+	map<string, Channel *> channels;
+	vector<User *> users;
 	set<User *> operators;
 
 public:
@@ -38,13 +38,15 @@ public:
 	const CommandManager& getCommandManager() const;
 	const PluginLoader& getPluginLoader() const;
 
+	void broadcast(const string& string) const;
+
 	const vector<User *>& getUsers() const;
-	User *findUser(const string& nickname);
+	User *findUser(const string& nickname) const;
 	void addUser(User *user);
 	void removeUser(User *user);
 
 	const map<string, Channel *>& getChannels() const;
-	Channel *findChannel(const string& channel);
+	Channel *findChannel(const string& channel) const;
 	void addChannel(Channel *channel);
 	void removeChannel(Channel *channel);
 
@@ -53,6 +55,8 @@ public:
 	bool isOperator(User *user);
 
 	const Server& getServer() const;
+
+	void sendWelcomeMessage(User& user);
 
 	~Irc();
 };

@@ -4,7 +4,7 @@ NAME				:= server/ircserv
 
 # Commands
 
-override CC			:= clang++
+CC					:= clang++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 

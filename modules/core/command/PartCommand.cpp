@@ -12,22 +12,20 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 		Channel *channel = *it;
 
-		if (!*it) {
-			sender.send(ResponseTypes::ERR_NOSUCHCHANNEL());
-			continue;
-		} else if (!(*it)->isOnChan(&user)) {
+		if (!channel->isOnChan(&user)) {
 			sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str()));
 			continue;
 		}
-		channel->removeUser(&user);
-		if (channel->getFlag().anonymous && message) {
+		std::cout << "Removing " << user.getSenderName() << " from " << channel->getSenderName() << std::endl;
+		if (channel->getFlags().anonymous && message) {
 			channel->send(ResponseTypes::PART.anonymous("anonymous", message->c_str()));
-		} else if (channel->getFlag().anonymous && !message) {
+		} else if (channel->getFlags().anonymous && !message) {
 			channel->send(ResponseTypes::PART.anonymous("anonymous"));
 		} else if (message) {
 			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message->c_str()));
 		} else {
 			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), user.getSenderName().c_str()));
 		}
+		channel->removeUser(&user);
 	}
 }

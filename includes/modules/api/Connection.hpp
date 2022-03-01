@@ -3,24 +3,13 @@
 
 #include "ft_irc.hpp"
 
-#include "api/Client.hpp"
-
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <poll.h>
 
-#include <sstream>
-
 class Client;
 
 class Connection {
-private:
-	string itoa(int value) const {
-		std::ostringstream out;
-		out << value;
-		return out.str();
-	}
-
 public:
 	static vector<struct pollfd> sockets;
 
@@ -35,10 +24,10 @@ public:
 	void send(const char *str, int len) const;
 
 	string getIP() const {
-		return itoa(addr.sin_addr.s_addr & 0xFF) + '.'
-			+ itoa((addr.sin_addr.s_addr & 0xFF00) >> 8) + '.'
-			+ itoa((addr.sin_addr.s_addr & 0xFF0000) >> 16) + '.'
-			+ itoa((addr.sin_addr.s_addr & 0xFF000000) >> 24);
+		return ::itos(addr.sin_addr.s_addr & 0xFF) + '.'
+			+ ::itos((addr.sin_addr.s_addr & 0xFF00) >> 8) + '.'
+			+ ::itos((addr.sin_addr.s_addr & 0xFF0000) >> 16) + '.'
+			+ ::itos((addr.sin_addr.s_addr & 0xFF000000) >> 24);
 	}
 };
 

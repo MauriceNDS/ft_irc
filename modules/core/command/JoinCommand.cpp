@@ -11,23 +11,28 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 	vector<string *> *passwords = cmd.getArg<vector<string *> *>("keys");
 	size_t arg_i = 0;
 	for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
-		if ((*it)->getFlag().invite && (*it)->getInvite().find(&user) == (*it)->getInvite().end()) {
-			user.send(ResponseTypes::ERR_INVITEONLYCHAN((*it)->getName().c_str()));
-		} else if ((*it)->getFlag().user_limit && (*it)->getUsers().size() >= (*it)->getFlag().user_limit) {
-			user.send(ResponseTypes::ERR_CHANNELISFULL((*it)->getName().c_str()));
-		} else if (!(*it)->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != (*it)->getPassword()))) {
-			user.send(ResponseTypes::ERR_BADCHANNELKEY((*it)->getName().c_str()));
-		} else if (!(*it)->isOnChan(&user)) {
-			if (!(*it)->getFlag().anonymous) {
-				(*it)->send(ResponseTypes::JOIN(user, (*it)->getName().c_str()));
-			} else {
-				(*it)->send(ResponseTypes::JOIN.anonymous((*it)->getName().c_str()));
+		Channel *channel = *it;
+
+		if (channel->getFlags().invite && channel->getInvites().find(&user) == channel->getInvites().end()) {
+			user.send(ResponseTypes::ERR_INVITEONLYCHAN(channel->getName().c_str()));
+		} else if (channel->getFlags().user_limit && channel->getUsers().size() >= channel->getFlags().user_limit) {
+			user.send(ResponseTypes::ERR_CHANNELISFULL(channel->getName().c_str()));
+		} else if (!channel->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != channel->getPassword()))) {
+			user.send(ResponseTypes::ERR_BADCHANNELKEY(channel->getName().c_str()));
+		} else if (!channel->isOnChan(&user)) {
+			channel->addUser(static_cast<User *>(&sender));
+			if (!channel->getFlags().anonymous)
+				channel->send(ResponseTypes::JOIN(user, channel->getName().c_str()));
+			else
+				channel->send(ResponseTypes::JOIN.anonymous(channel->getName().c_str()));
+
+			for (set<User *>::const_iterator users = channel->getUsers().begin(); users != channel->getUsers().end(); users++) {
+				if (!channel->getFlags().anonymous)
+					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
+				else
+					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
 			}
-			for (set<User *>::const_iterator users = (*it)->getUsers().begin(); users != (*it)->getUsers().end(); users++) {
-				user.send(ResponseTypes::RPL_NAMREPLY(user, (*it)->getName().c_str(), (*users)->getName().c_str()));
-			}
-			(*it)->addUser(static_cast<User *>(&sender));
-			user.send(ResponseTypes::RPL_TOPIC(user, (*it)->getName().c_str(), (*it)->getTopic().c_str()));
+			user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), channel->getName().c_str()));
 		}
 		arg_i++;
 	}

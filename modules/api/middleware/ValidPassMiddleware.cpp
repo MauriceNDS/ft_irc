@@ -9,6 +9,6 @@ bool ValidPassMiddleware::handle(const Client& client) const {
 			return true;
 		else
 			user.send(ResponseTypes::ERR_NOVALIDPASS());
-	} catch (const std::bad_cast& e) {}
+	} catch (...) {}
 	return false;
 };

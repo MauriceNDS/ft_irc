@@ -3,7 +3,7 @@
 
 #include "ft_irc.hpp"
 
-#include "api/CommandSender.hpp"
+#include "api/interface/CommandSender.hpp"
 
 class Irc;
 class User;
@@ -40,12 +40,17 @@ public:
 	string getSenderName() const;
 
 	void send(const string& message) const;
+	void send(const CommandSender& sender, const string& message) const;
 
-	const set<User *>& getUsers();
-	const set<User *>& getInvite();
+	const set<User *>& getUsers() const;
+	const set<User *>& getInvites() const;
 
-	Modes& getFlag();
-	string& getPassword();
+	Modes& getFlags();
+	const Modes& getFlags() const;
+	string getSymbol() const;
+	
+	const string& getPassword() const;
+	void setPassword(const string& password);
 
 	void addUser(User *user);
 	void removeUser(User *user);
