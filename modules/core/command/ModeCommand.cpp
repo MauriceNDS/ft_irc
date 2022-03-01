@@ -8,6 +8,10 @@
 
 #include "api/ResponseTypes.hpp"
 
+static void concat_mode_rsp(string & mod, string & params, string & base, string & add) {
+	
+}
+
 void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User&>(sender);
 	Channel& channel = cmd.getArg<Channel>("channel");
@@ -58,6 +62,8 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		return ;
 	}
 
+	string mode_output;
+
 	for (vector<Flag>::iterator i = modes->begin(); i != modes->end(); i++) {
 		bool enabled = i->sign == '+';
 		switch (i->letter) {
@@ -96,5 +102,10 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 				channel.demoteVoiceOp(irc.findUser(i->value));
 			break;
 		}
+		if (mode_output.empty())
+			mode_output += " ";
+		mode_output += i->sign + i->letter + " " + i->value;
+		if ()
 	}
+	// channel.send(ResponseTypes::MODE(user, channel, mode));
 }
