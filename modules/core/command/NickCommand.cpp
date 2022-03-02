@@ -19,7 +19,8 @@ void NickCommand::execute(const Command& cmd, CommandSender& sender) {
 		user.send(ResponseTypes::ERR_NICKNAMEINUSE(nickname.c_str()));
 		return;
 	}
-	Irc::getInstance().broadcast(ResponseTypes::NICK(user, nickname.c_str()));
+	if (user.isRegistered())
+		Irc::getInstance().broadcast(ResponseTypes::NICK(user, nickname.c_str()));
 	user.setName(nickname);
 
 	if (user.isRegistered() && !wasRegistered)
