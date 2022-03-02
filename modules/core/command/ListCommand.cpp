@@ -6,7 +6,7 @@
 #include "api/ResponseTypes.hpp"
 
 void ListCommand::sendChan(const Channel *channel, const CommandSender& sender) const {
-	if (!channel->getFlags().secret || !channel->getFlags().priv)
+	if (!channel->getFlags().secret && !channel->getFlags().priv)
 		sender.send(ResponseTypes::RPL_LIST(sender.getName().c_str(), channel->getName().c_str(), ::itos(channel->getUsers().size()).c_str(), channel->getTopic().c_str()));
 }
 
