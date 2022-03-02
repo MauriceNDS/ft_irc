@@ -56,13 +56,13 @@ void Channel::removeUser(User *user) {
 }
 
 void Channel::addInvite(User *user) {
-	if (invite.find(user) != invite.end())
+	if (invite.find(user) == invite.end())
 		invite.insert(user);
 }
 
 bool Channel::isVoiceOp(User *user) {
 	set<User *>::iterator it = voiceop.find(user);
-	if (it == users.end() && !isChanop(user))
+	if (it == voiceop.end() && !isChanop(user))
 		return false;
 	return true;
 };
