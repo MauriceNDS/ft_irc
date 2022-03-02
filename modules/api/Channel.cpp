@@ -83,6 +83,16 @@ bool Channel::isOnChan(User *user) {
 	return true;
 }
 
+string Channel::getTaggedUserName(User *user) const{
+	if (user && users.find(user) != users.end()) {
+		if (this->chanop.find(user) != chanop.end())
+			return ("@" + user->getName());
+		else if (this->voiceop.find(user) != voiceop.end())
+			return ("+" + user->getName());
+	}
+	return user->getName();
+}
+
 void Channel::promoteVoiceOp(User *user) {
 	if (!user)
 		return;

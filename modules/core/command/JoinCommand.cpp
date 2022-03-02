@@ -28,7 +28,7 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 
 			for (set<User *>::const_iterator users = channel->getUsers().begin(); users != channel->getUsers().end(); users++) {
 				if (!channel->getFlags().anonymous)
-					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName((*users)).c_str())); //(*users)->getName().c_str()
 				else
 					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
 			}
