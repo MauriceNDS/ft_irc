@@ -8,8 +8,15 @@
 
 #include "api/ResponseTypes.hpp"
 
-static void concat_mode_rsp(string & mod, string & params, string & base, string & add) {
-	
+static void concat_mode_rpl(string & mode_output, vector<Flag>::iterator & i) {
+	if (!mode_output.empty())
+			mode_output += " ";
+		mode_output.push_back(i->sign);
+		mode_output.push_back(i->letter);
+		if (!i->value.empty()) {
+			mode_output.append(" ");
+			mode_output.append(i->value);
+		}
 }
 
 void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
@@ -102,10 +109,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 				channel.demoteVoiceOp(irc.findUser(i->value));
 			break;
 		}
-		if (mode_output.empty())
-			mode_output += " ";
-		mode_output += i->sign + i->letter + " " + i->value;
-		if ()
+		concat_mode_rpl(mode_output, i);
 	}
-	// channel.send(ResponseTypes::MODE(user, channel, mode));
+	channel.send(ResponseTypes::MODE(user, channel.getName().c_str(), mode_output.c_str()));
 }

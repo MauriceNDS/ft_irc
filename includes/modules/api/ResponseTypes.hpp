@@ -13,7 +13,7 @@ namespace ResponseTypes {
 	const ResponseSpec NICK = ResponseSpec("NICK", ":<nick>");
 	const ResponseSpec PONG = ResponseSpec("PONG", "<server>");
 	const ResponseSpec QUIT = ResponseSpec("QUIT", ":<message>");
-	const ResponseSpec MODE = ResponseSpec("MODE", "<channel> :<message>");
+	const ResponseSpec MODE = ResponseSpec("MODE", "<channel> <modes>");
 	const ResponseSpec RPL_WELCOME = ResponseSpec(1, "<client> :Welcome to the Internet Relay Network <sendername>");
 	const ResponseSpec RPL_YOURHOST = ResponseSpec(2, "<client> :Your host is <servername>, running version <ver>");
 	const ResponseSpec RPL_CREATED = ResponseSpec(3, "<client> :This server was created <date>");
