@@ -40,6 +40,8 @@ void Channel::setPassword(const string& password) {
 void Channel::addUser(User *user) {
 	if (!users.size())
 		promoteChanop(user);
+	if (invite.find(user) != invite.end())
+		invite.erase(user);
 	users.insert(user);
 }
 
