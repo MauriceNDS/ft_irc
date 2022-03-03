@@ -43,6 +43,7 @@ public:
 	string getSenderName() const;
 
 	void start();
+	void stop();
 
 	~Server();
 };

@@ -164,10 +164,14 @@ void Server::incomingRequest(size_t index) {
 	}
 }
 
-Server::~Server() {
+void Server::stop() {
 	for (size_t i = 0; i < connections.size(); i++) {
 		closeConnection(i);
 		delete connections[i];
 	}
 	connections.clear();
+}
+
+Server::~Server() {
+	stop();
 }
