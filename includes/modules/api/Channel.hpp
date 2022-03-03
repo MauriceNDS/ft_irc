@@ -67,6 +67,8 @@ public:
 	void promoteVoiceOp(User *user);
 	void demoteVoiceOp(User *user);
 
+	string getTaggedUserName(User *user) const;
+
 	const string getTopic() const;
 	void setTopic(string& arg);
 

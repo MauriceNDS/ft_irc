@@ -20,7 +20,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), (*ite)->getName().c_str()));
+				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName(*ite).c_str()));
 			}
 			sender.send(ResponseTypes::RPL_ENDOFNAMES(sender.getName().c_str(), channel->getName().c_str()));
 		}
@@ -38,7 +38,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), (*ite)->getName().c_str()));
+				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName(*ite).c_str()));
 			}
 			sender.send(ResponseTypes::RPL_ENDOFNAMES(sender.getName().c_str(), channel->getName().c_str()));
 		}

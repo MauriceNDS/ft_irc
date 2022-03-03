@@ -56,13 +56,13 @@ void Channel::removeUser(User *user) {
 }
 
 void Channel::addInvite(User *user) {
-	if (invite.find(user) != invite.end())
+	if (invite.find(user) == invite.end())
 		invite.insert(user);
 }
 
 bool Channel::isVoiceOp(User *user) {
 	set<User *>::iterator it = voiceop.find(user);
-	if (it == users.end() && !isChanop(user))
+	if (it == voiceop.end() && !isChanop(user))
 		return false;
 	return true;
 };
@@ -81,6 +81,16 @@ bool Channel::isOnChan(User *user) {
 	if (it == users.end())
 		return false;
 	return true;
+}
+
+string Channel::getTaggedUserName(User *user) const{
+	if (user && users.find(user) != users.end()) {
+		if (this->chanop.find(user) != chanop.end())
+			return ("@" + user->getName());
+		else if (this->voiceop.find(user) != voiceop.end())
+			return ("+" + user->getName());
+	}
+	return user->getName();
 }
 
 void Channel::promoteVoiceOp(User *user) {
