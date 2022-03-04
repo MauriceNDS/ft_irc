@@ -17,7 +17,7 @@ Connection *Server::addConnection(const struct pollfd& connection, const struct 
 	return newConnect;
 }
 
-Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password) {}
+Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password), running(true) {}
 
 const string& Server::getName() const {
 	return name;
@@ -76,7 +76,7 @@ void Server::start() {
 		plugin->second->serverStarted();
 
 	std::cout << "Waiting for connections..." << std::endl;
-	while (true) {
+	while (running) {
 		poll(&Connection::sockets[0], Connection::sockets.size(), -1);
 		for (size_t i = 0; i < Connection::sockets.size(); i++) {
 			if (Connection::sockets[i].revents == 0)
@@ -107,7 +107,7 @@ void Server::incomingConnection() {
 
 	newSocket.events = POLLIN;
 	clen = sizeof(newConnection);
-	while (true) {
+	while (running) {
 		if ((newSocket.fd = accept(Connection::sockets[0].fd, (struct sockaddr *)&newConnection, (socklen_t*)&clen)) < 0)
 			break;
 
@@ -134,7 +134,7 @@ void Server::removeConnection(size_t index) {
 void Server::incomingRequest(size_t index) {
 	char buffer[MAX_BUFFER_LENGTH];
 
-	while (true) {
+	while (running) {
 		int ret = recv(Connection::sockets[index].fd, buffer, MAX_BUFFER_LENGTH - 1, 0);
 		if (ret < 0)
 			return;
@@ -159,13 +159,19 @@ void Server::incomingRequest(size_t index) {
 				std::cout << "          --> " << request << std::endl;
 				MessageEvent event = MessageEvent(request, *connections[index]->client);
 				Irc::getInstance().getCommandManager().process(event);
+				if (!running)
+					return ;
 			}
 		}
 	}
 }
 
+void Server::stop() { running = false; }
+
 Server::~Server() {
-	for (size_t i = 0; i < connections.size(); i++) {
+	size_t i = connections.size();
+	while (i) {
+		i--;
 		closeConnection(i);
 		delete connections[i];
 	}

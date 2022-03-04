@@ -105,7 +105,7 @@ void Channel::demoteVoiceOp(User *user) {
 	if (!user)
 		return;
 	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end())
+	if (it != voiceop.end())
 		voiceop.erase(user);
 }
 
@@ -121,7 +121,7 @@ void Channel::demoteChanop(User *user) {
 	if (!user)
 		return;
 	set<User *>::iterator it = chanop.find(user);
-	if (it == chanop.end())
+	if (it != chanop.end())
 		chanop.erase(user);
 	if (!chanop.size() && flags.reop)
 		chanop.insert(*users.begin());

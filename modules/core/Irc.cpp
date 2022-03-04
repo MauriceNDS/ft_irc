@@ -14,6 +14,7 @@
 #include "core/command/InviteCommand.hpp"
 #include "core/command/ListCommand.hpp"
 #include "core/command/QuitCommand.hpp"
+#include "core/command/SquitCommand.hpp"
 #include "core/command/ModeCommand.hpp"
 
 #include "core/command/element/MsgToCommandElement.hpp"
@@ -23,14 +24,16 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
-#include "api/middleware/UserMiddleware.hpp"
-#include "api/middleware/RegisteredUserMiddleware.hpp"
-#include "api/middleware/ValidPassMiddleware.hpp"
-
 #include "api/command/CommandSpec.hpp"
 #include "api/command/GenericArguments.hpp"
 
+#include "api/middleware/UserMiddleware.hpp"
+
 #include "api/command/element/FlagsCommandElement.hpp"
+
+#include "core/middleware/OperatorMiddleware.hpp"
+#include "core/middleware/ValidPassMiddleware.hpp"
+#include "core/middleware/RegisteredUserMiddleware.hpp"
 
 Irc& Irc::getInstance() {
 	return *Irc::instance;
@@ -181,6 +184,12 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 		.executor(new ModeCommand())
 		.build()
 	);
+	commandManager.registerCommand(CommandSpec::Builder()
+		.name("SQUIT")
+		.middleware(new OperatorMiddleware())
+		.executor(new SquitCommand())
+		.build()
+	);
 
 	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
 		plugin->second->init();
@@ -256,6 +265,7 @@ void Irc::addChannel(Channel *channel) {
 
 void Irc::removeChannel(Channel *channel) {
 	channels.erase(channel->getName());
+	delete channel;
 }
 
 const map<string, Channel *>& Irc::getChannels() const {
@@ -270,11 +280,11 @@ void Irc::demoteOperator(User *user) {
 	operators.erase(user);
 }
 
-bool Irc::isOperator(User *user) {
+bool Irc::isOperator(const User *user) const {
 	return operators.find(user) != operators.end();
 }
 
-const Server& Irc::getServer() const {
+Server& Irc::getServer() {
 	return server;
 }
 
@@ -289,10 +299,13 @@ Irc::~Irc() {
 	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
 		plugin->second->serverStopping();
 
-	for (vector<User *>::iterator i = users.begin(); i != users.end(); ++i)
-		delete *i;
-
 	users.clear();
+	operators.clear();
+
+	for (map<string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
+		delete it->second;
+	}
+	channels.clear();
 
 	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
 		plugin->second->serverStopped();

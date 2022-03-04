@@ -24,3 +24,18 @@ bool User::isRegistered() const {
 }
 
 bool User::getValidPassword() const					{ return this->validPassword; }
+
+bool User::isValidName(const string& identifier) {
+	string letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	string digit = "0123456789";
+	string dash = "-";
+	string special = "[]\\`_^{|}";
+
+	if (identifier.empty() || identifier.length() > 9)
+		return false;
+	if ((letter + special).find_first_of(identifier.substr(0, 1)) == std::string::npos)
+		return false;
+	if ((letter + special + digit + dash).find_first_of(identifier) == std::string::npos)
+		return false;
+	return true;
+}

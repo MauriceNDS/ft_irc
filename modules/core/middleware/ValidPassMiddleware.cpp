@@ -1,6 +1,6 @@
 #include "api/User.hpp"
 #include "api/ResponseTypes.hpp"
-#include "api/middleware/ValidPassMiddleware.hpp"
+#include "core/middleware/ValidPassMiddleware.hpp"
 
 bool ValidPassMiddleware::handle(const Client& client) const {
 	try {

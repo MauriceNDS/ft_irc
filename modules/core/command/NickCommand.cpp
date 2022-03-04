@@ -9,8 +9,8 @@ void NickCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = dynamic_cast<User&>(sender);
 
 	string& nickname = cmd.getArg<string>("nickname");
-	if (nickname.empty() || nickname.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_") != string::npos) {
-		user.send(ResponseTypes::ERR_ERRONEUSNICKNAME(nickname.c_str()));
+	if (!User::isValidName(nickname)) {
+		user.send(ResponseTypes::ERR_ERRONEUSNICKNAME(user.getName().c_str(), nickname.c_str()));
 		return;
 	}
 	bool wasRegistered = user.isRegistered();
