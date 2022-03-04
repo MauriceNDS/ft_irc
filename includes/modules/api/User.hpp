@@ -27,6 +27,8 @@ public:
 
 	bool isRegistered() const;
 	bool getValidPassword() const;
+
+	static bool isValidName(const string& identifier);
 };
 
 #endif /* FT_IRC_API_USER */

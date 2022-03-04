@@ -36,7 +36,7 @@ namespace ResponseTypes {
 	const ResponseSpec ERR_NOTEXTTOSEND = ResponseSpec(412, ":No text to send");
 	const ResponseSpec ERR_UNKNOWNCOMMAND = ResponseSpec(421, "<command> :Unknown command");
 	const ResponseSpec ERR_NONICKNAMEGIVEN = ResponseSpec(431, ":No nickname given");
-	const ResponseSpec ERR_ERRONEUSNICKNAME = ResponseSpec(432, "<nick> :Erroneous nickname");
+	const ResponseSpec ERR_ERRONEUSNICKNAME = ResponseSpec(432, "<client> <nick> :Erroneous nickname");
 	const ResponseSpec ERR_NICKNAMEINUSE = ResponseSpec(433, "<nick> :Nickname is already in use");
 	const ResponseSpec ERR_USERNOTINCHANNEL = ResponseSpec(441, "<nick> <channel> :They aren't on that channel");
 	const ResponseSpec ERR_NOTONCHANNEL = ResponseSpec(442, "<channel> :You're not on that channel");
