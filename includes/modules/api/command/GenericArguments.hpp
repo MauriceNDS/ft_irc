@@ -10,14 +10,9 @@
 
 class StringCommandElement : public CommandElement {
 public:
-	void *parseValue(string arg, MessageEvent& event) const {
-		(void)event;
-		return new string(arg);
-	}
+	void *parseValue(string arg, MessageEvent& event) const;
 
-	void destroy(void *arg) const {
-		delete static_cast<string*>(arg);
-	}
+	void destroy(void *arg) const;
 };
 
 class OptionalCommandElement : public CommandElement {
@@ -26,40 +21,17 @@ private:
 
 	OptionalCommandElement();
 public:
-	OptionalCommandElement(CommandElement *subtype) : subtype(subtype) {}
+	OptionalCommandElement(CommandElement *subtype);
 
-	bool isRequired() const {
-		return false;
-	}
+	bool isRequired() const;
 
-	void *parseValues(list<string>& args, MessageEvent& event) const {
-		if (args.empty())
-			return new const void*(NULL);
-		void *val = subtype->parseValues(args, event);
-		if (!val)
-			return NULL;
-		return new const void*(val);
-	}
+	void *parseValues(list<string>& args, MessageEvent& event) const;
 
-	void *parseValue(string arg, MessageEvent& event) const {
-		if (arg.empty())
-			return new const void*(NULL);
-		void *val = subtype->parseValue(arg, event);
-		if (!val)
-			return NULL;
-		return new const void*(val);
-	}
+	void *parseValue(string arg, MessageEvent& event) const;
 
-	void destroy(void *arg) const {
-		void **elem = static_cast<void **>(arg);
-		if (*elem)
-			subtype->destroy(*elem);
-		delete elem;
-	}
+	void destroy(void *arg) const;
 
-	~OptionalCommandElement() {
-		delete this->subtype;
-	}
+	~OptionalCommandElement();
 };
 
 template <class T>
@@ -108,13 +80,9 @@ public:
 };
 
 namespace GenericArguments {
-	StringCommandElement *string() {
-		return new StringCommandElement();
-	}
+	StringCommandElement *string();
 
-	OptionalCommandElement *optional(CommandElement *subtype) {
-		return new OptionalCommandElement(subtype);
-	}
+	OptionalCommandElement *optional(CommandElement *subtype);
 
 	template <class T>
 	ListCommandElement<T> *list(CommandElement *subtype) {
