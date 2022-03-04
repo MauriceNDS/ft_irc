@@ -265,6 +265,7 @@ void Irc::addChannel(Channel *channel) {
 
 void Irc::removeChannel(Channel *channel) {
 	channels.erase(channel->getName());
+	delete channel;
 }
 
 const map<string, Channel *>& Irc::getChannels() const {
