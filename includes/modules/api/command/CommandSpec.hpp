@@ -31,7 +31,7 @@ private:
 	CommandSpec& operator=(const CommandSpec&);
 
 protected:
-	CommandSpec(const string& name, const vector<pair<string, CommandElement *> >& parameters, CommandExecutor *executor, Middleware *middleware) : _name(name), _parameters(parameters), _executor(executor), _middleware(middleware) {}
+	CommandSpec(const string& name, const vector<pair<string, CommandElement *> >& parameters, CommandExecutor *executor, Middleware *middleware);
 
 public:
 	class Builder {
@@ -42,36 +42,20 @@ public:
 		Middleware *_middleware;
 
 	public:
-		Builder() : _executor(NULL), _middleware(NULL) {}
+		Builder();
 
-		Builder& name(string name) {
-			this->_name = name;
-			return *this;
-		}
+		Builder& name(string name);
 
-		Builder& argument(string arg, CommandElement *element) {
-			this->_parameters.push_back(make_pair(arg, element));
-			return *this;
-		}
+		Builder& argument(string arg, CommandElement *element);
 
-		Builder &executor(CommandExecutor *executor) {
-			this->_executor = executor;
-			return *this;
-		}
+		Builder &executor(CommandExecutor *executor);
 
-		Builder &middleware(Middleware *middleware) {
-			this->_middleware = middleware;
-			return *this;
-		}
+		Builder &middleware(Middleware *middleware);
 
-		const CommandSpec *build() const {
-			return new CommandSpec(_name, _parameters, _executor, _middleware);
-		}
+		const CommandSpec *build() const;
 	};
 
-	const string& getName() const {
-		return _name;
-	}
+	const string& getName() const;
 
 	~CommandSpec();
 };

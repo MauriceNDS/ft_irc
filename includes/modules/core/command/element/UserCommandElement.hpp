@@ -11,13 +11,7 @@
 
 class UserCommandElement : public CommandElement {
 public:
-	void *parseValue(string arg, MessageEvent& event) const {
-		User *user = Irc::getInstance().findUser(arg);
-		if (user)
-			return user;
-		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK(arg.c_str()));
-		return NULL;
-	}
+	void *parseValue(string arg, MessageEvent& event) const;
 };
 
 #endif /* FT_IRC_CORE_USER_COMMAND_ELEMENT */

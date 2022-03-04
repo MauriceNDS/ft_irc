@@ -9,16 +9,16 @@ class Plugin {
 public:
 	virtual string getId() const = 0;
 
-	virtual void construct() {};
-	virtual void preInit() {};
-	virtual void init() {};
-	virtual void postInit() {};
-	virtual void serverAboutToStart() {};
-	virtual void serverStarted() {};
-	virtual void serverStopping() {};
-	virtual void serverStopped() {};
+	virtual void construct();
+	virtual void preInit();
+	virtual void init();
+	virtual void postInit();
+	virtual void serverAboutToStart();
+	virtual void serverStarted();
+	virtual void serverStopping();
+	virtual void serverStopped();
 
-	virtual ~Plugin() {};
+	virtual ~Plugin();
 };
 
 #endif /* FT_IRC_API_PLUGIN */

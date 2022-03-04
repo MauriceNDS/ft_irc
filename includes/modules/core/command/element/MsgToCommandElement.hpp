@@ -12,23 +12,9 @@
 
 class MsgToCommandElement : public CommandElement {
 public:
-	const ResponseSpec& notProvidedResponse() const {
-		return ResponseTypes::ERR_NORECIPIENT;
-	}
+	const ResponseSpec& notProvidedResponse() const;
 
-	void *parseValue(string arg, MessageEvent& event) const {
-		if (Channel::isValidIdentifier(arg)) {
-			Channel *channel = Irc::getInstance().findChannel(arg);
-			if (channel)
-				return channel;
-		} else {
-			User *user = Irc::getInstance().findUser(arg);
-			if (user) 
-				return user;
-		}
-		event.getSender().send(ResponseTypes::ERR_NOSUCHNICK(arg.c_str()));
-		return NULL;
-	}
+	void *parseValue(string arg, MessageEvent& event) const;
 };
 
 #endif /* FT_IRC_CORE_MSGTARGET_COMMAND_ELEMENT */

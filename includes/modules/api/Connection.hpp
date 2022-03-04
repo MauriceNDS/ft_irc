@@ -23,12 +23,7 @@ public:
 
 	void send(const char *str, int len) const;
 
-	string getIP() const {
-		return ::itos(addr.sin_addr.s_addr & 0xFF) + '.'
-			+ ::itos((addr.sin_addr.s_addr & 0xFF00) >> 8) + '.'
-			+ ::itos((addr.sin_addr.s_addr & 0xFF0000) >> 16) + '.'
-			+ ::itos((addr.sin_addr.s_addr & 0xFF000000) >> 24);
-	}
+	string getIP() const;
 };
 
 #endif /* FT_IRC_SERVER_CONNECTION */

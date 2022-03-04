@@ -7,8 +7,9 @@ struct Flag {
 	char sign;
 	char letter;
 	string value;
+	bool has_value;
 
-	Flag(char sign, char letter, string value = "") : sign(sign), letter(letter), value(value) {}
+	Flag(char sign, char letter, string value = "");
 };
 
 #endif /* FT_IRC_API_FLAGS */
