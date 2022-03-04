@@ -13,22 +13,9 @@ private:
 	bool createIfUnknown;
 
 public:
-	ChannelCommandElement(bool createIfUnknown) : createIfUnknown(createIfUnknown) {};
+	ChannelCommandElement(bool createIfUnknown);
 
-	void *parseValue(string arg, MessageEvent& event) const {
-		if (Channel::isValidIdentifier(arg)) {
-			Channel *channel;
-			if ((channel = Irc::getInstance().findChannel(arg))) {
-				return (channel);
-			} else if (createIfUnknown) {
-				channel = new Channel(arg);
-				Irc::getInstance().addChannel(channel);
-				return (channel);
-			}
-		}
-		event.getSender().send(ResponseTypes::ERR_NOSUCHCHANNEL(arg.c_str()));
-		return NULL;
-	}
+	void *parseValue(string arg, MessageEvent& event) const;
 };
 
 #endif /* FT_IRC_CORE_CHANNEL_COMMAND_ELEMENT */

@@ -18,35 +18,21 @@ private:
 		string name;
 
 	public:
-		AnonymousSender() : name("anonymous") {}
+		AnonymousSender();
 
-		void send(const string& message) const {
-			(void)message;
-		}
+		void send(const string& message) const;
 
-		const string& getName() const {
-			return name;
-		}
+		const string& getName() const;
 
-		string getSenderName() const {
-			return name;
-		}
+		string getSenderName() const;
 	};
 
 	string build(const CommandSender& sender, const char *first, va_list argptr) const;
 
 public:
-	ResponseSpec(int response, const string& args = "") : _args(args) {
-		_command = string(3, '0');
+	ResponseSpec(int response, const string& args = "");
 
-		_command[2] = (response % 10) + '0';
-		response /= 10;
-		_command[1] = (response % 10) + '0';
-		response /= 10;
-		_command[0] = (response % 10) + '0';
-	}
-
-	ResponseSpec(const string& command, const string& args = "") : _command(command), _args(args) {}
+	ResponseSpec(const string& command, const string& args = "");
 
 	string operator()() const;
 	string operator()(const char *args...) const;

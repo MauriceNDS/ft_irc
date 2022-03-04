@@ -10,23 +10,15 @@ private:
 	bool cancelled;
 
 public:
-	MessageEvent(const string& message, Client& sender) : message(message), sender(sender), cancelled(false) {}
+	MessageEvent(const string& message, Client& sender);
 
-	Client& getSender() const {
-		return this->sender;
-	}
+	Client& getSender() const;
 
-	const string& getMessage() const {
-		return this->message;
-	}
+	const string& getMessage() const;
 
-	void setCancelled(bool cancel) {
-		this->cancelled = cancel;
-	}
+	void setCancelled(bool cancel);
 	
-	bool isCancelled() const {
-		return this->cancelled;
-	}
+	bool isCancelled() const;
 };
 
 #endif /* FT_IRC_API_MESSAGE_EVENT */
