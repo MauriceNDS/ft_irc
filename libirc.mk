@@ -74,6 +74,8 @@ $(DEPS):
 build/%.o:	%.cpp tmp/%.d
 			$(CC) $(CPPFLAGS) $(DEPFLAGS) $(INCLUDES) -c $< -o $@ -Iincludes
 
+%.h %.hpp: ;
+
 $(NAME):	$(OBJS)
 			$(CC) $(LDFLAGS) -o $(NAME) $(OBJS)
 
