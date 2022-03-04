@@ -24,7 +24,7 @@ private:
 
 	map<string, Channel *> channels;
 	vector<User *> users;
-	set<User *> operators;
+	set<const User *> operators;
 
 public:
 	static Irc& getInstance();
@@ -52,9 +52,9 @@ public:
 
 	void promoteOperator(User *user);
 	void demoteOperator(User *user);
-	bool isOperator(User *user);
+	bool isOperator(const User *user) const;
 
-	const Server& getServer() const;
+	Server& getServer();
 
 	void sendWelcomeMessage(User& user);
 

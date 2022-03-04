@@ -60,7 +60,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 			mod += 'l';
 			params += ::itos(flags.user_limit);
 		}
-		sender.send(ResponseTypes::RPL_CHANNELMODEIS(channel.getName().c_str(), mod.c_str(), params.c_str()));
+		sender.send(ResponseTypes::RPL_CHANNELMODEIS(sender.getName().c_str(), channel.getName().c_str(), mod.c_str(), params.c_str()));
 		return ;
 	}
 		

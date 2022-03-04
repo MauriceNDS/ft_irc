@@ -27,9 +27,7 @@ override SRCS		:=													\
 				modules/api/command/element/FlagsCommandElement.cpp		\
 				modules/api/command/response/ResponseSpec.cpp			\
 				modules/api/middleware/Middleware.cpp					\
-				modules/api/middleware/RegisteredUserMiddleware.cpp		\
 				modules/api/middleware/UserMiddleware.cpp				\
-				modules/api/middleware/ValidPassMiddleware.cpp			\
 				modules/core/command/InviteCommand.cpp					\
 				modules/core/command/JoinCommand.cpp					\
 				modules/core/command/KickCommand.cpp					\
@@ -40,12 +38,16 @@ override SRCS		:=													\
 				modules/core/command/NoticeCommand.cpp					\
 				modules/core/command/OperCommand.cpp					\
 				modules/core/command/PartCommand.cpp					\
+				modules/core/command/SquitCommand.cpp					\
 				modules/core/command/PassCommand.cpp					\
 				modules/core/command/PingCommand.cpp					\
 				modules/core/command/PrivmsgCommand.cpp					\
 				modules/core/command/QuitCommand.cpp					\
 				modules/core/command/TopicCommand.cpp					\
 				modules/core/command/UserCommand.cpp					\
+				modules/core/middleware/OperatorMiddleware.cpp			\
+				modules/core/middleware/ValidPassMiddleware.cpp			\
+				modules/core/middleware/RegisteredUserMiddleware.cpp	\
 				modules/core/Irc.cpp									\
 				modules/server/Server.cpp								\
 				modules/api/utils.cpp									\

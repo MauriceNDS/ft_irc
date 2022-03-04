@@ -14,11 +14,11 @@ void OperCommand::execute(const Command& cmd, CommandSender& sender) {
 	string& password = cmd.getArg<string>("password");
 
 	if (name != test_name) {
-		sender.send(ResponseTypes::ERR_NOOPERHOST().c_str());
+		sender.send(ResponseTypes::ERR_NOOPERHOST(user.getName().c_str()).c_str());
 	} else if (password != test_password) {
-		sender.send(ResponseTypes::ERR_PASSWDMISMATCH().c_str());
+		sender.send(ResponseTypes::ERR_PASSWDMISMATCH(user.getName().c_str()).c_str());
 	} else if (!Irc::getInstance().isOperator(&user)){
-		sender.send(ResponseTypes::RPL_YOUREOPER());
+		sender.send(ResponseTypes::RPL_YOUREOPER(user.getName().c_str()));
 		Irc::getInstance().promoteOperator(&user);
 	}
 }

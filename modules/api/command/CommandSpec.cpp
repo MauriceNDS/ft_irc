@@ -31,7 +31,6 @@ void CommandSpec::call(list<string>& tokens, MessageEvent& event) const {
 	if (!event.isCancelled()) {
 		_executor->execute(Command(_name, args, event.getSender()), event.getSender());
 	}
-
 	// Destroy all the created elements
 	for (it = _parameters.begin(); it != _parameters.end(); it++) {
 		try {

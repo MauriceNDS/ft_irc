@@ -1,6 +1,7 @@
 #include "api/User.hpp"
 #include "api/ResponseTypes.hpp"
-#include "api/middleware/RegisteredUserMiddleware.hpp"
+
+#include "core/middleware/RegisteredUserMiddleware.hpp"
 
 bool RegisteredUserMiddleware::handle(const Client& client) const {
 	try {

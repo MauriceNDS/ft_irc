@@ -20,6 +20,7 @@ private:
 	struct sockaddr_in connectionConfig;
 	const int port;
 	const string password;
+	bool running;
 
 	void incomingConnection();
 	void incomingRequest(size_t index);
