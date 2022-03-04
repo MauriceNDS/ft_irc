@@ -23,12 +23,14 @@ void *FlagsCommandElement::parseValues(list<string>& args, MessageEvent& event) 
 			if (*it != ':' && pos != string::npos) {
 				Flag flag(sign, *it);
 
-				if (flags[pos + 1] == ':') {
+				char next = flags[pos + 1];
+				if (next == ':' || next == sign) {
 					if (args.empty()) {
 						event.getSender().send(ResponseTypes::ERR_NEEDMOREPARAMS("MODE"));
 						destroy(modes);
 						return NULL;
 					}
+					flag.has_value = true;
 					flag.value = args.front();
 					args.pop_front();
 				}
