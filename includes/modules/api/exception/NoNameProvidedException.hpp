@@ -5,9 +5,7 @@
 
 struct NoNameProvidedException : public std::exception {
 
-	const char *what() const throw () {
-		return "Cannot initialize a command without a name.";
-	}
+	const char *what() const throw ();
 };
 
 #endif /* FT_IRC_API_NO_NAME_PROVIDED_EXCEPTION */

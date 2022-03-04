@@ -14,7 +14,7 @@ private:
 	map<string, void *const> _args;
 	const CommandSender& _sender;
 
-	Command(const string& name, map<string, void *const>& args, const CommandSender& sender) : _name(name), _args(args), _sender(sender) {}
+	Command(const string& name, map<string, void *const>& args, const CommandSender& sender);
 
 public:
 	template <class T>
@@ -27,13 +27,9 @@ public:
 		}
 	}
 
-	const string& getCommand() const {
-		return _name;
-	}
+	const string& getCommand() const;
 
-	const CommandSender& getSender() const {
-		return _sender;
-	}
+	const CommandSender& getSender() const;
 };
 
 #endif /* FT_IRC_API_COMMAND */
