@@ -16,7 +16,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 			const Channel *channel = it->second;
 			const set<User *>& channelUserList = channel->getUsers();
 
-			if (channel->getFlags().anonymous || channel->getFlags().secret || channel->getFlags().priv)
+			if (channel->getFlags().secret || channel->getFlags().priv)
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
@@ -34,7 +34,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 			const Channel *channel = *it;
 			const set<User *>& channelUserList = channel->getUsers();
 			
-			if (channel->getFlags().anonymous || channel->getFlags().secret)
+			if (channel->getFlags().secret)
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {

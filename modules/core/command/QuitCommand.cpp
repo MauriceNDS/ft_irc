@@ -14,17 +14,8 @@ void QuitCommand::execute(const Command& cmd, CommandSender& sender) {
 	string *message = cmd.getArg<string *>("message");
 	map<string, Channel *> chan_list = Irc::getInstance().getChannels();
 	for (map<string, Channel *>::const_iterator it = chan_list.begin(); it != chan_list.end(); it++) {
-		if (it->second->containsUser(user)) {
-			if (message && it->second->getFlags().anonymous) {
-				it->second->send(ResponseTypes::PART.anonymous(message->c_str()));
-			} else if (it->second->getFlags().anonymous) {
-				it->second->send(ResponseTypes::PART.anonymous("anonymous"));
-			} else if (message) {
-				it->second->send(ResponseTypes::QUIT(user, message->c_str()));
-			} else {
-				it->second->send(ResponseTypes::QUIT(user, user.getName().c_str()));
-			}
-		}
+		if (it->second->containsUser(user))
+			it->second->send(ResponseTypes::QUIT(user, message ? message->c_str() : user.getName().c_str()));
 	}
 	// *************************************************
 

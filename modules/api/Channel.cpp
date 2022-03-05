@@ -33,17 +33,11 @@ void Channel::onJoin(GroupJoinEvent::After& event) {
 	if (size() == 1)
 		promote(event.getUser());
 
-	if (!getFlags().anonymous)
-		send(ResponseTypes::JOIN(user, getName().c_str()));
-	else
-		send(ResponseTypes::JOIN.anonymous(getName().c_str()));
+	send(ResponseTypes::JOIN(user, getName().c_str()));
 
-	for (set<User *>::const_iterator entry = getUsers().begin(); entry != getUsers().end(); entry++) {
-		if (!getFlags().anonymous)
-			user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), getSymbol().c_str(), getName().c_str(), getDisplayName(*(*entry)).c_str()));
-		else
-			user.send(ResponseTypes::RPL_NAMREPLY("anonymous", getSymbol().c_str(), getName().c_str(), (*entry)->getName().c_str()));
-	}
+	for (set<User *>::const_iterator entry = getUsers().begin(); entry != getUsers().end(); entry++)
+		user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), getSymbol().c_str(), getName().c_str(), getDisplayName(*(*entry)).c_str()));
+
 	user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), getName().c_str()));
 
 	std::cout << "[INFO] " << event.getUser().getName() << " joined " << getName() << std::endl;

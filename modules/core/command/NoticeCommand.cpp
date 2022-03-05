@@ -15,8 +15,6 @@ void NoticeCommand::execute(const Command& cmd, CommandSender& sender) {
 		if (channel) {
 			if (!channel->containsUser(user) && channel->getFlags().outside_message) {}
 			else if (channel->getFlags().moderate && !channel->isVoiceOp(user)) {}
-			else if (channel->getFlags().anonymous)
-				channel->send(sender, ResponseTypes::NOTICE.anonymous(channel->getName().c_str(), message.c_str()));
 			else
 				channel->send(sender, ResponseTypes::NOTICE(sender, channel->getName().c_str(), message.c_str()));
 			continue;

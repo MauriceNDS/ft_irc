@@ -19,10 +19,7 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 			continue;
 		}
 
-		if (channel->getFlags().anonymous)
-			channel->send(ResponseTypes::PART.anonymous("anonymous", message ? message->c_str() : ""));
-		else
-			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message ? message->c_str() : user.getSenderName().c_str()));
+		channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message ? message->c_str() : user.getSenderName().c_str()));
 
 		channel->removeUser(user);
 	}

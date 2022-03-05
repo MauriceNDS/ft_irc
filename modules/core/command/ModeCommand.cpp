@@ -36,8 +36,6 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		string mod;
 		string params;
 
-		if (flags.anonymous)
-			mod += 'a';
 		if (flags.invite)
 			mod += 'i';
 		if (flags.moderate)
@@ -75,7 +73,6 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<Flag>::iterator i = modes->begin(); i != modes->end(); i++) {
 		bool enabled = i->sign == '+';
 		switch (i->letter) {
-		case 'a': flags.anonymous = enabled; break;
 		case 'i': flags.invite = enabled; break;
 		case 'k':
 			if (enabled && !channel.getPassword().empty())
