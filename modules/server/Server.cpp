@@ -44,17 +44,23 @@ void Server::start() {
 	int opt = 1;
 
 	std::cout << "Setting up the server..." << std::endl;
-
-	// Can be protected
-	serverSocket.fd = socket(AF_INET, SOCK_STREAM, 0);
+	
+	if ((serverSocket.fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+		std::cerr << std::strerror(errno) << std::endl;
+		return;
+	}
 	serverSocket.events = POLLIN;
 
-	// Can be protected -- Allow socket descriptor to be reusable
-	setsockopt(serverSocket.fd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+	if (setsockopt(serverSocket.fd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) == -1) {
+		std::cerr << std::strerror(errno) << std::endl;
+		return;
+	}
 	opt = 1;
 
-	// Can be protected -- Set socket to be nonblocking
-	ioctl(serverSocket.fd, FIONBIO, (char *)&opt);
+	if (ioctl(serverSocket.fd, FIONBIO, (char *)&opt) == -1) {
+		std::cerr << std::strerror(errno) << std::endl;
+		return;
+	}
 
 	connectionConfig.sin_family = AF_INET;
 	connectionConfig.sin_addr.s_addr = INADDR_ANY;
@@ -62,13 +68,15 @@ void Server::start() {
 
 	if (bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig))) {
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno); 
+		return;
 	}
 
 	addConnection(serverSocket, connectionConfig);
 
-	// Can be protected
-	listen(serverSocket.fd, 32);
+	if (listen(serverSocket.fd, 32) == -1) { 
+		std::cerr << std::strerror(errno) << std::endl;
+		return;
+	}
 
 	vector<Connection *>::iterator it;
 
@@ -122,6 +130,7 @@ void Server::closeConnection(size_t index) {
 		Irc::getInstance().removeUser(user);
 		delete user;
 	}
+	shutdown(Connection::sockets[index].fd, SHUT_RDWR);
 	close(Connection::sockets[index].fd);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
 }
