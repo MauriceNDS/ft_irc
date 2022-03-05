@@ -24,7 +24,7 @@ override OBJS		:= $(addprefix build/, $(SRCS:.cpp=.o))
 
 override DEPS		:= $(addprefix tmp/, $(SRCS:.cpp=.d))
 
-override DIRS		:= $(sort $(dir $(NAME) $(OBJS)))
+override DIRS		:= $(sort $(dir $(NAME) $(OBJS) $(DEPS)))
 
 override INCLUDES	:= -Iincludes -Iincludes/modules
 
