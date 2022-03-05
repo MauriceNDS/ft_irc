@@ -47,20 +47,19 @@ void Server::start() {
 	
 	if ((serverSocket.fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno); 
+		return;
 	}
 	serverSocket.events = POLLIN;
 
 	if (setsockopt(serverSocket.fd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) == -1) {
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno);
+		return;
 	}
 	opt = 1;
 
-	// Set socket to be nonblocking
 	if (ioctl(serverSocket.fd, FIONBIO, (char *)&opt) == -1) {
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno);
+		return;
 	}
 
 	connectionConfig.sin_family = AF_INET;
@@ -69,14 +68,14 @@ void Server::start() {
 
 	if (bind(serverSocket.fd, (struct sockaddr *)&connectionConfig, sizeof(connectionConfig))) {
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno); 
+		return;
 	}
 
 	addConnection(serverSocket, connectionConfig);
 
 	if (listen(serverSocket.fd, 32) == -1) { 
 		std::cerr << std::strerror(errno) << std::endl;
-		exit(errno); 
+		return;
 	}
 
 	vector<Connection *>::iterator it;
