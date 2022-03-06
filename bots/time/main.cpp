@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <ctime>
+#include <unistd.h>
 
 #define MAX_BUFFER_LENGTH 512
 
@@ -124,5 +125,7 @@ int main(int argc, const char **argv) {
 	}
 
 	run(sockfd, argv[argc - 1]);
+	close(sockfd);
+	shutdown(sockfd, SHUT_RDWR);
 	return 0;
 }
