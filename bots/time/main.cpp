@@ -77,7 +77,7 @@ void run(int sockfd, const string& password) {
 						else
 							message += getDateTime("It is %I:%M %p");
 					} else {
-						message += "Send `datetime', `date' or `time' on this channel\n";
+						message += "Send `datetime', `date' or `time' on this channel. ";
 						message += "Use `24` or `12` to change the format for hours.";
 					}
 					message += "\n";
