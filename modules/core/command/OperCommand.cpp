@@ -17,8 +17,8 @@ void OperCommand::execute(const Command& cmd, CommandSender& sender) {
 		sender.send(ResponseTypes::ERR_NOOPERHOST(user.getName().c_str()).c_str());
 	} else if (password != test_password) {
 		sender.send(ResponseTypes::ERR_PASSWDMISMATCH(user.getName().c_str()).c_str());
-	} else if (!Irc::getInstance().isOperator(&user)){
+	} else if (!Irc::getInstance().isOperator(user)){
 		sender.send(ResponseTypes::RPL_YOUREOPER(user.getName().c_str()));
-		Irc::getInstance().promoteOperator(&user);
+		Irc::getInstance().promote(user);
 	}
 }

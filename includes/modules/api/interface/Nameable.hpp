@@ -5,7 +5,7 @@
 
 class Nameable {
 public:
-	virtual const std::string& getName() const = 0;
+	virtual string getName() const = 0;
 
 	virtual ~Nameable() {}
 };

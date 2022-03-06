@@ -27,7 +27,7 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 	Irc& irc = Irc::getInstance();
 	Modes &flags = channel.getFlags();
 
-	if (!channel.containsUser(&user)) {
+	if (!channel.containsUser(user)) {
 		sender.send(ResponseTypes::ERR_USERNOTINCHANNEL(user.getName().c_str(), channel.getName().c_str()));
 		return ;
 	}
@@ -64,12 +64,13 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 		return ;
 	}
 		
-	if (!channel.isChanop(&user)) {
+	if (!channel.isOperator(user)) {
 		sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 		return ;
 	}
 
 	string mode_output;
+	User *target;
 
 	for (vector<Flag>::iterator i = modes->begin(); i != modes->end(); i++) {
 		bool enabled = i->sign == '+';
@@ -86,27 +87,33 @@ void ModeCommand::execute(const Command& cmd, CommandSender& sender) {
 			break;
 		case 'l': 
 			if (enabled)
-				flags.user_limit = static_cast<int>(atoi(i->value.c_str()));
+				flags.user_limit = atoi(i->value.c_str());
 			else
 				flags.user_limit = 0;
 			break;
 		case 'm': flags.moderate = enabled; break;
 		case 'n': flags.outside_message = enabled; break;
 		case 'o':
+			target = irc.findUser(i->value);
+			if (!target)
+				break;
 			if (enabled)
-				channel.promoteChanop(irc.findUser(i->value));
+				channel.promote(*target);
 			else
-				channel.demoteChanop(irc.findUser(i->value));
+				channel.demote(*target);
 			break;
 		case 'p': flags.priv = enabled; break;
 		case 'r': flags.reop = enabled; break;
 		case 's': flags.secret = enabled; break;
 		case 't': flags.topic = enabled; break;
 		case 'v':
+			target = irc.findUser(i->value);
+			if (!target)
+				break;
 			if (enabled)
-				channel.promoteVoiceOp(irc.findUser(i->value));
+				channel.promoteVoiceOp(*target);
 			else
-				channel.demoteVoiceOp(irc.findUser(i->value));
+				channel.demoteVoiceOp(*target);
 			break;
 		}
 		concat_mode_rpl(mode_output, i);

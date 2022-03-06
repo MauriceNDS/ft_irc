@@ -23,7 +23,7 @@ void Server::send(const string& message) const {
 	std::cout << message << std::endl;
 }
 
-const string& Server::getName() const {
+string Server::getName() const {
 	return name;
 }
 
@@ -130,10 +130,8 @@ void Server::incomingConnection() {
 void Server::closeConnection(size_t index) {
 	Client *client = connections[index]->client;
 	User *user = dynamic_cast<User *>(client);
-	if (user) {
-		Irc::getInstance().removeUser(user);
-		delete user;
-	}
+	if (user)
+		Irc::getInstance().removeUser(*user);
 	shutdown(Connection::sockets[index].fd, SHUT_RDWR);
 	close(Connection::sockets[index].fd);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
@@ -182,6 +180,9 @@ void Server::incomingRequest(size_t index) {
 void Server::stop() { running = false; }
 
 Server::~Server() {
+	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopping();
+
 	size_t i = connections.size();
 	while (i) {
 		i--;
@@ -189,4 +190,7 @@ Server::~Server() {
 		delete connections[i];
 	}
 	connections.clear();
+
+	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopped();
 }

@@ -12,7 +12,7 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<Channel *>::iterator it = channelList.begin(); it != channelList.end(); it++) {
 		Channel *channel = *it;
 
-		if (!channel->containsUser(&user)) {
+		if (!channel->containsUser(user)) {
 			sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str()));
 			continue;
 		}
@@ -26,6 +26,6 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 		} else {
 			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), user.getSenderName().c_str()));
 		}
-		channel->removeUser(&user);
+		channel->removeUser(user);
 	}
 }

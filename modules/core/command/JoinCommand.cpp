@@ -19,18 +19,17 @@ void JoinCommand::execute(const Command& cmd, CommandSender& sender) {
 			user.send(ResponseTypes::ERR_CHANNELISFULL(channel->getName().c_str()));
 		} else if (!channel->getPassword().empty() && (!passwords || (arg_i > passwords->size() || *((*passwords)[arg_i]) != channel->getPassword()))) {
 			user.send(ResponseTypes::ERR_BADCHANNELKEY(channel->getName().c_str()));
-		} else if (!channel->containsUser(&user)) {
-			channel->addUser(static_cast<User *>(&sender));
+		} else if (channel->addUser(user)) {
 			if (!channel->getFlags().anonymous)
 				channel->send(ResponseTypes::JOIN(user, channel->getName().c_str()));
 			else
 				channel->send(ResponseTypes::JOIN.anonymous(channel->getName().c_str()));
 
-			for (set<User *>::const_iterator users = channel->getUsers().begin(); users != channel->getUsers().end(); users++) {
+			for (set<User *>::const_iterator entry = channel->getUsers().begin(); entry != channel->getUsers().end(); entry++) {
 				if (!channel->getFlags().anonymous)
-					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName((*users)).c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getDisplayName(*(*entry)).c_str()));
 				else
-					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getSymbol().c_str(), channel->getName().c_str(), (*users)->getName().c_str()));
+					user.send(ResponseTypes::RPL_NAMREPLY("anonymous", channel->getSymbol().c_str(), channel->getName().c_str(), (*entry)->getName().c_str()));
 			}
 			user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), channel->getName().c_str()));
 		}

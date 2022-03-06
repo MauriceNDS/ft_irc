@@ -5,9 +5,9 @@ NAME				:= server/libirc.so
 # Commands
 
 CC					:= clang++
-override CPPFLAGS	:= -g3 -std=c++98 -Wall -Wextra -Werror -fPIC
+override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC -fsanitize=address -g3
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
-override LDFLAGS	:= --shared
+override LDFLAGS	:= --shared -fsanitize=address -g3
 
 ifeq ($(shell uname),Darwin)
 LDFLAGS				+= -Wl,-install_name,@rpath/libirc.so
@@ -32,6 +32,7 @@ override SRCS		:=													\
 				modules/api/command/GenericArguments.cpp				\
 				modules/api/command/element/FlagsCommandElement.cpp		\
 				modules/api/command/response/ResponseSpec.cpp			\
+				modules/api/event/Cancellable.cpp						\
 				modules/api/event/MessageEvent.cpp						\
 				modules/api/exception/ArgumentNotFoundException.cpp		\
 				modules/api/exception/DuplicatedCommandException.cpp	\

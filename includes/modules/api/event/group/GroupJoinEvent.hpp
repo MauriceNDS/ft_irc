@@ -5,6 +5,8 @@
 #include "api/User.hpp"
 #include "api/event/Cancellable.hpp"
 
+class Group;
+
 class GroupJoinEvent {
 protected:
 	Group& group;

@@ -27,7 +27,6 @@ struct Modes {
 class Channel : public CommandSender, public Group {
 private:
 	string topic;
-	set<User *> users;
 	set<User *> voiceop;
 	set<User *> invite;
 	Modes flags;
@@ -39,12 +38,13 @@ public:
 	void setPassword(const string& password);
 
 	// CommandSender
+	string getName() const;
 	string getSenderName() const;
 	void send(const string& message) const;
 	void send(const CommandSender& sender, const string& message) const;
 
 	// Channel
-	string getTaggedUserName(User *user) const;
+	string getDisplayName(const User& user) const;
 
 	const string getTopic() const;
 	void setTopic(string& arg);
@@ -53,12 +53,12 @@ public:
 	Modes& getFlags();
 	string getSymbol() const;
 
-	void promoteVoiceOp(User *user);
-	void demoteVoiceOp(User *user);
-	bool isVoiceOp(User *user);
+	bool isVoiceOp(const User &user) const;
+	void promoteVoiceOp(User &user);
+	void demoteVoiceOp(User &user);
 
 	const set<User *>& getInvites() const;
-	void addInvite(User *user);
+	void addInvite(User& user);
 
 	static bool isValidIdentifier(const string& identifier);
 };

@@ -3,7 +3,7 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
-Channel::Channel(const string& name) : Group(name, NULL) {}
+Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {}
 
 const set<User *>& Channel::getInvites() const {
 	return invite;
@@ -33,42 +33,31 @@ void Channel::setPassword(const string& password) {
 	flags.password = password;
 }
 
-void Channel::addInvite(User *user) {
-	if (invite.find(user) == invite.end())
-		invite.insert(user);
+void Channel::addInvite(User& user) {
+	if (invite.find(&user) == invite.end())
+		invite.insert(&user);
 }
 
-bool Channel::isVoiceOp(User *user) {
-	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end() && !isOperator(user))
-		return false;
-	return true;
-};
-
-string Channel::getTaggedUserName(User *user) const{
-	if (user && users.find(user) != users.end()) {
-		if (this->chanop.find(user) != chanop.end())
-			return ("@" + user->getName());
-		else if (this->voiceop.find(user) != voiceop.end())
-			return ("+" + user->getName());
-	}
-	return user->getName();
+bool Channel::isVoiceOp(const User& user) const {
+	if (isOperator(user))
+		return true;
+	return voiceop.find(const_cast<User *>(&user)) != voiceop.end();
 }
 
-void Channel::promoteVoiceOp(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end())
-		voiceop.insert(user);
+string Channel::getDisplayName(const User& user) const{
+	if (isLocalOperator(user))
+		return ("@" + user.getName());
+	else if (isVoiceOp(user))
+		return ("+" + user.getName());
+	return user.getName();
 }
 
-void Channel::demoteVoiceOp(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = voiceop.find(user);
-	if (it != voiceop.end())
-		voiceop.erase(user);
+void Channel::promoteVoiceOp(User& user) {
+	voiceop.insert(&user);
+}
+
+void Channel::demoteVoiceOp(User& user) {
+	voiceop.erase(&user);
 }
 
 const string Channel::getTopic() const {
@@ -79,6 +68,10 @@ const string Channel::getTopic() const {
 
 void Channel::setTopic(string& arg) {
 	topic = arg;
+}
+
+string Channel::getName() const {
+	return getIdentifier();
 }
 
 string Channel::getSenderName() const {

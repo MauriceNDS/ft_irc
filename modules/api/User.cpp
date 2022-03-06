@@ -8,7 +8,7 @@ void User::setUserName(const string& username)		{ this->username = username; }
 void User::setRealName(const string& realname)		{ this->realname = realname; }
 void User::setValidPassword(bool arg)					{ this->validPassword = arg; }
 
-const string& User::getName() const					{ return this->name; }
+string User::getName() const						{ return this->name; }
 const string& User::getUserName() const				{ return this->username; }
 const string& User::getRealName() const				{ return this->realname; }
 

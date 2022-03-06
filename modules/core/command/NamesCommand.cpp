@@ -10,7 +10,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 	vector<Channel *> *channelList = cmd.getArg<vector<Channel *> *>("channels");
 	if (!channelList) {
 		const map<string, Channel *>& channels = Irc::getInstance().getChannels();
-		const vector<User *>& users = Irc::getInstance().getUsers();
+		const set<User *>& users = Irc::getInstance().getUsers();
 
 		for (map<string, Channel *>::const_iterator it = channels.begin(); it != channels.end(); it++) {
 			const Channel *channel = it->second;
@@ -20,11 +20,11 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName(*ite).c_str()));
+				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getDisplayName(*(*ite)).c_str()));
 			}
 			sender.send(ResponseTypes::RPL_ENDOFNAMES(sender.getName().c_str(), channel->getName().c_str()));
 		}
-		for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
+		for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
 			const User *user = *it;
 			sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), "=", "*", user->getName().c_str()));
 		}
@@ -38,7 +38,7 @@ void NamesCommand::execute(const Command& cmd, CommandSender& sender) {
 				continue;
 
 			for (set<User *>::const_iterator ite = channelUserList.begin(); ite != channelUserList.end(); ite++) {
-				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getTaggedUserName(*ite).c_str()));
+				sender.send(ResponseTypes::RPL_NAMREPLY(sender.getName().c_str(), channel->getSymbol().c_str(), channel->getName().c_str(), channel->getDisplayName(*(*ite)).c_str()));
 			}
 			sender.send(ResponseTypes::RPL_ENDOFNAMES(sender.getName().c_str(), channel->getName().c_str()));
 		}

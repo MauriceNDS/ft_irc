@@ -9,12 +9,12 @@ void TopicCommand::execute(const Command& cmd, CommandSender& sender) {
 
 	Channel& channel = cmd.getArg<Channel>("channel");
 	string *topic = cmd.getArg<string *>("topic");
-	if (!channel.containsUser(&user)) {
+	if (!channel.containsUser(user)) {
 		sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel.getName().c_str()));
 		return;
 	}
 	else if (topic) {
-		if (channel.getFlags().topic && !channel.isChanop(&user)) {
+		if (channel.getFlags().topic && !channel.isOperator(user)) {
 			sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 			return;
 		}

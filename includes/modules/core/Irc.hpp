@@ -3,6 +3,7 @@
 
 #include "ft_irc.hpp"
 
+#include "api/Group.hpp"
 #include "api/PluginLoader.hpp"
 #include "api/command/CommandManager.hpp"
 
@@ -14,17 +15,13 @@
 class User;
 class Channel;
 
-class Irc {
+class Irc : public Group {
 private:
 	static Irc *instance;
 
 	Server server;
 	CommandManager commandManager;
 	PluginLoader pluginLoader;
-
-	map<string, Channel *> channels;
-	vector<User *> users;
-	set<const User *> operators;
 
 public:
 	static Irc& getInstance();
@@ -44,28 +41,22 @@ public:
 	CommandManager& getCommandManager();
 	const CommandManager& getCommandManager() const;
 
-	// Users
-	const vector<User *>& getUsers() const;
-	User *findUser(const string& nickname) const;
-	void addUser(User *user);
-	void removeUser(User *user);
-
 	// Channels
-	const map<string, Channel *>& getChannels() const;
+	/**
+	 * @brief Provide a filtered view of getChilds with channels only.
+	 */
+	map<string, Channel *> getChannels() const;
 	Channel *findChannel(const string& channel) const;
-	void addChannel(Channel *channel);
-	void removeChannel(Channel *channel);
 
-	// Operators
-	void promoteOperator(User *user);
-	void demoteOperator(User *user);
-	bool isOperator(const User *user) const;
-
+	// Server
 	Server& getServer();
 
+	// Misc
+	void broadcast(const string& message) const;
 	void sendWelcomeMessage(User& user);
 
-	~Irc();
+	// Listeners
+	void onLeave(GroupLeaveEvent& event);
 };
 
 #endif /* FT_IRC_CORE */

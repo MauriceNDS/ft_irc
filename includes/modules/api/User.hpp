@@ -20,7 +20,7 @@ public:
 	void setRealName(const string& realname);
 	void setValidPassword(bool arg);
 
-	const string& getName() const;
+	string getName() const;
 	const string& getUserName() const;
 	const string& getRealName() const;
 	string getSenderName() const;

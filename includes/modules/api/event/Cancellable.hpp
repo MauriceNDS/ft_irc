@@ -6,15 +6,11 @@ protected:
 	bool cancelled;
 
 public:
-	void setCancelled(bool cancel) {
-		this->cancelled = cancel;
-	}
-	
-	bool isCancelled() const {
-		return this->cancelled;
-	}
-
+	explicit Cancellable(bool value = false);
 	virtual ~Cancellable() = 0;
+
+	void setCancelled(bool cancel);
+	bool isCancelled() const;
 };
 
 #endif /* FT_IRC_API_CANCELLABLE */

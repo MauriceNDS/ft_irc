@@ -8,7 +8,7 @@ void ResponseSpec::AnonymousSender::send(const string& message) const {
 	(void)message;
 }
 
-const string& ResponseSpec::AnonymousSender::getName() const {
+string ResponseSpec::AnonymousSender::getName() const {
 	return name;
 }
 
