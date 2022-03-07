@@ -1,19 +1,12 @@
 # Properties
 
-NAME				:= server/ircserv
+NAME				:= timebot
 
 # Commands
 
-CC					:= clang++
+CC					:= g++-11
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
-
-ifeq ($(shell uname),Darwin)
-override LOADER_PATH	:= @loader_path
-else
-override LOADER_PATH	:= $$ORIGIN
-endif
-override LDFLAGS	:= -Wl,-rpath,'$(LOADER_PATH)' -Wl,-rpath,'$(LOADER_PATH)/plugins'
 
 # Sources
 
@@ -26,7 +19,7 @@ override DEPS		:= $(addprefix tmp/, $(SRCS:.cpp=.d))
 
 override DIRS		:= $(sort $(dir $(NAME) $(OBJS) $(DEPS)))
 
-override INCLUDES	:= -Iincludes -Iincludes/modules
+override INCLUDES	:= -I.
 
 # Rules
 
@@ -47,15 +40,7 @@ build/%.o:	%.cpp tmp/%.d
 %.h %.hpp: ;
 
 $(NAME):	$(OBJS)
-			$(CC) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
-
-ifdef N
-plugin:
-			bash scripts/create_plugin.bash $(N)
-endif
-
-lib:
-			$(MAKE) -f libirc.mk
+			$(CC) -o $(NAME) $(OBJS)
 
 clean:
 			rm -rf build tmp
