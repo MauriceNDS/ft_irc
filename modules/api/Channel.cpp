@@ -7,6 +7,10 @@ Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {
 	std::cout << "[INFO] " << getName() << " created" << std::endl;
 }
 
+Channel *Channel::create(const string& name) {
+	return new Channel(name);
+}
+
 Channel::~Channel() {
 	std::cout << "[INFO] " << getName() << " destroyed" << std::endl;
 }
@@ -47,6 +51,8 @@ void Channel::onJoin(GroupJoinEvent::After& event) {
 
 void Channel::onLeave(GroupLeaveEvent& event) {
 	std::cout << "[INFO] " << event.getUser().getName() << " left " << getName() << std::endl;
+	if (isEmpty())
+		delete this;
 }
 
 const set<User *>& Channel::getInvites() const {

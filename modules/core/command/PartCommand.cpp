@@ -26,7 +26,5 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), user.getSenderName().c_str()));
 		}
 		channel->removeUser(user);
-		if (channel->isEmpty())
-			delete channel;
 	}
 }

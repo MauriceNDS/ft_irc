@@ -5,9 +5,9 @@ NAME				:= server/libirc.so
 # Commands
 
 CC					:= clang++
-override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC -fsanitize=address -g3
+override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
-override LDFLAGS	:= --shared -fsanitize=address -g3
+override LDFLAGS	:= --shared
 
 ifeq ($(shell uname),Darwin)
 LDFLAGS				+= -Wl,-install_name,@rpath/libirc.so

@@ -113,7 +113,8 @@ bool Group::addUser(User& user) {
 void Group::removeUser(User& user) {
 	demote(user);
 	if (users.erase(&user)) {
-		for (map<string, Group *>::iterator child = childs.begin(); child != childs.end(); child++)
+		map<string, Group *> tmp = childs;
+		for (map<string, Group *>::iterator child = tmp.begin(); child != tmp.end(); child++)
 			child->second->removeUser(user);
 
 		GroupLeaveEvent event(*this, user);

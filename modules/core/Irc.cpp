@@ -149,14 +149,14 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("NAMES")
-		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(false))))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new NamesCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("LIST")
-		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(false))))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new ListCommand())
 		.build()
