@@ -3,7 +3,51 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
-Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {}
+Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {
+	std::cout << "[INFO] " << getName() << " created" << std::endl;
+}
+
+Channel::~Channel() {
+	std::cout << "[INFO] " << getName() << " destroyed" << std::endl;
+}
+
+void Channel::onJoin(GroupJoinEvent::Before& event) {
+	User& user = event.getUser();
+
+	if (getFlags().invite && !isInvited(user)) {
+		user.send(ResponseTypes::ERR_INVITEONLYCHAN(getName().c_str()));
+		event.setCancelled(true);
+	} else if (getFlags().user_limit && size() >= getFlags().user_limit) {
+		user.send(ResponseTypes::ERR_CHANNELISFULL(getName().c_str()));
+		event.setCancelled(true);
+	}
+}
+
+void Channel::onJoin(GroupJoinEvent::After& event) {
+	User& user = event.getUser();
+
+	if (size() == 1)
+		promote(event.getUser());
+
+	if (!getFlags().anonymous)
+		send(ResponseTypes::JOIN(user, getName().c_str()));
+	else
+		send(ResponseTypes::JOIN.anonymous(getName().c_str()));
+
+	for (set<User *>::const_iterator entry = getUsers().begin(); entry != getUsers().end(); entry++) {
+		if (!getFlags().anonymous)
+			user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), getSymbol().c_str(), getName().c_str(), getDisplayName(*(*entry)).c_str()));
+		else
+			user.send(ResponseTypes::RPL_NAMREPLY("anonymous", getSymbol().c_str(), getName().c_str(), (*entry)->getName().c_str()));
+	}
+	user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), getName().c_str()));
+
+	std::cout << "[INFO] " << event.getUser().getName() << " joined " << getName() << std::endl;
+}
+
+void Channel::onLeave(GroupLeaveEvent& event) {
+	std::cout << "[INFO] " << event.getUser().getName() << " left " << getName() << std::endl;
+}
 
 const set<User *>& Channel::getInvites() const {
 	return invite;
@@ -33,9 +77,12 @@ void Channel::setPassword(const string& password) {
 	flags.password = password;
 }
 
+bool Channel::isInvited(User& user) const {
+	return invite.find(&user) != invite.end();
+}
+
 void Channel::addInvite(User& user) {
-	if (invite.find(&user) == invite.end())
-		invite.insert(&user);
+	invite.insert(&user);
 }
 
 bool Channel::isVoiceOp(const User& user) const {
@@ -79,13 +126,11 @@ string Channel::getSenderName() const {
 }
 
 void Channel::send(const string& message) const {
-	std::cout << "          }-- " << message.c_str();
 	for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)
 		(*it)->send(message);
 }
 
 void Channel::send(const CommandSender& sender, const string& message) const {
-	std::cout << "          }-- " << message.c_str();
 	for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
 		User *user = *it;
 		if (user != &sender) {

@@ -42,9 +42,8 @@ Group *Group::getChild(const string& identifier) const {
 }
 
 // Events
-void Group::onJoin(GroupJoinEvent&) {}
-// void Group::onJoin(GroupJoinEvent::Before& event) {}
-// void Group::onJoin(GroupJoinEvent::After& event) {}
+void Group::onJoin(GroupJoinEvent::Before&) {}
+void Group::onJoin(GroupJoinEvent::After&) {}
 void Group::onLeave(GroupLeaveEvent&) {}
 
 // Users
@@ -120,6 +119,14 @@ void Group::removeUser(User& user) {
 		GroupLeaveEvent event(*this, user);
 		onLeave(event);
 	}
+}
+
+set<User *>::size_type Group::size() const {
+	return users.size();
+}
+
+bool Group::isEmpty() const {
+	return users.empty();
 }
 
 // Operators (inherited)

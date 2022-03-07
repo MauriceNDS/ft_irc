@@ -233,6 +233,7 @@ Channel *Irc::findChannel(const string& channel) const {
 }
 
 void Irc::onLeave(GroupLeaveEvent& event) {
+	std::cout << "[INFO] " << event.getUser().getName() << " : connection lost." << std::endl;
 	event.getUser().getConnection()->closeConnection = true;
 	delete &event.getUser();
 }

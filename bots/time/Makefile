@@ -4,7 +4,7 @@ NAME				:= timebot
 
 # Commands
 
-CC					:= g++-11
+CC					:= clang++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 

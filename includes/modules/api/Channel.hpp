@@ -33,6 +33,7 @@ private:
 
 public:
 	Channel(const string& name);
+	~Channel();
 	
 	const string& getPassword() const;
 	void setPassword(const string& password);
@@ -58,7 +59,13 @@ public:
 	void demoteVoiceOp(User &user);
 
 	const set<User *>& getInvites() const;
+	bool isInvited(User& user) const;
 	void addInvite(User& user);
+
+	// Listeners
+	virtual void onJoin(GroupJoinEvent::Before& event);
+	virtual void onJoin(GroupJoinEvent::After& event);
+	virtual void onLeave(GroupLeaveEvent& event);
 
 	static bool isValidIdentifier(const string& identifier);
 };

@@ -11,6 +11,7 @@ void PrivmsgCommand::execute(const Command& cmd, CommandSender& sender) {
 	for (vector<CommandSender *>::iterator it = target.begin(); it != target.end(); it++) {
 		Channel *channel = dynamic_cast<Channel *>(*it);
 		if (channel) {
+			std::cout << "[INFO] <" << channel->getName() << "> " << sender.getName() << " | " << message << std::endl; 
 			if (!channel->containsUser(user) && !channel->getFlags().outside_message)
 				sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str(), channel->getName().c_str()));
 			else if (channel->getFlags().moderate && !channel->isVoiceOp(user))
@@ -23,6 +24,7 @@ void PrivmsgCommand::execute(const Command& cmd, CommandSender& sender) {
 		}
 		User *target = dynamic_cast<User *>(*it);
 		if (target) {
+			std::cout << "[INFO] <" << target->getName() << "> " << sender.getName() << " | " << message << std::endl; 
 			target->send(ResponseTypes::PRIVMSG(sender, target->getName().c_str(), message.c_str()));
 			continue;
 		}

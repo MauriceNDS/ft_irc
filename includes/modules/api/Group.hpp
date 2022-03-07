@@ -29,8 +29,8 @@ protected:
 	set<User *> operators;
 
 	// Listeners
-	virtual void onJoin(GroupJoinEvent& event);
-	// virtual void onJoin(GroupJoinEvent::After& event);
+	virtual void onJoin(GroupJoinEvent::Before& event);
+	virtual void onJoin(GroupJoinEvent::After& event);
 	virtual void onLeave(GroupLeaveEvent& event);
 
 public:
@@ -49,6 +49,8 @@ public:
 	bool addUser(User *user);
 	bool addUser(User& user);
 	void removeUser(User& user);
+	set<User *>::size_type size() const;
+	bool isEmpty() const;
 
 	// Operators (inherited)
 	set<User *> getOperators() const;
