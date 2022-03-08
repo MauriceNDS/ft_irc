@@ -7,10 +7,6 @@ Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {
 	std::cout << "[INFO] " << getName() << " created" << std::endl;
 }
 
-Channel *Channel::create(const string& name) {
-	return new Channel(name);
-}
-
 Channel::~Channel() {
 	std::cout << "[INFO] " << getName() << " destroyed" << std::endl;
 }
@@ -45,8 +41,13 @@ void Channel::onJoin(GroupJoinEvent::After& event) {
 
 void Channel::onLeave(GroupLeaveEvent& event) {
 	std::cout << "[INFO] " << event.getUser().getName() << " left " << getName() << std::endl;
-	if (isEmpty())
-		delete this;
+	if (isEmpty()) {
+		event.getGroup().kill();
+	} else {
+		if (flags.reop && getLocalOperators().size() == 0) {
+			promote(*(*(getUsers().begin())));
+		}
+	}
 }
 
 const set<User *>& Channel::getInvites() const {
@@ -86,8 +87,6 @@ void Channel::addInvite(User& user) {
 }
 
 bool Channel::isVoiceOp(const User& user) const {
-	if (isOperator(user))
-		return true;
 	return voiceop.find(const_cast<User *>(&user)) != voiceop.end();
 }
 

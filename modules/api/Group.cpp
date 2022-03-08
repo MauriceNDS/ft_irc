@@ -1,16 +1,27 @@
 #include "api/Group.hpp"
 #include "api/exception/DuplicatedGroupException.hpp"
 
-Group::Group(const string& identifier, Group *parent) : identifier(identifier), parent(parent) {
+Group::Group(const string& identifier, Group *parent) : alive(true), identifier(identifier), parent(parent) {
 	if (parent)
 		parent->addChild(this);
 }
 
+void Group::kill() {
+	if (alive)
+		delete this;
+}
+
 Group::~Group() {
-	if (parent)
-		parent->removeChild(getIdentifier());
+	alive = false;
 	while (childs.size())
 		delete childs.begin()->second;
+	for (set<User *>::iterator it = users.begin(); it != users.end(); it++) {
+		GroupLeaveEvent event = GroupLeaveEvent(*this, *(*it));
+		onLeave(event);
+	}
+
+	if (parent)
+		parent->removeChild(getIdentifier());
 }
 
 const string& Group::getIdentifier() const {

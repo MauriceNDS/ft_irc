@@ -12,6 +12,8 @@ class GroupLeaveEvent;
 
 class Group {
 private:
+	bool alive;
+
 	string identifier;
 	Group *const parent;
 	map<string, Group *> childs;
@@ -36,6 +38,8 @@ protected:
 public:
 	explicit Group(const string& identifier, Group *parent = NULL);
 	virtual ~Group();
+
+	void kill();
 
 	const string& getIdentifier() const;
 	const map<string, Group *>& getChilds() const;

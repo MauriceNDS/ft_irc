@@ -30,10 +30,8 @@ private:
 	set<User *> invite;
 	Modes flags;
 
-	Channel(const string& name);
-
 public:
-	static Channel *create(const string& name);
+	Channel(const string& name);
 	~Channel();
 	
 	const string& getPassword() const;
