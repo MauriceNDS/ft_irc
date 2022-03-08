@@ -8,7 +8,7 @@ void *ChannelCommandElement::parseValue(string arg, MessageEvent& event) const {
 		if ((channel = Irc::getInstance().findChannel(arg))) {
 			return channel;
 		} else if (createIfUnknown) {
-			channel = Channel::create(arg);
+			channel = new Channel(arg);
 			return channel;
 		}
 	}
