@@ -12,23 +12,14 @@ void KickCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& target = cmd.getArg<User>("user");
 	
 	if (!channel.isOperator(user)) {
-		// If user is not an operator
 		sender.send(ResponseTypes::ERR_CHANOPRIVSNEEDED(channel.getName().c_str()));
 		return;
 	} else if (!channel.containsUser(target)) {
-		// If target is not on the channel
 		user.send(ResponseTypes::ERR_USERNOTINCHANNEL(target.getName().c_str(), channel.getName().c_str()));
 		return ;
 	}
 
-	if (channel.getFlags().anonymous && message) {
-		channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), message->c_str()));
-	} else if (channel.getFlags().anonymous && !message) {
-		channel.send(ResponseTypes::KICK.anonymous(channel.getName().c_str(), target.getName().c_str()));
-	} if (message) {
-		channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), message->c_str()));
-	} else {
-		channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), target.getName().c_str()));
-	}
+	channel.send(ResponseTypes::KICK(sender, channel.getName().c_str(), message ? message->c_str() : target.getName().c_str()));
+
 	channel.removeUser(target);
 }

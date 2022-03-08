@@ -16,8 +16,6 @@ void PrivmsgCommand::execute(const Command& cmd, CommandSender& sender) {
 				sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str(), channel->getName().c_str()));
 			else if (channel->getFlags().moderate && !channel->isVoiceOp(user))
 				sender.send(ResponseTypes::ERR_CANNOTSENDTOCHAN(channel->getName().c_str()));
-			else if (channel->getFlags().anonymous)
-				channel->send(sender, ResponseTypes::PRIVMSG.anonymous(channel->getName().c_str(), message.c_str()));
 			else
 				channel->send(sender, ResponseTypes::PRIVMSG(sender, channel->getName().c_str(), message.c_str()));
 			continue;

@@ -1,5 +1,7 @@
 #include "core/command/PartCommand.hpp"
 
+#include "core/Irc.hpp"
+
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 #include "api/ResponseTypes.hpp"
@@ -16,15 +18,9 @@ void PartCommand::execute(const Command& cmd, CommandSender& sender) {
 			sender.send(ResponseTypes::ERR_NOTONCHANNEL(channel->getName().c_str()));
 			continue;
 		}
-		if (channel->getFlags().anonymous && message) {
-			channel->send(ResponseTypes::PART.anonymous("anonymous", message->c_str()));
-		} else if (channel->getFlags().anonymous && !message) {
-			channel->send(ResponseTypes::PART.anonymous("anonymous"));
-		} else if (message) {
-			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message->c_str()));
-		} else {
-			channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), user.getSenderName().c_str()));
-		}
+
+		channel->send(ResponseTypes::PART(sender, channel->getName().c_str(), message ? message->c_str() : user.getSenderName().c_str()));
+
 		channel->removeUser(user);
 	}
 }

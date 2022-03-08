@@ -10,7 +10,6 @@ class Irc;
 class User;
 
 struct Modes {
-	bool anonymous;
 	bool invite;
 	bool moderate;
 	bool outside_message;
@@ -21,7 +20,7 @@ struct Modes {
 	string password;
 	size_t user_limit;
 
-	Modes() : anonymous(false), invite(false), moderate(false), outside_message(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
+	Modes() : invite(false), moderate(false), outside_message(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
 };
 
 class Channel : public CommandSender, public Group {
