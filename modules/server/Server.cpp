@@ -19,7 +19,11 @@ Connection *Server::addConnection(const struct pollfd& connection, const struct 
 
 Server::Server(const string& name, const int port, const string& password) : name(name), host("127.0.0.1"), port(port), password(password), running(true) {}
 
-const string& Server::getName() const {
+void Server::send(const string& message) const {
+	std::cout << message << std::endl;
+}
+
+string Server::getName() const {
 	return name;
 }
 
@@ -43,7 +47,7 @@ void Server::start() {
 	struct pollfd serverSocket;
 	int opt = 1;
 
-	std::cout << "Setting up the server..." << std::endl;
+	std::cout << "[INFO] Setting up the server..." << std::endl;
 	
 	if ((serverSocket.fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		std::cerr << std::strerror(errno) << std::endl;
@@ -83,22 +87,20 @@ void Server::start() {
 	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
 		plugin->second->serverStarted();
 
-	std::cout << "Waiting for connections..." << std::endl;
+	std::cout << "[INFO] Waiting for connections..." << std::endl;
 	while (running) {
 		poll(&Connection::sockets[0], Connection::sockets.size(), -1);
 		for (size_t i = 0; i < Connection::sockets.size(); i++) {
 			if (Connection::sockets[i].revents == 0)
 				continue;
 			if (Connection::sockets[i].fd == Connection::sockets[0].fd) {
-				std::cout << "  IncomingConnection..." << std::endl;
+				std::cout << "[INFO] New connection" << std::endl;
 				incomingConnection();
 				break;
 			}
 			else {
-				std::cout << "  IncomingRequest..." << std::endl;
 				incomingRequest(i);
 				if (connections[i]->closeConnection) {
-					std::cout << "  CloseConnection..." << std::endl;
 					closeConnection(i);
 					removeConnection(i);
 					break;
@@ -126,10 +128,9 @@ void Server::incomingConnection() {
 void Server::closeConnection(size_t index) {
 	Client *client = connections[index]->client;
 	User *user = dynamic_cast<User *>(client);
-	if (user) {
-		Irc::getInstance().removeUser(user);
-		delete user;
-	}
+	if (user)
+		Irc::getInstance().removeUser(*user);
+
 	shutdown(Connection::sockets[index].fd, SHUT_RDWR);
 	close(Connection::sockets[index].fd);
 	Connection::sockets.erase(Connection::sockets.begin() + index);
@@ -165,7 +166,6 @@ void Server::incomingRequest(size_t index) {
 					connections[index]->request = request;
 				else
 					connections[index]->request.clear();
-				std::cout << "          --> " << request << std::endl;
 				MessageEvent event = MessageEvent(request, *connections[index]->client);
 				Irc::getInstance().getCommandManager().process(event);
 				if (!running)
@@ -178,6 +178,9 @@ void Server::incomingRequest(size_t index) {
 void Server::stop() { running = false; }
 
 Server::~Server() {
+	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopping();
+
 	size_t i = connections.size();
 	while (i) {
 		i--;
@@ -185,4 +188,7 @@ Server::~Server() {
 		delete connections[i];
 	}
 	connections.clear();
+
+	for (map<const string, Plugin *>::const_iterator plugin = Irc::getInstance().getPluginLoader().getPlugins().begin(); plugin != Irc::getInstance().getPluginLoader().getPlugins().end(); plugin++)
+		plugin->second->serverStopped();
 }

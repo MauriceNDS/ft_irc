@@ -39,7 +39,7 @@ Irc& Irc::getInstance() {
 	return *Irc::instance;
 }
 
-Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : server(name, port, password) {
+Irc::Irc(const string& name, const int port, const string& password, const vector<string>& plugins) : Group(name), server(name, port, password) {
 	Irc::instance = this;
 
 	getPluginLoader().loadPlugins(plugins);
@@ -149,14 +149,14 @@ Irc::Irc(const string& name, const int port, const string& password, const vecto
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("NAMES")
-		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(false))))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new NamesCommand())
 		.build()
 	);
 	commandManager.registerCommand(CommandSpec::Builder()
 		.name("LIST")
-		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(true))))
+		.argument("channels", GenericArguments::optional(GenericArguments::list<Channel>(new ChannelCommandElement(false))))
 		.middleware(new RegisteredUserMiddleware())
 		.executor(new ListCommand())
 		.build()
@@ -222,66 +222,30 @@ void Irc::start() {
 }
 
 void Irc::broadcast(const string& message) const {
-	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
+	for (set<User *>::const_iterator it = getUsers().begin(); it != getUsers().end(); it++) {
 		(*it)->send(message);
 	}
 }
 
-User *Irc::findUser(const string& nickname) const {
-	for (vector<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
-		User *user = *it;
-		if (nickname == user->getName())
-			return *it;
-	}
-	return NULL;
-}
-
-const vector<User *>& Irc::getUsers() const {
-	return users;
-}
-
-void Irc::addUser(User *user) {
-	users.push_back(user);
-}
-
-void Irc::removeUser(User *user) {
-	for (vector<User *>::iterator it = users.begin(); it != users.end(); it++) {
-		if (*it == user) {
-			users.erase(it);
-			break ;
-		}
-	}
-}
-
 Channel *Irc::findChannel(const string& channel) const {
-	map<string, Channel *>::const_iterator it = channels.find(channel);
-	return it != channels.end() ? it->second : NULL;
+	Group *group = getChild(channel);
+	return dynamic_cast<Channel *>(group);
 }
 
-void Irc::addChannel(Channel *channel) {
-	if (channel)
-		channels.insert(make_pair(channel->getName(), channel));
+void Irc::onLeave(GroupLeaveEvent& event) {
+	std::cout << "[INFO] " << event.getUser().getName() << " : connection lost." << std::endl;
+	event.getUser().getConnection()->closeConnection = true;
+	delete &event.getUser();
 }
 
-void Irc::removeChannel(Channel *channel) {
-	channels.erase(channel->getName());
-	delete channel;
-}
-
-const map<string, Channel *>& Irc::getChannels() const {
+map<string, Channel *> Irc::getChannels() const {
+	map<string, Channel *> channels;
+	for (map<string, Group *>::const_iterator it = getChilds().begin(); it != getChilds().end(); it++) {
+		Channel *channel = dynamic_cast<Channel *>(it->second);
+		if (channel)
+			channels[it->first] = channel;
+	}
 	return channels;
-}
-
-void Irc::promoteOperator(User *user) {
-	operators.insert(user);
-}
-
-void Irc::demoteOperator(User *user) {
-	operators.erase(user);
-}
-
-bool Irc::isOperator(const User *user) const {
-	return operators.find(user) != operators.end();
 }
 
 Server& Irc::getServer() {
@@ -296,19 +260,6 @@ void Irc::sendWelcomeMessage(User& user) {
 }
 
 Irc::~Irc() {
-	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
-		plugin->second->serverStopping();
-
-	users.clear();
-	operators.clear();
-
-	for (map<string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
-		delete it->second;
-	}
-	channels.clear();
-
-	for (map<const string, Plugin *>::const_iterator plugin = getPluginLoader().getPlugins().begin(); plugin != getPluginLoader().getPlugins().end(); plugin++)
-		plugin->second->serverStopped();
 }
 
 Irc *Irc::instance = NULL;

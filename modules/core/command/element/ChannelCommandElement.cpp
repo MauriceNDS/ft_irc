@@ -6,11 +6,10 @@ void *ChannelCommandElement::parseValue(string arg, MessageEvent& event) const {
 	if (Channel::isValidIdentifier(arg)) {
 		Channel *channel;
 		if ((channel = Irc::getInstance().findChannel(arg))) {
-			return (channel);
+			return channel;
 		} else if (createIfUnknown) {
-			channel = new Channel(arg);
-			Irc::getInstance().addChannel(channel);
-			return (channel);
+			channel = Channel::create(arg);
+			return channel;
 		}
 	}
 	event.getSender().send(ResponseTypes::ERR_NOSUCHCHANNEL(arg.c_str()));

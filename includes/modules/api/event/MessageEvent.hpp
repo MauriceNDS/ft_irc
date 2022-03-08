@@ -2,12 +2,12 @@
 #define FT_IRC_API_MESSAGE_EVENT
 
 #include "api/Client.hpp"
+#include "api/event/Cancellable.hpp"
 
-class MessageEvent {
+class MessageEvent : public Cancellable {
 private:
 	string message;
 	Client& sender;
-	bool cancelled;
 
 public:
 	MessageEvent(const string& message, Client& sender);

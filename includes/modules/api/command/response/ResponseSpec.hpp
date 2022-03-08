@@ -22,7 +22,7 @@ private:
 
 		void send(const string& message) const;
 
-		const string& getName() const;
+		string getName() const;
 
 		string getSenderName() const;
 	};

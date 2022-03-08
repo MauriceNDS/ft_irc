@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
 
 	vector<string> files;
 
-	Irc irc("ft_irc", std::atoi(argv[1]), argv[2], files);
-
-	signal(SIGINT, &handle_sigint);
-
-	irc.start();
+	{
+		Irc irc("ft_irc", std::atoi(argv[1]), argv[2], files);
+		signal(SIGINT, &handle_sigint);
+		irc.start();
+	}
 	std::cout << "Goodbye!" << std::endl;
 	return EXIT_SUCCESS;
 }

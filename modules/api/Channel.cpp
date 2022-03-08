@@ -3,10 +3,56 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
-Channel::Channel(const string& name) : name(name) {}
+Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {
+	std::cout << "[INFO] " << getName() << " created" << std::endl;
+}
 
-const set<User *>& Channel::getUsers() const {
-	return users;
+Channel *Channel::create(const string& name) {
+	return new Channel(name);
+}
+
+Channel::~Channel() {
+	std::cout << "[INFO] " << getName() << " destroyed" << std::endl;
+}
+
+void Channel::onJoin(GroupJoinEvent::Before& event) {
+	User& user = event.getUser();
+
+	if (getFlags().invite && !isInvited(user)) {
+		user.send(ResponseTypes::ERR_INVITEONLYCHAN(getName().c_str()));
+		event.setCancelled(true);
+	} else if (getFlags().user_limit && size() >= getFlags().user_limit) {
+		user.send(ResponseTypes::ERR_CHANNELISFULL(getName().c_str()));
+		event.setCancelled(true);
+	}
+}
+
+void Channel::onJoin(GroupJoinEvent::After& event) {
+	User& user = event.getUser();
+
+	if (size() == 1)
+		promote(event.getUser());
+
+	if (!getFlags().anonymous)
+		send(ResponseTypes::JOIN(user, getName().c_str()));
+	else
+		send(ResponseTypes::JOIN.anonymous(getName().c_str()));
+
+	for (set<User *>::const_iterator entry = getUsers().begin(); entry != getUsers().end(); entry++) {
+		if (!getFlags().anonymous)
+			user.send(ResponseTypes::RPL_NAMREPLY(user.getName().c_str(), getSymbol().c_str(), getName().c_str(), getDisplayName(*(*entry)).c_str()));
+		else
+			user.send(ResponseTypes::RPL_NAMREPLY("anonymous", getSymbol().c_str(), getName().c_str(), (*entry)->getName().c_str()));
+	}
+	user.send(ResponseTypes::RPL_ENDOFNAMES(user.getName().c_str(), getName().c_str()));
+
+	std::cout << "[INFO] " << event.getUser().getName() << " joined " << getName() << std::endl;
+}
+
+void Channel::onLeave(GroupLeaveEvent& event) {
+	std::cout << "[INFO] " << event.getUser().getName() << " left " << getName() << std::endl;
+	if (isEmpty())
+		delete this;
 }
 
 const set<User *>& Channel::getInvites() const {
@@ -37,94 +83,34 @@ void Channel::setPassword(const string& password) {
 	flags.password = password;
 }
 
-void Channel::addUser(User *user) {
-	if (!users.size())
-		promoteChanop(user);
-	if (invite.find(user) != invite.end())
-		invite.erase(user);
-	users.insert(user);
+bool Channel::isInvited(User& user) const {
+	return invite.find(&user) != invite.end();
 }
 
-void Channel::removeUser(User *user) {
-	users.erase(user);
-	chanop.erase(user);
-	if (!users.size()) {
-		Irc::getInstance().removeChannel(this);
-	} else if (!chanop.size() && flags.reop) {
-		chanop.insert(*users.begin());
-	}
+void Channel::addInvite(User& user) {
+	invite.insert(&user);
 }
 
-void Channel::addInvite(User *user) {
-	if (invite.find(user) == invite.end())
-		invite.insert(user);
+bool Channel::isVoiceOp(const User& user) const {
+	if (isOperator(user))
+		return true;
+	return voiceop.find(const_cast<User *>(&user)) != voiceop.end();
 }
 
-bool Channel::isVoiceOp(User *user) {
-	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end() && !isChanop(user))
-		return false;
-	return true;
-};
-
-bool Channel::isChanop(User *user) {
-	set<User *>::iterator it = chanop.find(user);
-	if (it == chanop.end()) {
-		if (!Irc::getInstance().isOperator(user))
-			return (false);
-	}
-	return (true);
+string Channel::getDisplayName(const User& user) const{
+	if (isLocalOperator(user))
+		return ("@" + user.getName());
+	else if (isVoiceOp(user))
+		return ("+" + user.getName());
+	return user.getName();
 }
 
-bool Channel::isOnChan(User *user) {
-	set<User *>::iterator it = users.find(user);
-	if (it == users.end())
-		return false;
-	return true;
+void Channel::promoteVoiceOp(User& user) {
+	voiceop.insert(&user);
 }
 
-string Channel::getTaggedUserName(User *user) const{
-	if (user && users.find(user) != users.end()) {
-		if (this->chanop.find(user) != chanop.end())
-			return ("@" + user->getName());
-		else if (this->voiceop.find(user) != voiceop.end())
-			return ("+" + user->getName());
-	}
-	return user->getName();
-}
-
-void Channel::promoteVoiceOp(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = voiceop.find(user);
-	if (it == voiceop.end())
-		voiceop.insert(user);
-}
-
-void Channel::demoteVoiceOp(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = voiceop.find(user);
-	if (it != voiceop.end())
-		voiceop.erase(user);
-}
-
-void Channel::promoteChanop(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = chanop.find(user);
-	if (it == chanop.end())
-		chanop.insert(user);
-}
-
-void Channel::demoteChanop(User *user) {
-	if (!user)
-		return;
-	set<User *>::iterator it = chanop.find(user);
-	if (it != chanop.end())
-		chanop.erase(user);
-	if (!chanop.size() && flags.reop)
-		chanop.insert(*users.begin());
+void Channel::demoteVoiceOp(User& user) {
+	voiceop.erase(&user);
 }
 
 const string Channel::getTopic() const {
@@ -137,28 +123,26 @@ void Channel::setTopic(string& arg) {
 	topic = arg;
 }
 
-const string& Channel::getName() const {
-	return name;
+string Channel::getName() const {
+	return getIdentifier();
+}
+
+string Channel::getSenderName() const {
+	return getName() + "!" + Irc::getInstance().getServer().getConnection().getIP();
 }
 
 void Channel::send(const string& message) const {
-	std::cout << "          }-- " << message.c_str();
 	for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++)
 		(*it)->send(message);
 }
 
 void Channel::send(const CommandSender& sender, const string& message) const {
-	std::cout << "          }-- " << message.c_str();
 	for (set<User *>::const_iterator it = users.begin(); it != users.end(); it++) {
 		User *user = *it;
 		if (user != &sender) {
 			user->send(message);
 		}
 	}
-}
-
-string Channel::getSenderName() const {
-	return getName() + "!" + Irc::getInstance().getServer().getConnection().getIP();
 }
 
 bool Channel::isValidIdentifier(const string& identifier) {

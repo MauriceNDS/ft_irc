@@ -1,6 +1,6 @@
 #include "api/event/MessageEvent.hpp"
 
-MessageEvent::MessageEvent(const string& message, Client& sender) : message(message), sender(sender), cancelled(false) {}
+MessageEvent::MessageEvent(const string& message, Client& sender) : message(message), sender(sender) {}
 
 Client& MessageEvent::getSender() const {
 	return this->sender;

@@ -9,11 +9,12 @@
 void QuitCommand::execute(const Command& cmd, CommandSender& sender) {
 	User& user = static_cast<User &>(sender);
 
+	// *************************************************
+	// Subject to removal
 	string *message = cmd.getArg<string *>("message");
 	map<string, Channel *> chan_list = Irc::getInstance().getChannels();
 	for (map<string, Channel *>::const_iterator it = chan_list.begin(); it != chan_list.end(); it++) {
-		if (it->second->isOnChan(&user)) {
-			it->second->removeUser(&user);
+		if (it->second->containsUser(user)) {
 			if (message && it->second->getFlags().anonymous) {
 				it->second->send(ResponseTypes::PART.anonymous(message->c_str()));
 			} else if (it->second->getFlags().anonymous) {
@@ -25,7 +26,7 @@ void QuitCommand::execute(const Command& cmd, CommandSender& sender) {
 			}
 		}
 	}
-	Client& client = static_cast<Client &>(sender);
-	sender.send(ResponseTypes::ERROR());
-	client.getConnection()->closeConnection = true;
+	// *************************************************
+
+	Irc::getInstance().removeUser(user);
 }

@@ -16,6 +16,8 @@ void UserCommand::execute(const Command& cmd, CommandSender& sender) {
 	user.setUserName(cmd.getArg<string>("user"));
 	user.setRealName(cmd.getArg<string>("realname"));
 
-	if (user.isRegistered())
+	if (user.isRegistered()) {
+		std::cout << "[INFO] " << user.getName() << " registered" << std::endl;
 		Irc::getInstance().sendWelcomeMessage(user);
+	}
 }

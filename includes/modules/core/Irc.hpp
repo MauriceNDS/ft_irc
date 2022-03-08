@@ -3,6 +3,7 @@
 
 #include "ft_irc.hpp"
 
+#include "api/Group.hpp"
 #include "api/PluginLoader.hpp"
 #include "api/command/CommandManager.hpp"
 
@@ -14,7 +15,7 @@
 class User;
 class Channel;
 
-class Irc {
+class Irc : public Group {
 private:
 	static Irc *instance;
 
@@ -22,43 +23,40 @@ private:
 	CommandManager commandManager;
 	PluginLoader pluginLoader;
 
-	map<string, Channel *> channels;
-	vector<User *> users;
-	set<const User *> operators;
-
 public:
 	static Irc& getInstance();
 
 	Irc(const string& name, const int port, const string& password, const vector<string>& plugins);
+	~Irc();
 
+	// Server
+	const Server& getServer() const;
 	void start();
 
-	CommandManager& getCommandManager();
+	// PluginLoader
 	PluginLoader& getPluginLoader();
-	const CommandManager& getCommandManager() const;
 	const PluginLoader& getPluginLoader() const;
 
-	void broadcast(const string& string) const;
+	// CommandManager
+	CommandManager& getCommandManager();
+	const CommandManager& getCommandManager() const;
 
-	const vector<User *>& getUsers() const;
-	User *findUser(const string& nickname) const;
-	void addUser(User *user);
-	void removeUser(User *user);
-
-	const map<string, Channel *>& getChannels() const;
+	// Channels
+	/**
+	 * @brief Provide a filtered view of getChilds with channels only.
+	 */
+	map<string, Channel *> getChannels() const;
 	Channel *findChannel(const string& channel) const;
-	void addChannel(Channel *channel);
-	void removeChannel(Channel *channel);
 
-	void promoteOperator(User *user);
-	void demoteOperator(User *user);
-	bool isOperator(const User *user) const;
-
+	// Server
 	Server& getServer();
 
+	// Misc
+	void broadcast(const string& message) const;
 	void sendWelcomeMessage(User& user);
 
-	~Irc();
+	// Listeners
+	void onLeave(GroupLeaveEvent& event);
 };
 
 #endif /* FT_IRC_CORE */
