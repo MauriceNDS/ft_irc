@@ -20,7 +20,7 @@ struct Modes {
 	string password;
 	size_t user_limit;
 
-	Modes() : invite(false), moderate(false), outside_message(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
+	Modes();
 };
 
 class Channel : public CommandSender, public Group {
@@ -62,8 +62,8 @@ public:
 	void addInvite(User& user);
 
 	// Listeners
-	virtual void onJoin(GroupJoinEvent::Before& event);
-	virtual void onJoin(GroupJoinEvent::After& event);
+	virtual void onJoin(GroupJoinEventBefore& event);
+	virtual void onJoin(GroupJoinEventAfter& event);
 	virtual void onLeave(GroupLeaveEvent& event);
 
 	static bool isValidIdentifier(const string& identifier);

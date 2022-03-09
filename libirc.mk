@@ -34,8 +34,11 @@ override SRCS		:=													\
 				modules/api/command/response/ResponseSpec.cpp			\
 				modules/api/event/Cancellable.cpp						\
 				modules/api/event/MessageEvent.cpp						\
+				modules/api/event/group/GroupLeaveEvent.cpp				\
+				modules/api/event/group/GroupJoinEvent.cpp				\
 				modules/api/exception/ArgumentNotFoundException.cpp		\
 				modules/api/exception/DuplicatedCommandException.cpp	\
+				modules/api/exception/DuplicatedGroupException.cpp		\
 				modules/api/exception/NoNameProvidedException.cpp		\
 				modules/api/middleware/Middleware.cpp					\
 				modules/api/middleware/UserMiddleware.cpp				\

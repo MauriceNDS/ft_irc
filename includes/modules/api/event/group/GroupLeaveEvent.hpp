@@ -5,21 +5,19 @@
 #include "api/User.hpp"
 #include "api/event/Cancellable.hpp"
 
+class Group;
+
 class GroupLeaveEvent {
 protected:
 	Group& group;
 	User& user;
 
 public:
-	GroupLeaveEvent(Group& group, User& user) : group(group), user(user) {}
+	GroupLeaveEvent(Group& group, User& user);
 
-	User& getUser() {
-		return user;
-	}
+	User& getUser();
 
-	Group& getGroup() {
-		return group;
-	}
+	Group& getGroup();
 };
 
 #endif /* FT_IRC_API_GROUP_LEAVE_EVENT */

@@ -3,6 +3,8 @@
 #include "api/User.hpp"
 #include "api/Channel.hpp"
 
+Modes::Modes() : invite(false), moderate(false), outside_message(false), priv(false), secret(false), reop(false), topic(true), user_limit(0) {}
+
 Channel::Channel(const string& name) : Group(name, &Irc::getInstance()) {
 	std::cout << "[INFO] " << getName() << " created" << std::endl;
 }
@@ -11,7 +13,7 @@ Channel::~Channel() {
 	std::cout << "[INFO] " << getName() << " destroyed" << std::endl;
 }
 
-void Channel::onJoin(GroupJoinEvent::Before& event) {
+void Channel::onJoin(GroupJoinEventBefore& event) {
 	User& user = event.getUser();
 
 	if (getFlags().invite && !isInvited(user)) {
@@ -23,7 +25,7 @@ void Channel::onJoin(GroupJoinEvent::Before& event) {
 	}
 }
 
-void Channel::onJoin(GroupJoinEvent::After& event) {
+void Channel::onJoin(GroupJoinEventAfter& event) {
 	User& user = event.getUser();
 
 	if (size() == 1)

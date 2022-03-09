@@ -8,6 +8,8 @@
 
 class Irc;
 class GroupJoinEvent;
+class GroupJoinEventBefore;
+class GroupJoinEventAfter;
 class GroupLeaveEvent;
 
 class Group {
@@ -31,8 +33,8 @@ protected:
 	set<User *> operators;
 
 	// Listeners
-	virtual void onJoin(GroupJoinEvent::Before& event);
-	virtual void onJoin(GroupJoinEvent::After& event);
+	virtual void onJoin(GroupJoinEventBefore& event);
+	virtual void onJoin(GroupJoinEventAfter& event);
 	virtual void onLeave(GroupLeaveEvent& event);
 
 public:
