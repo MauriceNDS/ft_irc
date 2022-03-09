@@ -13,28 +13,21 @@ protected:
 	User& user;
 
 public:
-	GroupJoinEvent(Group& group, User& user) : group(group), user(user) {}
+	GroupJoinEvent(Group& group, User& user);
 
-	User& getUser() {
-		return user;
-	}
+	User& getUser();
 
-	Group& getGroup() {
-		return group;
-	}
-
-	class Before;
-	class After;
+	Group& getGroup();
 };
 
-class GroupJoinEvent::Before : public GroupJoinEvent, public Cancellable {
+class GroupJoinEventBefore : public GroupJoinEvent, public Cancellable {
 public:
-	Before(Group& group, User& user) : GroupJoinEvent(group, user) {}
+	GroupJoinEventBefore(Group& group, User& user);
 };
 
-class GroupJoinEvent::After : public GroupJoinEvent {
+class GroupJoinEventAfter : public GroupJoinEvent {
 public:
-	After(Group& group, User& user) : GroupJoinEvent(group, user) {}
+	GroupJoinEventAfter(Group& group, User& user);
 };
 
 #endif /* FT_IRC_API_GROUP_JOIN_EVENT */

@@ -5,9 +5,7 @@
 
 struct DuplicatedGroupException : public std::exception {
 
-	const char *what() const throw () {
-		return "The group already exists in the parent.";
-	}
+	const char *what() const throw ();
 };
 
 #endif /* FT_IRC_API_DUPLICATED_GROUP_EXCEPTION */

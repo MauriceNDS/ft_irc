@@ -2,20 +2,6 @@
 
 #include "core/Irc.hpp"
 
-ResponseSpec::AnonymousSender::AnonymousSender() : name("anonymous") {}
-
-void ResponseSpec::AnonymousSender::send(const string& message) const {
-	(void)message;
-}
-
-string ResponseSpec::AnonymousSender::getName() const {
-	return name;
-}
-
-string ResponseSpec::AnonymousSender::getSenderName() const {
-	return name;
-}
-
 ResponseSpec::ResponseSpec(int response, const string& args) : _args(args) {
 	_command = string(3, '0');
 
@@ -77,15 +63,4 @@ string ResponseSpec::operator()(const CommandSender& sender, const char *args...
 	va_start(argptr, args);
 
 	return build(sender, args, argptr);
-}
-
-string ResponseSpec::anonymous() const {
-	return operator()(ResponseSpec::AnonymousSender());
-}
-
-string ResponseSpec::anonymous(const char *args...) const {
-	std::va_list argptr;
-	va_start(argptr, args);
-
-	return build(ResponseSpec::AnonymousSender(), args, argptr);
 }

@@ -53,8 +53,8 @@ Group *Group::getChild(const string& identifier) const {
 }
 
 // Events
-void Group::onJoin(GroupJoinEvent::Before&) {}
-void Group::onJoin(GroupJoinEvent::After&) {}
+void Group::onJoin(GroupJoinEventBefore&) {}
+void Group::onJoin(GroupJoinEventAfter&) {}
 void Group::onLeave(GroupLeaveEvent&) {}
 
 // Users
@@ -82,7 +82,7 @@ bool Group::canJoin(User& user) {
 	if (parent && !parent->canJoin(user))
 		return false;
 
-	GroupJoinEvent::Before before(*this, user);
+	GroupJoinEventBefore before(*this, user);
 	onJoin(before);
 	if (before.isCancelled())
 		return false;
@@ -99,7 +99,7 @@ void Group::addUserRecursive(User& user) {
 
 	users.insert(&user);
 
-	GroupJoinEvent::After after(*this, user);
+	GroupJoinEventAfter after(*this, user);
 	onJoin(after);
 }
 
