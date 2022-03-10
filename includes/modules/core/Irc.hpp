@@ -19,9 +19,9 @@ class Irc : public Group {
 private:
 	static Irc *instance;
 
+	PluginLoader pluginLoader;
 	Server server;
 	CommandManager commandManager;
-	PluginLoader pluginLoader;
 
 public:
 	static Irc& getInstance();
