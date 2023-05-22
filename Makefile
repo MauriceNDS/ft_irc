@@ -4,7 +4,7 @@ NAME				:= server/ircserv
 
 # Commands
 
-CC					:= clang++
+CC					:= g++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 
@@ -47,7 +47,7 @@ build/%.o:	%.cpp tmp/%.d
 %.h %.hpp: ;
 
 $(NAME):	$(OBJS)
-			$(CC) $(LDFLAGS) -ldl -Lserver -lirc -o $(NAME) $(OBJS)
+			$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) -Lserver -lirc
 
 ifdef N
 plugin:

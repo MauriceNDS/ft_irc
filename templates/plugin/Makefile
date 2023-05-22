@@ -4,7 +4,7 @@ NAME				:= ../../server/plugins/$(notdir $(CURDIR)).so
 
 # Commands
 
-override CC			:= clang++
+override CC			:= g++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 override LDFLAGS	:= --shared

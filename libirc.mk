@@ -4,7 +4,7 @@ NAME				:= server/libirc.so
 
 # Commands
 
-CC					:= clang++
+CC					:= g++
 override CPPFLAGS	:= -std=c++98 -Wall -Wextra -Werror -fPIC
 override DEPFLAGS	 = -MT $@ -MMD -MF tmp/$*.d
 override LDFLAGS	:= --shared
@@ -96,6 +96,6 @@ build/%.o:	%.cpp tmp/%.d
 %.h %.hpp: ;
 
 $(NAME):	$(OBJS)
-			$(CC) $(LDFLAGS) -o $(NAME) $(OBJS)
+			$(CC) $(LDFLAGS) -o $(NAME) $(OBJS) -ldl
 
 .PHONY:		all
